@@ -3,11 +3,6 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  
-  // Only protect admin routes
-  if (!path.startsWith("/admin")) {
-    return NextResponse.next();
-  }
 
   const isAuthPage = path === "/login";
   const isAdminRoute = path.startsWith("/admin");
