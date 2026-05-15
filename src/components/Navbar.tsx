@@ -27,8 +27,8 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[100] transition-shadow ${
-        scrolled ? "bg-white shadow-md" : "bg-white"
+      className={`transition-shadow ${
+        scrolled ? "bg-white shadow-md sticky top-0 z-[100]" : "bg-white"
       }`}
     >
       <div className="container-custom py-3 flex items-center justify-between">
