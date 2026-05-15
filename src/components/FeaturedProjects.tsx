@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -179,7 +179,7 @@ function matchesBudget(priceStr: string, budgetFilter: string): boolean {
   return true;
 }
 
-export default function FeaturedProjects() {
+function FeaturedProjectsContent() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
@@ -352,5 +352,23 @@ export default function FeaturedProjects() {
         )}
       </div>
     </section>
+  );
+}
+
+export default function FeaturedProjects() {
+  return (
+    <Suspense fallback={<div className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
+      <div className="container-custom">
+        <div className="text-center">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto" />
+            <div className="h-12 bg-gray-200 rounded w-1/2 mx-auto" />
+            <div className="h-4 bg-gray-200 rounded w-2/3 mx-auto" />
+          </div>
+        </div>
+      </div>
+    </div>}>
+      <FeaturedProjectsContent />
+    </Suspense>
   );
 }
