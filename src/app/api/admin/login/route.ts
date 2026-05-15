@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
       // Set auth cookie
       const cookieStore = await cookies();
       cookieStore.set("admin_auth", "true", {
-        httpOnly: false,
-        secure: false,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 60 * 60 * 24, // 24 hours
         path: "/",

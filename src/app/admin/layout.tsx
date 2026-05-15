@@ -50,43 +50,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Client-side auth check
-  useEffect(() => {
-    const checkAuth = () => {
-      const authCookie = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("admin_auth="));
-      
-      const isAuth = authCookie ? authCookie.split("=")[1] === "true" : false;
-      setIsAuthenticated(isAuth);
-      setLoading(false);
-      
-      if (!isAuth) {
-        router.push("/login");
-      }
-    };
-
-    // Small delay to allow cookie to be set after login
-    const timer = setTimeout(checkAuth, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Show loading state while checking auth
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
-      </div>
-    );
-  }
-
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
-    return null;
-  }
 
   const handleLogout = async () => {
     try {
