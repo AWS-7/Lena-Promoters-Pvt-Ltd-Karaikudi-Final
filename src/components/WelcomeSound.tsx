@@ -13,7 +13,7 @@ export default function WelcomeSound() {
       hasPlayed.current = true;
 
       const utterance = new SpeechSynthesisUtterance(
-        "Welcome to Lena Promoters Private Limited. DTCP and RERA approved land and plot layouts in Karaikudi."
+        "Welcome to Lena Promoters Private Limited Site."
       );
       utterance.rate = 0.9;
       utterance.pitch = 1;
