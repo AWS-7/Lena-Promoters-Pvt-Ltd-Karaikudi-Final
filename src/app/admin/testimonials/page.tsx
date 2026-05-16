@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Testimonial } from "@/lib/types";
 import { Plus, Pencil, Trash2, X, Star } from "lucide-react";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 export default function TestimonialsPage() {
   const [items, setItems] = useState<Testimonial[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Testimonial | null>(null);
   const [form, setForm] = useState<Partial<Testimonial>>({ rating: 5 });
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function load() {
     const { data } = await supabase.from("testimonials").select("*").order("created_at", { ascending: false });
@@ -28,9 +31,16 @@ export default function TestimonialsPage() {
     setShowForm(false); setEditing(null); setForm({ rating: 5 }); load();
   }
 
-  async function remove(id: string) {
-    if (!confirm("Delete?")) return;
-    await supabase.from("testimonials").delete().eq("id", id);
+  function askRemove(id: string) {
+    setSelectedId(id);
+    setDialogOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    if (!selectedId) return;
+    await supabase.from("testimonials").delete().eq("id", selectedId);
+    setDialogOpen(false);
+    setSelectedId(null);
     load();
   }
 
@@ -73,7 +83,7 @@ export default function TestimonialsPage() {
                 </td>
                 <td className="px-5 py-3 text-right">
                   <button onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} className="text-gray-500 hover:text-[#0E6FA3] mr-3"><Pencil size={16} /></button>
-                  <button onClick={() => remove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
+                  <button onClick={() => askRemove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
@@ -81,6 +91,15 @@ export default function TestimonialsPage() {
           </tbody>
         </table>
       </div>
+      <ConfirmDialog
+        open={dialogOpen}
+        title="Delete Testimonial"
+        message="Are you sure you want to delete this testimonial? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => { setDialogOpen(false); setSelectedId(null); }}
+      />
     </div>
   );
 }

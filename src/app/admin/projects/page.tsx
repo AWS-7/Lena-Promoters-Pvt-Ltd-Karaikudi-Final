@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import type { Project } from "@/lib/types";
 import { Plus, Pencil, Trash2, X, Check, Landmark, Building2, Home } from "lucide-react";
 import CloudinaryUpload from "@/components/admin/CloudinaryUpload";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 const categoryOptions = [
   { key: "government", label: "Government Approved", subtitle: "DTCP & RERA", color: "bg-[#1195db]", icon: Landmark },
@@ -21,6 +22,8 @@ export default function ProjectsPage() {
   const [form, setForm] = useState<Partial<Project>>({ featured: false, category: "government" });
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<CategoryKey | "all">("all");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function load() {
     const { data } = await supabase.from("projects").select("*").order("created_at", { ascending: false });
@@ -80,14 +83,20 @@ export default function ProjectsPage() {
     setLoading(false);
   }
 
-  async function remove(id: string) {
-    if (!confirm("Delete this project?")) return;
-    const { error } = await supabase.from("projects").delete().eq("id", id);
+  function askRemove(id: string) {
+    setSelectedId(id);
+    setDialogOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    if (!selectedId) return;
+    const { error } = await supabase.from("projects").delete().eq("id", selectedId);
     if (error) {
       console.error("Delete failed:", error);
       alert(`Delete failed: ${error.message}`);
-      return;
     }
+    setDialogOpen(false);
+    setSelectedId(null);
     await load();
   }
 
@@ -227,7 +236,7 @@ export default function ProjectsPage() {
                   <td className="px-5 py-3">{item.featured ? <Check size={16} className="text-green-600" /> : "—"}</td>
                   <td className="px-5 py-3 text-right">
                     <button onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} className="text-gray-500 hover:text-[#0E6FA3] mr-3"><Pencil size={16} /></button>
-                    <button onClick={() => remove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
+                    <button onClick={() => askRemove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
                   </td>
                 </tr>
               );
@@ -238,6 +247,15 @@ export default function ProjectsPage() {
           </tbody>
         </table>
       </div>
+      <ConfirmDialog
+        open={dialogOpen}
+        title="Delete Project"
+        message="Are you sure you want to delete this project? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => { setDialogOpen(false); setSelectedId(null); }}
+      />
     </div>
   );
 }

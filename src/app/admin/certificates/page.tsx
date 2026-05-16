@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Certificate } from "@/lib/types";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 export default function CertificatesPage() {
   const [items, setItems] = useState<Certificate[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Certificate | null>(null);
   const [form, setForm] = useState<Partial<Certificate>>({ order: 0 });
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function load() {
     const { data } = await supabase.from("certificates").select("*").order("order", { ascending: true });
@@ -28,9 +31,16 @@ export default function CertificatesPage() {
     setShowForm(false); setEditing(null); setForm({ order: 0 }); load();
   }
 
-  async function remove(id: string) {
-    if (!confirm("Delete?")) return;
-    await supabase.from("certificates").delete().eq("id", id);
+  function askRemove(id: string) {
+    setSelectedId(id);
+    setDialogOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    if (!selectedId) return;
+    await supabase.from("certificates").delete().eq("id", selectedId);
+    setDialogOpen(false);
+    setSelectedId(null);
     load();
   }
 
@@ -68,7 +78,7 @@ export default function CertificatesPage() {
                 <td className="px-5 py-3 text-gray-600">{item.order}</td>
                 <td className="px-5 py-3 text-right">
                   <button onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} className="text-gray-500 hover:text-[#0E6FA3] mr-3"><Pencil size={16} /></button>
-                  <button onClick={() => remove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
+                  <button onClick={() => askRemove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
@@ -76,6 +86,15 @@ export default function CertificatesPage() {
           </tbody>
         </table>
       </div>
+      <ConfirmDialog
+        open={dialogOpen}
+        title="Delete Certificate"
+        message="Are you sure you want to delete this certificate? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => { setDialogOpen(false); setSelectedId(null); }}
+      />
     </div>
   );
 }

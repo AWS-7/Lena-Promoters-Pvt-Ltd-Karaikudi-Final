@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Partner } from "@/lib/types";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 export default function PartnersPage() {
   const [items, setItems] = useState<Partner[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Partner | null>(null);
   const [form, setForm] = useState<Partial<Partner>>({ order: 0 });
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function load() {
     const { data } = await supabase.from("partners").select("*").order("order", { ascending: true });
@@ -28,9 +31,16 @@ export default function PartnersPage() {
     setShowForm(false); setEditing(null); setForm({ order: 0 }); load();
   }
 
-  async function remove(id: string) {
-    if (!confirm("Delete?")) return;
-    await supabase.from("partners").delete().eq("id", id);
+  function askRemove(id: string) {
+    setSelectedId(id);
+    setDialogOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    if (!selectedId) return;
+    await supabase.from("partners").delete().eq("id", selectedId);
+    setDialogOpen(false);
+    setSelectedId(null);
     load();
   }
 
@@ -69,7 +79,7 @@ export default function PartnersPage() {
                 <td className="px-5 py-3 text-gray-600">{item.order}</td>
                 <td className="px-5 py-3 text-right">
                   <button onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} className="text-gray-500 hover:text-[#0E6FA3] mr-3"><Pencil size={16} /></button>
-                  <button onClick={() => remove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
+                  <button onClick={() => askRemove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
@@ -77,6 +87,15 @@ export default function PartnersPage() {
           </tbody>
         </table>
       </div>
+      <ConfirmDialog
+        open={dialogOpen}
+        title="Delete Partner"
+        message="Are you sure you want to delete this partner? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => { setDialogOpen(false); setSelectedId(null); }}
+      />
     </div>
   );
 }

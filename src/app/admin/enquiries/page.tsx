@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Enquiry } from "@/lib/types";
 import { Phone, MapPin, User, Trash2, Search, Clock, MessageSquare, CheckCircle, Clock as ClockIcon } from "lucide-react";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 const statusColors: Record<string, string> = {
   pending: "bg-amber-100 text-amber-700 border-amber-200",
@@ -20,6 +21,8 @@ export default function EnquiriesPage() {
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function load() {
     setLoading(true);
@@ -45,9 +48,16 @@ export default function EnquiriesPage() {
 
   useEffect(() => { load(); }, []);
 
-  async function remove(id: string) {
-    if (!confirm("Delete this enquiry?")) return;
-    await supabase.from("enquiries").delete().eq("id", id);
+  function askRemove(id: string) {
+    setSelectedId(id);
+    setDialogOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    if (!selectedId) return;
+    await supabase.from("enquiries").delete().eq("id", selectedId);
+    setDialogOpen(false);
+    setSelectedId(null);
     load();
   }
 
@@ -186,7 +196,7 @@ export default function EnquiriesPage() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <button
-                      onClick={() => remove(enquiry.id)}
+                      onClick={() => askRemove(enquiry.id)}
                       className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete"
                     >
@@ -200,6 +210,15 @@ export default function EnquiriesPage() {
         </div>
       </div>
       )}
+      <ConfirmDialog
+        open={dialogOpen}
+        title="Delete Enquiry"
+        message="Are you sure you want to delete this enquiry? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => { setDialogOpen(false); setSelectedId(null); }}
+      />
     </div>
   );
 }

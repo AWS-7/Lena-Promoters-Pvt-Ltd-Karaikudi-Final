@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { ProjectPlot } from "@/lib/types";
 import { Plus, Pencil, Trash2, X, Check, MapPin, Save, LayoutGrid, Upload, Image as ImageIcon } from "lucide-react";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 const statusColors: Record<string, string> = {
   available: "bg-green-500",
@@ -25,6 +26,8 @@ export default function LayoutMapAdmin() {
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function load() {
     const { data } = await supabase.from("project_plots").select("*").order("plot_number", { ascending: true });
@@ -120,9 +123,16 @@ export default function LayoutMapAdmin() {
     }
   }
 
-  async function remove(id: string) {
-    if (!confirm("Delete this plot?")) return;
-    await supabase.from("project_plots").delete().eq("id", id);
+  function askRemove(id: string) {
+    setSelectedId(id);
+    setDialogOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    if (!selectedId) return;
+    await supabase.from("project_plots").delete().eq("id", selectedId);
+    setDialogOpen(false);
+    setSelectedId(null);
     await load();
   }
 
@@ -312,7 +322,7 @@ export default function LayoutMapAdmin() {
                     setImagePreview(plot.image_url || null);
                     setShowForm(true); 
                   }} className="text-gray-500 hover:text-[#1195db] mr-3"><Pencil size={16} /></button>
-                  <button onClick={() => remove(plot.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
+                  <button onClick={() => askRemove(plot.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
@@ -322,6 +332,15 @@ export default function LayoutMapAdmin() {
           </tbody>
         </table>
       </div>
+      <ConfirmDialog
+        open={dialogOpen}
+        title="Delete Plot"
+        message="Are you sure you want to delete this plot? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => { setDialogOpen(false); setSelectedId(null); }}
+      />
     </div>
   );
 }

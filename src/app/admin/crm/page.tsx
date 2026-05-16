@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Lead } from "@/lib/types";
 import { Pencil, Trash2, Download, Search, Filter, Calendar, MessageSquare, CheckCircle, Clock, Phone, X } from "lucide-react";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 const statusOptions = [
   { value: "new", label: "New Lead", color: "bg-blue-50 text-blue-600" },
@@ -23,6 +24,8 @@ export default function CRMPage() {
   const [editing, setEditing] = useState<Lead | null>(null);
   const [showNotes, setShowNotes] = useState(false);
   const [notes, setNotes] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function load() {
     const { data } = await supabase.from("leads").select("*").order("created_at", { ascending: false });
@@ -44,9 +47,16 @@ export default function CRMPage() {
     load();
   }
 
-  async function remove(id: string) {
-    if (!confirm("Delete this lead?")) return;
-    await supabase.from("leads").delete().eq("id", id);
+  function askRemove(id: string) {
+    setSelectedId(id);
+    setDialogOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    if (!selectedId) return;
+    await supabase.from("leads").delete().eq("id", selectedId);
+    setDialogOpen(false);
+    setSelectedId(null);
     load();
   }
 
@@ -182,7 +192,7 @@ export default function CRMPage() {
                   >
                     <MessageSquare size={16} />
                   </button>
-                  <button onClick={() => remove(lead.id)} className="text-gray-500 hover:text-red-600">
+                  <button onClick={() => askRemove(lead.id)} className="text-gray-500 hover:text-red-600">
                     <Trash2 size={16} />
                   </button>
                 </td>
@@ -195,6 +205,15 @@ export default function CRMPage() {
         </table>
       </div>
 
+      <ConfirmDialog
+        open={dialogOpen}
+        title="Delete Lead"
+        message="Are you sure you want to delete this lead? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => { setDialogOpen(false); setSelectedId(null); }}
+      />
       {showNotes && editing && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">

@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Lead } from "@/lib/types";
 import { Trash2, Download } from "lucide-react";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 export default function LeadsPage() {
   const [items, setItems] = useState<Lead[]>([]);
   const [filter, setFilter] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function load() {
     const { data } = await supabase.from("leads").select("*").order("created_at", { ascending: false });
@@ -16,9 +19,16 @@ export default function LeadsPage() {
 
   useEffect(() => { load(); }, []);
 
-  async function remove(id: string) {
-    if (!confirm("Delete this lead?")) return;
-    await supabase.from("leads").delete().eq("id", id);
+  function askRemove(id: string) {
+    setSelectedId(id);
+    setDialogOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    if (!selectedId) return;
+    await supabase.from("leads").delete().eq("id", selectedId);
+    setDialogOpen(false);
+    setSelectedId(null);
     load();
   }
 
@@ -106,7 +116,7 @@ export default function LeadsPage() {
                 </td>
                 <td className="px-5 py-3 text-gray-500 text-xs">{new Date(item.created_at!).toLocaleDateString()}</td>
                 <td className="px-5 py-3 text-right">
-                  <button onClick={() => remove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
+                  <button onClick={() => askRemove(item.id)} className="text-gray-500 hover:text-red-600"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
@@ -114,6 +124,15 @@ export default function LeadsPage() {
           </tbody>
         </table>
       </div>
+      <ConfirmDialog
+        open={dialogOpen}
+        title="Delete Lead"
+        message="Are you sure you want to delete this lead? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => { setDialogOpen(false); setSelectedId(null); }}
+      />
     </div>
   );
 }
