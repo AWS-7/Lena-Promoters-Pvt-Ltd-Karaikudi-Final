@@ -4,6 +4,7 @@ import "./globals.css";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Preloader from "@/components/Preloader";
 import WelcomeSound from "@/components/WelcomeSound";
+import VisitorTracker from "@/components/VisitorTracker";
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -88,6 +89,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://rjeydmqspxklsrtohumn.supabase.co" />
       </head>
       <body className={`${poppins.variable} ${inter.variable} min-h-full flex flex-col pb-[88px] md:pb-0`}>
+        <VisitorTracker />
         <WelcomeSound />
         <Preloader />
         {children}

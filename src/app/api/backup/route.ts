@@ -32,13 +32,22 @@ export async function GET() {
   });
 }
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
     if (!supabaseUrl || !supabaseServiceKey) {
       return NextResponse.json(
         { error: "Missing SUPABASE_SERVICE_ROLE_KEY. Go to Vercel Dashboard → Settings → Environment Variables and add it." },
         { status: 503 }
       );
+    }
+
+    // Parse optional triggered flag
+    let triggered = false;
+    try {
+      const body = await request.json();
+      triggered = !!body?.triggered;
+    } catch {
+      // GET-style POST or no body — treat as manual backup
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -59,6 +68,7 @@ export async function POST() {
       version: "1.0",
       timestamp,
       source_url: supabaseUrl,
+      triggered,
       tables: backup,
     };
 
