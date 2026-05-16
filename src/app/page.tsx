@@ -31,7 +31,7 @@ export default function Home() {
       <Navbar />
       <main className="overflow-x-hidden">
         <HeroSection />
-        <ScrollReveal delay={0.1}>
+        <ScrollReveal  delay={0.1}>
           <StatsSection />
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
