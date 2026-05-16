@@ -62,6 +62,7 @@ const TYPE_OPTIONS = [
 
 export default function HeroSection() {
   const [settings, setSettings] = useState<any>(null);
+  const [heroContent, setHeroContent] = useState<any>(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedLocation, setSelectedLocation] = useState("All Locations");
   const [selectedBudget, setSelectedBudget] = useState("Any Budget");
@@ -82,6 +83,15 @@ export default function HeroSection() {
       .single()
       .then(({ data }) => {
         if (data) setSettings(data);
+      });
+
+    supabase
+      .from("homepage_content")
+      .select("content")
+      .eq("section_key", "hero")
+      .single()
+      .then(({ data }) => {
+        if (data) setHeroContent(data.content);
       });
 
     supabase
@@ -136,7 +146,7 @@ export default function HeroSection() {
         style={{ y: backgroundY }}
       >
         <Image
-          src="/hero-bg.png"
+          src={heroContent?.bgImage || "/hero-bg.png"}
           alt="Hero background"
           fill
           priority
@@ -156,14 +166,14 @@ export default function HeroSection() {
           >
             <motion.div variants={itemVariants} className="inline-flex items-center gap-2 bg-white/10 backdrop-blur rounded-full px-4 py-1.5 text-sm mb-4 md:mb-6">
               <Shield size={14} />
-              DTCP & RERA Approved Layouts
+              {heroContent?.badge || "DTCP & RERA Approved Layouts"}
             </motion.div>
             <motion.h1 variants={itemVariants} className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-snug md:leading-tight mb-4 md:mb-6">
-              Premium DTCP Approved <span className="block text-[#e6f2f9]">Land & Plot Layouts</span>
-              in Karaikudi
+              {heroContent?.title1 || "Premium DTCP Approved"} <span className="block text-[#e6f2f9]">{heroContent?.title2 || "Land & Plot Layouts"}</span>
+              {heroContent?.location || "in Karaikudi"}
             </motion.h1>
             <motion.p variants={itemVariants} className="text-sm sm:text-base md:text-xl text-white/90 mb-6 md:mb-8 max-w-xl mx-auto md:mx-0">
-              Trusted land promoter in Tamil Nadu offering clear-title plots, legal assurance, and hassle-free registration at prime locations.
+              {heroContent?.subtitle || "Trusted land promoter in Tamil Nadu offering clear-title plots, legal assurance, and hassle-free registration at prime locations."}
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-wrap gap-3 md:gap-4 mb-6 md:mb-8 justify-center md:justify-start">
@@ -171,7 +181,7 @@ export default function HeroSection() {
                 href="#projects"
                 className="inline-flex items-center gap-2 rounded-lg bg-white text-[#0E6FA3] px-4 sm:px-5 md:px-6 py-2.5 md:py-3 font-semibold hover:bg-gray-100 transition-colors hover:scale-105 active:scale-95 text-sm md:text-base"
               >
-                Explore Projects <ChevronRight size={16} className="md:w-[18px] md:h-[18px]" />
+                {heroContent?.ctaText || "Explore Projects"} <ChevronRight size={16} className="md:w-[18px] md:h-[18px]" />
               </a>
               <a
                 href={`tel:${phone}`}
@@ -211,10 +221,10 @@ export default function HeroSection() {
               {/* Header */}
               <div className="mb-4 sm:mb-6">
                 <h3 className="text-white font-bold text-lg sm:text-xl md:text-2xl mb-1.5 sm:mb-2">
-                  Find Your Ideal Plot in Karaikudi
+                  {heroContent?.formTitle || "Find Your Ideal Plot in Karaikudi"}
                 </h3>
                 <p className="text-white/70 text-xs sm:text-sm">
-                  DTCP Approved | Clear Title | Prime Locations
+                  {heroContent?.formSubtitle || "DTCP Approved | Clear Title | Prime Locations"}
                 </p>
               </div>
 
@@ -263,7 +273,7 @@ export default function HeroSection() {
                   whileTap={{ scale: 0.98 }}
                   className="flex items-center justify-center gap-2 sm:gap-3 w-full rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#1195db] to-[#0E6FA3] text-white py-3 sm:py-4 font-bold text-sm sm:text-lg hover:from-[#0E6FA3] hover:to-[#0a5480] transition-all shadow-xl shadow-[#1195db]/30 mt-2 sm:mt-4"
                 >
-                  View Available Plots
+                  {heroContent?.searchBtn || "View Available Plots"}
                   <ChevronRight size={18} className="sm:w-5 sm:h-5" />
                 </motion.button>
               </div>

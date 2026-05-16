@@ -36,7 +36,25 @@ CREATE INDEX IF NOT EXISTS idx_visitor_logs_device
   ON visitor_logs(device);
 ```
 
-## Step 2: Done
+## Step 2: Enable RLS for homepage_content (if not already)
+
+Run this in Supabase SQL Editor to allow public reads on homepage content:
+
+```sql
+-- Allow anyone to read homepage content (public site)
+CREATE POLICY IF NOT EXISTS "Allow public read on homepage_content"
+  ON homepage_content FOR SELECT
+  USING (true);
+
+-- Allow authenticated users (admin) to update homepage content
+CREATE POLICY IF NOT EXISTS "Allow admin update on homepage_content"
+  ON homepage_content FOR ALL
+  TO authenticated
+  USING (true)
+  WITH CHECK (true);
+```
+
+## Step 3: Done
 
 The tracking system is active. Visit `/admin/analytics` to view visitor data.
 

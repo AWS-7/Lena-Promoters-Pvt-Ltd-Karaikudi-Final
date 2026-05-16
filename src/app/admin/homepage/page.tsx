@@ -159,41 +159,94 @@ export default function HomepageAdmin() {
                 value={get("hero", "bgImage", "/hero-bg.png")}
                 onChange={(url) => updateField("hero", "bgImage", url)}
               />
-              <div>
-                <label className="text-sm font-medium text-gray-700">Title Line 1</label>
-                <input
-                  type="text"
-                  value={get("hero", "title1", "Premium Plots & Land")}
-                  onChange={(e) => updateField("hero", "title1", e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
-                />
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Badge Text</label>
+                  <input
+                    type="text"
+                    value={get("hero", "badge", "DTCP & RERA Approved Layouts")}
+                    onChange={(e) => updateField("hero", "badge", e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Location Line</label>
+                  <input
+                    type="text"
+                    value={get("hero", "location", "in Karaikudi")}
+                    onChange={(e) => updateField("hero", "location", e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Title Line 2</label>
-                <input
-                  type="text"
-                  value={get("hero", "title2", "For Your Dream Home")}
-                  onChange={(e) => updateField("hero", "title2", e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
-                />
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Title Line 1</label>
+                  <input
+                    type="text"
+                    value={get("hero", "title1", "Premium DTCP Approved")}
+                    onChange={(e) => updateField("hero", "title1", e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Title Line 2</label>
+                  <input
+                    type="text"
+                    value={get("hero", "title2", "Land & Plot Layouts")}
+                    onChange={(e) => updateField("hero", "title2", e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
+                  />
+                </div>
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700">Subtitle</label>
                 <textarea
                   rows={2}
-                  value={get("hero", "subtitle", "DTCP Approved Layouts in Karaikudi...")}
+                  value={get("hero", "subtitle", "Trusted land promoter in Tamil Nadu offering clear-title plots, legal assurance, and hassle-free registration at prime locations.")}
                   onChange={(e) => updateField("hero", "subtitle", e.target.value)}
                   className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
                 />
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">CTA Button Text</label>
-                <input
-                  type="text"
-                  value={get("hero", "ctaText", "Explore Projects")}
-                  onChange={(e) => updateField("hero", "ctaText", e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
-                />
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">CTA Button Text</label>
+                  <input
+                    type="text"
+                    value={get("hero", "ctaText", "Explore Projects")}
+                    onChange={(e) => updateField("hero", "ctaText", e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Search Button Text</label>
+                  <input
+                    type="text"
+                    value={get("hero", "searchBtn", "View Available Plots")}
+                    onChange={(e) => updateField("hero", "searchBtn", e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
+                  />
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Form Title</label>
+                  <input
+                    type="text"
+                    value={get("hero", "formTitle", "Find Your Ideal Plot in Karaikudi")}
+                    onChange={(e) => updateField("hero", "formTitle", e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Form Subtitle</label>
+                  <input
+                    type="text"
+                    value={get("hero", "formSubtitle", "DTCP Approved | Clear Title | Prime Locations")}
+                    onChange={(e) => updateField("hero", "formSubtitle", e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
+                  />
+                </div>
               </div>
               <button
                 onClick={() => saveSection("hero", data.hero || {})}
