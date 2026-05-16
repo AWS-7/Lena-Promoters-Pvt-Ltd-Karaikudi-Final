@@ -6,7 +6,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell, Legend,
 } from "recharts";
-import { TrendingUp, Users, Calendar, Phone, MousePointer, CheckCircle, Clock, Eye, Smartphone, Monitor, Tablet, Search, Filter, Trash2 } from "lucide-react";
+import { TrendingUp, Users, Calendar, Phone, MousePointer, CheckCircle, Clock, Eye, Smartphone, Monitor, Tablet, Search, Filter, Trash2, RefreshCw, Download } from "lucide-react";
 
 const COLORS = ["#0E6FA3", "#3b99cc", "#7cc4e8", "#0a5480", "#e6f2f9"];
 
@@ -80,6 +80,14 @@ export default function AnalyticsPage() {
     }
     load();
   }, []);
+
+  // Auto-refresh visitor logs every 2 minutes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadVisitorData(visitorFilterDate || undefined);
+    }, 2 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [visitorFilterDate]);
 
   async function loadVisitorData(dateFilter?: string) {
     setVisitorLoading(true);
@@ -253,7 +261,49 @@ export default function AnalyticsPage() {
               <Filter size={18} className="text-gray-400" />
               Visitor Logs
             </h3>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => loadVisitorData(visitorFilterDate || undefined)}
+                disabled={visitorLoading}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                title="Refresh"
+              >
+                <RefreshCw size={14} className={visitorLoading ? "animate-spin" : ""} />
+                Refresh
+              </button>
+              <button
+                onClick={() => {
+                  const rows = visitorLogs.map((log: any) => ({
+                    "Cookie ID": log.cookie_id || "",
+                    "IP Address": log.ip_address || "",
+                    "Date": log.visit_date,
+                    "Visit Count": log.visit_count,
+                    "First Visit": new Date(log.first_visit).toLocaleString(),
+                    "Last Visit": new Date(log.last_visit).toLocaleString(),
+                    "Device": log.device || "desktop",
+                  }));
+                  if (rows.length === 0) return;
+                  const headers = Object.keys(rows[0]);
+                  const csv = [
+                    headers.join(","),
+                    ...rows.map((r: any) => headers.map((h) => `"${String(r[h]).replace(/"/g, '""')}"`).join(",")),
+                  ].join("\n");
+                  const blob = new Blob([csv], { type: "text/csv" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `visitor_logs_${new Date().toISOString().split("T")[0]}.csv`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                }}
+                disabled={visitorLogs.length === 0}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors text-[#1195db]"
+              >
+                <Download size={14} />
+                Export CSV
+              </button>
               <div className="relative">
                 <Search size={16} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
@@ -295,13 +345,14 @@ export default function AnalyticsPage() {
                   <th className="px-4 py-3 text-left font-medium">First Visit</th>
                   <th className="px-4 py-3 text-left font-medium">Last Visit</th>
                   <th className="px-4 py-3 text-center font-medium">Device</th>
+                  <th className="px-4 py-3 text-center font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {visitorLoading ? (
-                  <tr><td colSpan={7} className="text-center text-gray-400 py-8">Loading...</td></tr>
+                  <tr><td colSpan={8} className="text-center text-gray-400 py-8">Loading...</td></tr>
                 ) : visitorLogs.length === 0 ? (
-                  <tr><td colSpan={7} className="text-center text-gray-400 py-8">No visitor logs yet. Data will appear once visitors start arriving.</td></tr>
+                  <tr><td colSpan={8} className="text-center text-gray-400 py-8">No visitor logs yet. Data will appear once visitors start arriving.</td></tr>
                 ) : (
                   visitorLogs
                     .filter((log) => {
@@ -313,7 +364,7 @@ export default function AnalyticsPage() {
                       );
                     })
                     .map((log) => (
-                      <tr key={log.id} className="border-t hover:bg-gray-50 transition-colors">
+                      <tr key={log.id} className="border-t hover:bg-gray-50 transition-colors group">
                         <td className="px-4 py-3 font-mono text-xs text-gray-600 max-w-[120px] truncate">
                           {log.cookie_id ? log.cookie_id.slice(0, 16) + "..." : "—"}
                         </td>
@@ -326,6 +377,18 @@ export default function AnalyticsPage() {
                           {log.device === "mobile" ? <Smartphone size={16} className="text-blue-500 mx-auto" /> :
                            log.device === "tablet" ? <Tablet size={16} className="text-purple-500 mx-auto" /> :
                            <Monitor size={16} className="text-gray-400 mx-auto" />}
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <button
+                            onClick={async () => {
+                              await supabase.from("visitor_logs").delete().eq("id", log.id);
+                              setVisitorLogs((prev) => prev.filter((l) => l.id !== log.id));
+                            }}
+                            className="opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                            title="Delete"
+                          >
+                            <Trash2 size={14} />
+                          </button>
                         </td>
                       </tr>
                     ))
