@@ -240,10 +240,24 @@ ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE enquiries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies to avoid conflicts, then recreate
+DROP POLICY IF EXISTS allow_all_anon_leads ON leads;
+DROP POLICY IF EXISTS allow_all_anon_enquiries ON enquiries;
+DROP POLICY IF EXISTS allow_all_anon_notifications ON notifications;
+DROP POLICY IF EXISTS allow_anonymous_insert_leads ON leads;
+DROP POLICY IF EXISTS allow_anonymous_insert_enquiries ON enquiries;
+DROP POLICY IF EXISTS allow_anonymous_insert_notifications ON notifications;
+DROP POLICY IF EXISTS allow_authenticated_read_leads ON leads;
+DROP POLICY IF EXISTS allow_authenticated_read_enquiries ON enquiries;
+DROP POLICY IF EXISTS allow_authenticated_read_notifications ON notifications;
+DROP POLICY IF EXISTS allow_public_read_notifications ON notifications;
+DROP POLICY IF EXISTS allow_public_read_leads ON leads;
+DROP POLICY IF EXISTS allow_public_read_enquiries ON enquiries;
+
 -- Allow all operations for anon role (website forms insert, admin panel reads/updates/deletes)
-CREATE POLICY IF NOT EXISTS allow_all_anon_leads ON leads FOR ALL TO anon USING (true) WITH CHECK (true);
-CREATE POLICY IF NOT EXISTS allow_all_anon_enquiries ON enquiries FOR ALL TO anon USING (true) WITH CHECK (true);
-CREATE POLICY IF NOT EXISTS allow_all_anon_notifications ON notifications FOR ALL TO anon USING (true) WITH CHECK (true);
+CREATE POLICY allow_all_anon_leads ON leads FOR ALL TO anon USING (true) WITH CHECK (true);
+CREATE POLICY allow_all_anon_enquiries ON enquiries FOR ALL TO anon USING (true) WITH CHECK (true);
+CREATE POLICY allow_all_anon_notifications ON notifications FOR ALL TO anon USING (true) WITH CHECK (true);
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_projects_featured ON projects(featured);

@@ -50,13 +50,13 @@ export default function EnquiryPopup() {
     if (!form.name.trim() || !form.phone.trim()) return;
     setLoading(true);
 
-    const { error: enquiryError } = await supabase.from("enquiries").insert({
+    const { error: enquiryError } = await supabase.from("enquiries").insert([{
       name: form.name,
       phone: form.phone,
       location: form.location,
       source: "website_popup",
       status: "pending",
-    });
+    }]);
     if (enquiryError) {
       console.error("Enquiry insert error:", enquiryError);
       alert("Failed to save enquiry: " + enquiryError.message);
