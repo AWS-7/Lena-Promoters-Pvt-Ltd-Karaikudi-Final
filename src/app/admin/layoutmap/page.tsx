@@ -216,15 +216,7 @@ export default function LayoutMapAdmin() {
               </select>
             </div>
           </div>
-          <div className="grid md:grid-cols-4 gap-4 mb-4">
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5">X Position</label>
-              <input type="number" placeholder="10" value={form.x || ""} onChange={(e) => setForm({ ...form, x: Number(e.target.value) })} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1.5">Y Position</label>
-              <input type="number" placeholder="10" value={form.y || ""} onChange={(e) => setForm({ ...form, y: Number(e.target.value) })} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]" />
-            </div>
+          <div className="grid md:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1.5">Width</label>
               <input type="number" placeholder="80" value={form.width || ""} onChange={(e) => setForm({ ...form, width: Number(e.target.value) })} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]" />

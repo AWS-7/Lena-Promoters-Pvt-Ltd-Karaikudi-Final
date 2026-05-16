@@ -24,8 +24,9 @@
   --color-brand: var(--brand);
   --color-brand-light: var(--brand-light);
   --color-brand-dark: var(--brand-dark);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-heading);
   --color-gray-50: var(--gray-50);
   --color-gray-100: var(--gray-100);
   --color-gray-200: var(--gray-200);
@@ -40,7 +41,6 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
   margin: 0;
   padding: 0;
 }
@@ -48,11 +48,20 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), "Inter", Arial, Helvetica, sans-serif;
   overflow-x: hidden;
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), "Poppins", Arial, Helvetica, sans-serif;
+  font-weight: 700;
+}
+
+p, span, li, a, button, input, textarea, select, label {
+  font-family: var(--font-body), "Inter", Arial, Helvetica, sans-serif;
 }
 
 .text-brand { color: var(--brand); }

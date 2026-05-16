@@ -1,26 +1,28 @@
+import dynamic from "next/dynamic";
 import TopHeader from "@/components/TopHeader";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import StatsSection from "@/components/StatsSection";
-import AboutSection from "@/components/AboutSection";
-import JourneySection from "@/components/JourneySection";
-import OffersSection from "@/components/OffersSection";
-import FeaturedProjects from "@/components/FeaturedProjects";
-import LatestOffers from "@/components/LatestOffers";
-import ServicesSection from "@/components/ServicesSection";
-import EMICalculator from "@/components/EMICalculator";
-import WhyChooseUs from "@/components/WhyChooseUs";
-import Testimonials from "@/components/Testimonials";
-import TrustSection from "@/components/TrustSection";
-import Gallery from "@/components/Gallery";
-import FAQ from "@/components/FAQ";
-import LayoutMap from "@/components/LayoutMap";
-import CTASection from "@/components/CTASection";
-import SiteVisitForm from "@/components/SiteVisitForm";
-import ContactSection from "@/components/ContactSection";
 import ScrollReveal from "@/components/ScrollReveal";
-import EnquiryPopup from "@/components/EnquiryPopup";
-import Footer from "@/components/Footer";
+
+const AboutSection = dynamic(() => import("@/components/AboutSection"));
+const TrustSection = dynamic(() => import("@/components/TrustSection"));
+const OffersSection = dynamic(() => import("@/components/OffersSection"));
+const FeaturedProjects = dynamic(() => import("@/components/FeaturedProjects"));
+const LatestOffers = dynamic(() => import("@/components/LatestOffers"));
+const ServicesSection = dynamic(() => import("@/components/ServicesSection"));
+const WhyChooseUs = dynamic(() => import("@/components/WhyChooseUs"));
+const EMICalculator = dynamic(() => import("@/components/EMICalculator"));
+const Testimonials = dynamic(() => import("@/components/Testimonials"));
+const Gallery = dynamic(() => import("@/components/Gallery"));
+const FAQ = dynamic(() => import("@/components/FAQ"));
+const LayoutMap = dynamic(() => import("@/components/LayoutMap"));
+const JourneySection = dynamic(() => import("@/components/JourneySection"));
+const CTASection = dynamic(() => import("@/components/CTASection"));
+const SiteVisitForm = dynamic(() => import("@/components/SiteVisitForm"));
+const ContactSection = dynamic(() => import("@/components/ContactSection"));
+const Footer = dynamic(() => import("@/components/Footer"));
+const EnquiryPopup = dynamic(() => import("@/components/EnquiryPopup"));
 
 export default function Home() {
   return (
@@ -47,14 +49,14 @@ export default function Home() {
         <ScrollReveal>
           <LatestOffers />
         </ScrollReveal>
-        <ScrollReveal delay={0.15}>
-          <EMICalculator />
-        </ScrollReveal>
         <ScrollReveal delay={0.1}>
           <ServicesSection />
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <WhyChooseUs />
+        </ScrollReveal>
+        <ScrollReveal delay={0.15}>
+          <EMICalculator />
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
           <Testimonials />

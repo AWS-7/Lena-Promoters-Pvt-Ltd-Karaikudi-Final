@@ -1,13 +1,22 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Preloader from "@/components/Preloader";
 import WelcomeSound from "@/components/WelcomeSound";
 
-const inter = Inter({
-  variable: "--font-inter",
+const poppins = Poppins({
+  variable: "--font-heading",
   subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -73,8 +82,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans pb-16 md:pb-0 pt-16">
+    <html lang="en" className={`${poppins.variable} ${inter.variable} h-full antialiased`}>
+      <head>
+        <link rel="preconnect" href="https://rjeydmqspxklsrtohumn.supabase.co" />
+        <link rel="dns-prefetch" href="https://rjeydmqspxklsrtohumn.supabase.co" />
+      </head>
+      <body className={`${poppins.variable} ${inter.variable} min-h-full flex flex-col pb-16 md:pb-0`}>
         <WelcomeSound />
         <Preloader />
         {children}
