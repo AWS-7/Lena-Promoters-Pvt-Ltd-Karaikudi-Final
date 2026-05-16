@@ -17,7 +17,10 @@ function useIsMobile() {
 
 export default function Preloader() {
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const isMobile = useIsMobile();
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), isMobile ? 800 : 1200);
@@ -34,7 +37,7 @@ export default function Preloader() {
           className="fixed inset-0 z-[200] bg-gradient-to-br from-[#0E6FA3] via-[#0E6FA3] to-[#0a5480] flex flex-col items-center justify-center overflow-hidden"
         >
           {/* Gradient overlay - static on mobile */}
-          {isMobile ? (
+          {(!mounted || isMobile) ? (
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.08)_0%,_transparent_70%)]" />
           ) : (
             <motion.div
@@ -45,7 +48,7 @@ export default function Preloader() {
           )}
 
           {/* Floating particles - desktop only */}
-          {!isMobile && [
+          {mounted && !isMobile && [
             { left: 10, top: 15 }, { left: 25, top: 35 }, { left: 65, top: 45 },
             { left: 80, top: 25 }, { left: 15, top: 60 }, { left: 55, top: 55 },
             { left: 75, top: 70 }, { left: 90, top: 50 }
@@ -72,7 +75,7 @@ export default function Preloader() {
           ))}
 
           {/* Animated waves - desktop only */}
-          {!isMobile && (
+          {mounted && !isMobile && (
             <>
               <motion.div
                 animate={{ x: [0, -100, 0] }}
@@ -88,7 +91,7 @@ export default function Preloader() {
           )}
 
           {/* Spinning rings - desktop only */}
-          {!isMobile && (
+          {mounted && !isMobile && (
             <>
               <motion.div
                 animate={{ rotate: 360 }}
@@ -109,7 +112,7 @@ export default function Preloader() {
           )}
 
           {/* Pulsing circles - desktop only */}
-          {!isMobile && [...Array(5)].map((_, i) => (
+          {mounted && !isMobile && [...Array(5)].map((_, i) => (
             <motion.div
               key={i}
               animate={{
@@ -133,7 +136,7 @@ export default function Preloader() {
             className="relative z-10"
           >
             {/* Glow behind logo - simplified on mobile */}
-            {isMobile ? (
+            {(!mounted || isMobile) ? (
               <div className="absolute inset-0 bg-white/15 rounded-full blur-3xl scale-150 -z-10" />
             ) : (
               <motion.div
@@ -143,7 +146,7 @@ export default function Preloader() {
               />
             )}
 
-            {isMobile ? (
+            {(!mounted || isMobile) ? (
               <div className="relative w-28 h-28 sm:w-32 sm:h-32 md:w-44 md:h-44 mx-auto">
                 <div className="absolute inset-0 bg-white rounded-full shadow-2xl" />
                 <Image
@@ -238,7 +241,7 @@ export default function Preloader() {
           </motion.div>
 
           {/* Bottom decorative dots - desktop only */}
-          {!isMobile && (
+          {mounted && !isMobile && (
             <div className="absolute bottom-8 flex gap-2">
               {[0, 1, 2].map((i) => (
                 <motion.div

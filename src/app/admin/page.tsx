@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   Briefcase, Users, MessageSquare, Image, TrendingUp,
   ArrowUpRight, ArrowDownRight, Zap, Calendar, Clock, MoreHorizontal,
@@ -69,6 +69,9 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<Record<string, number>>({});
   const [recentLeads, setRecentLeads] = useState<any[]>([]);
   const [recentEnquiries, setRecentEnquiries] = useState<any[]>([]);
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => { setNow(new Date()); }, []);
 
   useEffect(() => {
     async function loadStats() {
@@ -100,8 +103,14 @@ export default function AdminDashboard() {
           <p className="text-sm text-gray-500 mt-1">Welcome back! Here&apos;s what&apos;s happening today.</p>
         </div>
         <div className="text-right hidden sm:block">
-          <div className="text-sm font-medium text-gray-900">{new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}</div>
-          <div className="text-xs text-gray-400">{new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</div>
+          {now ? (
+            <>
+              <div className="text-sm font-medium text-gray-900">{now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}</div>
+              <div className="text-xs text-gray-400">{now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</div>
+            </>
+          ) : (
+            <div className="h-5 w-32 bg-gray-100 rounded animate-pulse" />
+          )}
         </div>
       </div>
 

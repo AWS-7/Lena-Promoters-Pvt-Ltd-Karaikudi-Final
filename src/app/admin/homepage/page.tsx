@@ -29,6 +29,7 @@ export default function HomepageAdmin() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     supabase
@@ -46,14 +47,27 @@ export default function HomepageAdmin() {
 
   const saveSection = async (section: string, content: any) => {
     setSaving(true);
-    const { error } = await supabase
-      .from("homepage_content")
-      .upsert({ section_key: section, content }, { onConflict: "section_key" });
+    setMessage("");
+    setErrorMessage("");
 
-    if (!error) {
-      setMessage("Saved successfully!");
-      setData((prev) => ({ ...prev, [section]: content }));
-      setTimeout(() => setMessage(""), 3000);
+    try {
+      const { error } = await supabase
+        .from("homepage_content")
+        .upsert({ section_key: section, content }, { onConflict: "section_key" });
+
+      if (error) {
+        console.error("Save error:", error);
+        setErrorMessage("Save failed: " + error.message);
+        setTimeout(() => setErrorMessage(""), 5000);
+      } else {
+        setMessage("Saved successfully!");
+        setData((prev) => ({ ...prev, [section]: content }));
+        setTimeout(() => setMessage(""), 3000);
+      }
+    } catch (err: any) {
+      console.error("Save exception:", err);
+      setErrorMessage("Save failed: " + (err.message || "Unknown error"));
+      setTimeout(() => setErrorMessage(""), 5000);
     }
     setSaving(false);
   };
@@ -84,15 +98,26 @@ export default function HomepageAdmin() {
           <h1 className="text-2xl font-bold text-gray-900">Homepage Sections</h1>
           <p className="text-gray-500 text-sm mt-1">Manage all homepage content. Images stored in Cloudinary, text in Supabase.</p>
         </div>
-        {message && (
-          <motion.span
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-green-100 text-green-700 px-4 py-2 rounded-lg text-sm font-medium"
-          >
-            {message}
-          </motion.span>
-        )}
+        <div className="flex items-center gap-2">
+          {message && (
+            <motion.span
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-green-100 text-green-700 px-4 py-2 rounded-lg text-sm font-medium"
+            >
+              {message}
+            </motion.span>
+          )}
+          {errorMessage && (
+            <motion.span
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-100 text-red-700 px-4 py-2 rounded-lg text-sm font-medium"
+            >
+              {errorMessage}
+            </motion.span>
+          )}
+        </div>
       </div>
 
       {/* Tabs */}
