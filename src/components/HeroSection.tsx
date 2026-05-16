@@ -238,7 +238,7 @@ export default function HeroSection() {
                     <select
                       value={selectedLocation}
                       onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full appearance-none rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent cursor-pointer hover:bg-white/20 transition-colors"
+                      className="w-full appearance-none rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent cursor-pointer hover:bg-white/20 transition-colors [&>option]:text-gray-900 [&>option]:bg-white"
                     >
                       {locations.map((loc) => (
                         <option key={loc} value={loc}>{loc}</option>
@@ -256,7 +256,7 @@ export default function HeroSection() {
                     <select
                       value={selectedBudget}
                       onChange={(e) => setSelectedBudget(e.target.value)}
-                      className="w-full appearance-none rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent cursor-pointer hover:bg-white/20 transition-colors"
+                      className="w-full appearance-none rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent cursor-pointer hover:bg-white/20 transition-colors [&>option]:text-gray-900 [&>option]:bg-white"
                     >
                       {budgetRanges.map((range) => (
                         <option key={range} value={range}>{range}</option>
