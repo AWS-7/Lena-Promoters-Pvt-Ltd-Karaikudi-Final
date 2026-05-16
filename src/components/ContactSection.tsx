@@ -44,10 +44,11 @@ export default function ContactSection() {
     setTimeout(() => setSubmitted(false), 4000);
   };
 
-  const phone = settings?.phone || "+91 98765 43210";
+  const phone1 = "+91 81487 48140";
+  const phone2 = "+91 81481 48140";
   const email = settings?.email || "info@lenapromoters.com";
   const address = settings?.address || "123, Main Road, Karaikudi, Sivaganga District, Tamil Nadu - 630001";
-  const whatsapp = settings?.whatsapp || "+91 98765 43210";
+  const whatsapp = settings?.whatsapp || "+91 81487 48140";
 
   return (
     <section id="contact" className="py-16 md:py-24 bg-white overflow-hidden">
@@ -82,7 +83,8 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500">Phone</div>
-                    <a href={`tel:${phone}`} className="font-semibold text-gray-900 hover:text-[#0E6FA3]">{phone}</a>
+                    <a href={`tel:${phone1.replace(/\s/g, "")}`} className="font-semibold text-gray-900 hover:text-[#0E6FA3] block">{phone1}</a>
+                    <a href={`tel:${phone2.replace(/\s/g, "")}`} className="font-semibold text-gray-900 hover:text-[#0E6FA3] block">{phone2}</a>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -116,7 +118,7 @@ export default function ContactSection() {
 
               <div className="mt-8 pt-6 border-t">
                 <a
-                  href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
+                  href={`https://wa.me/${phone1.replace(/\D/g, "")}`}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 rounded-lg bg-green-500 text-white px-5 py-2.5 text-sm font-medium hover:bg-green-600 transition-colors"

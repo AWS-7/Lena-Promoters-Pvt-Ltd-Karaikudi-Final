@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Phone, Mail, MapPin, ArrowUp } from "lucide-react";
+import { Phone, Mail, MapPin, ArrowUp, Code } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 
@@ -19,7 +19,8 @@ export default function Footer() {
       });
   }, []);
 
-  const phone = settings?.phone || "+91 98765 43210";
+  const phone1 = "+91 81487 48140";
+  const phone2 = "+91 81481 48140";
   const email = settings?.email || "info@lenapromoters.com";
   const address = settings?.address || "Karaikudi, Tamil Nadu";
 
@@ -79,8 +80,11 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-white mb-4">Contact Us</h4>
             <div className="space-y-3 text-sm">
-              <a href={`tel:${phone}`} className="flex items-center gap-2 hover:text-white transition-colors">
-                <Phone size={14} /> {phone}
+              <a href={`tel:${phone1.replace(/\s/g, "")}`} className="flex items-center gap-2 hover:text-white transition-colors">
+                <Phone size={14} /> {phone1}
+              </a>
+              <a href={`tel:${phone2.replace(/\s/g, "")}`} className="flex items-center gap-2 hover:text-white transition-colors">
+                <Phone size={14} /> {phone2}
               </a>
               <a href={`mailto:${email}`} className="flex items-center gap-2 hover:text-white transition-colors">
                 <Mail size={14} /> {email}
@@ -93,8 +97,11 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <div>
-            &copy; {new Date().getFullYear()} Lena Promoters Private Limited. All rights reserved.
+          <div className="flex flex-col gap-1">
+            <div>&copy; {new Date().getFullYear()} Lena Promoters Private Limited. All rights reserved.</div>
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <Code size={12} /> Developed by AWS-Agni Web Solution — 9080700642
+            </div>
           </div>
           <motion.button
             onClick={scrollToTop}

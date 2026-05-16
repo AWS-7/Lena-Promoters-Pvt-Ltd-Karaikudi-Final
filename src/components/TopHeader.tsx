@@ -17,7 +17,8 @@ export default function TopHeader() {
       });
   }, []);
 
-  const phone = settings?.phone || "+91 98765 43210";
+  const phone1 = "+91 81487 48140";
+  const phone2 = "+91 81481 48140";
   const email = settings?.email || "info@lenapromoters.com";
   const address = settings?.address || "Karaikudi, Tamil Nadu";
   const facebook = settings?.facebook || "#";
@@ -30,12 +31,19 @@ export default function TopHeader() {
         {/* Left: Contact info */}
         <div className="flex items-center gap-x-3 sm:gap-x-5 gap-y-1 min-w-0">
           <a
-            href={`tel:${phone}`}
+            href={`tel:${phone1.replace(/\s/g, "")}`}
             className="flex items-center gap-1.5 hover:underline whitespace-nowrap shrink-0"
           >
             <Phone size={13} className="shrink-0" />
-            <span className="hidden xs:inline">{phone}</span>
+            <span className="hidden xs:inline">{phone1}</span>
             <span className="xs:hidden">Call</span>
+          </a>
+          <a
+            href={`tel:${phone2.replace(/\s/g, "")}`}
+            className="hidden sm:flex items-center gap-1.5 hover:underline whitespace-nowrap shrink-0"
+          >
+            <Phone size={13} className="shrink-0" />
+            <span>{phone2}</span>
           </a>
           <a
             href={`mailto:${email}`}

@@ -103,7 +103,7 @@ export default function HeroSection() {
       });
   }, []);
 
-  const phone = settings?.phone || "+91 98765 43210";
+  const phone = "+91 81487 48140";
 
   // Extract unique locations from projects
   const locations = useMemo(() => {

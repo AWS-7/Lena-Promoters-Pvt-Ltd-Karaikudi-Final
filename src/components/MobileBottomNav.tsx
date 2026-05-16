@@ -32,7 +32,7 @@ export default function MobileBottomNav() {
   // Hide on admin pages
   if (pathname?.startsWith("/admin")) return null;
 
-  const phone = settings?.phone || "+91 98765 43210";
+  const phone = "+91 81487 48140";
 
   const isActive = (href: string) =>
     pathname === href || (href !== "/" && pathname?.startsWith(href));

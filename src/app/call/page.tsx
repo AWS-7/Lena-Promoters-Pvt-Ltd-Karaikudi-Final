@@ -20,10 +20,11 @@ export default function CallPage() {
       });
   }, []);
 
-  const phone = settings?.phone || "+91 98765 43210";
+  const phone1 = "+91 81487 48140";
+  const phone2 = "+91 81481 48140";
   const email = settings?.email || "info@lenapromoters.com";
   const address = settings?.address || "Karaikudi, Tamil Nadu";
-  const whatsapp = settings?.whatsapp || "+91 98765 43210";
+  const whatsapp = settings?.whatsapp || "+91 81487 48140";
 
   return (
     <>
@@ -56,7 +57,8 @@ export default function CallPage() {
                 </div>
                 <div className="flex-1">
                   <div className="text-sm text-gray-500 mb-1">Phone</div>
-                  <div className="text-xl font-bold text-gray-900">{phone}</div>
+                  <div className="text-xl font-bold text-gray-900">{phone1}</div>
+                  <div className="text-xl font-bold text-gray-900">{phone2}</div>
                 </div>
               </div>
             </motion.div>
@@ -142,10 +144,10 @@ export default function CallPage() {
             className="text-center mt-10"
           >
             <a
-              href={`tel:${phone}`}
+              href={`tel:${phone1.replace(/\s/g, "")}`}
               className="inline-flex items-center gap-3 rounded-2xl bg-green-500 text-white px-10 py-4 font-bold text-lg hover:bg-green-600 transition-colors shadow-xl"
             >
-              <Phone size={24} /> Call Now
+              <Phone size={24} /> Call {phone1}
             </a>
             <p className="text-white/60 text-sm mt-4">Click to dial directly</p>
           </motion.div>

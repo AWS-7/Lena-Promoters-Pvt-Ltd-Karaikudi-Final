@@ -19,8 +19,8 @@ export default function CTASection() {
       });
   }, []);
 
-  const phone = settings?.phone || "+91 98765 43210";
-  const whatsapp = settings?.whatsapp || "+91 98765 43210";
+  const phone = "+91 81487 48140";
+  const whatsapp = settings?.whatsapp || "+91 81487 48140";
 
   return (
     <section className="py-16 md:py-24 bg-gradient-to-br from-[#0E6FA3] to-[#0a5480] text-white relative overflow-hidden">
