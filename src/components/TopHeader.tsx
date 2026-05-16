@@ -25,7 +25,7 @@ export default function TopHeader() {
   const youtube = settings?.youtube || "#";
 
   return (
-    <div className="bg-[#0E6FA3] text-white">
+    <div className="bg-[#0E6FA3] text-white hidden md:block">
       <div className="container-custom py-2 px-4 flex items-center justify-between gap-3 text-xs sm:text-sm">
         {/* Left: Contact info */}
         <div className="flex items-center gap-x-3 sm:gap-x-5 gap-y-1 min-w-0">

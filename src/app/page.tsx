@@ -49,11 +49,11 @@ export default function Home() {
         <ScrollReveal>
           <LatestOffers />
         </ScrollReveal>
-        <ScrollReveal delay={0.1}>
-          <ServicesSection />
-        </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <WhyChooseUs />
+        </ScrollReveal>
+        <ScrollReveal delay={0.1}>
+          <ServicesSection />
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <EMICalculator />

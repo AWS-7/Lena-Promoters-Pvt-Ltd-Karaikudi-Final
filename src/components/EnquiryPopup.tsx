@@ -101,14 +101,14 @@ export default function EnquiryPopup() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 pt-20 pointer-events-none"
+            className="fixed inset-0 z-[110] flex items-center justify-center p-3 sm:p-4 pt-16 sm:pt-20 pointer-events-none"
           >
             <div
-              className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md pointer-events-auto overflow-hidden"
+              className="relative bg-white rounded-2xl shadow-2xl w-full max-w-[95vw] sm:max-w-sm md:max-w-md pointer-events-auto overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Top blue bar */}
-              <div className="bg-gradient-to-r from-[#1195db] to-[#0a5480] p-6 text-center relative">
+              <div className="bg-gradient-to-r from-[#1195db] to-[#0a5480] p-4 sm:p-6 text-center relative">
                 {/* Close */}
                 <button
                   onClick={close}
@@ -118,7 +118,7 @@ export default function EnquiryPopup() {
                 </button>
 
                 {/* Logo */}
-                <div className="relative w-16 h-16 mx-auto mb-3 bg-white rounded-xl p-1.5 shadow-lg">
+                <div className="relative w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 bg-white rounded-xl p-1 sm:p-1.5 shadow-lg">
                   <Image
                     src="/images/logo.png"
                     alt="Lena Promoters"
@@ -131,7 +131,7 @@ export default function EnquiryPopup() {
               </div>
 
               {/* Form */}
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 {submitted ? (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}

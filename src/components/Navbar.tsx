@@ -27,11 +27,12 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav
-      className={`sticky top-0 z-[100] bg-white transition-shadow duration-300 ${
-        scrolled ? "shadow-md" : "shadow-none"
-      }`}
-    >
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-[100] bg-white transition-shadow duration-300 md:sticky md:top-0 md:inset-x-0 ${
+          scrolled ? "shadow-md" : "shadow-none"
+        }`}
+      >
       <div className="container-custom py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <div className="relative w-15 h-15">
@@ -127,5 +128,8 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </nav>
+    {/* Spacer for mobile fixed navbar */}
+    <div className="h-[72px] md:hidden" />
+    </>
   );
 }
