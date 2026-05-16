@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -27,8 +27,12 @@ import {
   ChevronRight,
   Bell,
   Shield,
+  AlertTriangle,
 } from "lucide-react";
 import NotificationBell from "@/components/admin/NotificationBell";
+import { supabase } from "@/lib/supabase";
+
+const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
 
 const navGroups = [
   {
@@ -70,19 +74,111 @@ const navGroups = [
   },
 ];
 
+function clearAllStorage() {
+  try {
+    localStorage.removeItem("admin_auth");
+    localStorage.removeItem("auth");
+    localStorage.removeItem("supabase.auth.token");
+    localStorage.removeItem("sb-");
+    sessionStorage.clear();
+    // Clear all localStorage keys that might contain auth
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const key = localStorage.key(i);
+      if (key && (key.includes("auth") || key.includes("token") || key.includes("session") || key.includes("supabase") || key.includes("sb-"))) {
+        localStorage.removeItem(key);
+      }
+    }
+  } catch (e) {
+    console.error("Storage clear error:", e);
+  }
+}
+
+async function logoutServer() {
+  try {
+    // Sign out from Supabase if using it
+    await supabase.auth.signOut();
+    // Clear server cookie
+    await fetch("/api/admin/logout", { method: "POST", credentials: "include" });
+  } catch (e) {
+    console.error("Logout error:", e);
+  }
+  clearAllStorage();
+}
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showTimeoutWarning, setShowTimeoutWarning] = useState(false);
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const warningTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Strict logout function
+  const forceLogout = useCallback(async () => {
+    await logoutServer();
+    window.location.href = "/login";
+  }, []);
+
+  // Reset idle timer on activity
+  const resetIdleTimer = useCallback(() => {
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    if (warningTimer.current) clearTimeout(warningTimer.current);
+    setShowTimeoutWarning(false);
+
+    // Set warning timer (1 min before logout)
+    warningTimer.current = setTimeout(() => {
+      setShowTimeoutWarning(true);
+    }, INACTIVITY_TIMEOUT - 60 * 1000);
+
+    // Set logout timer
+    idleTimer.current = setTimeout(() => {
+      forceLogout();
+    }, INACTIVITY_TIMEOUT);
+  }, [forceLogout]);
+
+  // Activity listeners
+  useEffect(() => {
+    const events = ["mousedown", "mousemove", "keypress", "scroll", "touchstart", "click"];
+    events.forEach((e) => window.addEventListener(e, resetIdleTimer, { passive: true }));
+    resetIdleTimer();
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, resetIdleTimer));
+      if (idleTimer.current) clearTimeout(idleTimer.current);
+      if (warningTimer.current) clearTimeout(warningTimer.current);
+    };
+  }, [resetIdleTimer]);
+
+  // Auto-logout when leaving admin (beforeunload)
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Use sendBeacon for reliable async call on page close
+      const blob = new Blob([], { type: "application/json" });
+      navigator.sendBeacon("/api/admin/logout", blob);
+      clearAllStorage();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
+
+  // Validate session on mount
+  useEffect(() => {
+    async function validateSession() {
+      try {
+        const res = await fetch("/api/admin/session", { credentials: "include" });
+        if (!res.ok) {
+          clearAllStorage();
+          window.location.href = "/login";
+        }
+      } catch {
+        clearAllStorage();
+        window.location.href = "/login";
+      }
+    }
+    validateSession();
+  }, []);
 
   const handleLogout = async () => {
-    try {
-      await fetch("/api/admin/logout", { method: "POST" });
-      router.push("/login");
-      router.refresh();
-    } catch (error) {
-      console.error("Logout failed", error);
-    }
+    await forceLogout();
   };
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
@@ -197,6 +293,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
           </div>
         </header>
+
+        {/* Timeout Warning */}
+        {showTimeoutWarning && (
+          <div className="fixed top-16 left-0 right-0 z-40 lg:left-[260px] flex justify-center pointer-events-none">
+            <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-2 rounded-xl shadow-lg flex items-center gap-2 text-sm font-medium animate-pulse">
+              <AlertTriangle size={16} />
+              Session expires in 1 minute due to inactivity
+            </div>
+          </div>
+        )}
 
         {/* Page Content */}
         <main className="p-6">{children}</main>
