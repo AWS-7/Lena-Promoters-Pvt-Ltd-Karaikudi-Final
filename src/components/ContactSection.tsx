@@ -22,10 +22,15 @@ export default function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await supabase.from("leads").insert([
+    const { error: leadsError } = await supabase.from("leads").insert([
       { name: form.name, email: form.email, phone: form.phone, message: form.message, status: "new" },
     ]);
-    await supabase.from("notifications").insert([
+    if (leadsError) {
+      console.error("Leads insert error:", leadsError);
+      alert("Failed to save lead: " + leadsError.message);
+      return;
+    }
+    const { error: notifError } = await supabase.from("notifications").insert([
       {
         title: "New Contact Inquiry",
         message: `${form.name} submitted a contact form. Phone: ${form.phone}`,
@@ -33,6 +38,7 @@ export default function ContactSection() {
         read: false,
       },
     ]);
+    if (notifError) console.error("Notification insert error:", notifError);
     setSubmitted(true);
     setForm({ name: "", email: "", phone: "", message: "" });
     setTimeout(() => setSubmitted(false), 4000);

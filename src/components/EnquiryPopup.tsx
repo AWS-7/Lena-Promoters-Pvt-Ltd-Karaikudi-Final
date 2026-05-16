@@ -50,20 +50,27 @@ export default function EnquiryPopup() {
     if (!form.name.trim() || !form.phone.trim()) return;
     setLoading(true);
 
-    await supabase.from("enquiries").insert([{
+    const { error: enquiryError } = await supabase.from("enquiries").insert({
       name: form.name,
       phone: form.phone,
       location: form.location,
       source: "website_popup",
       status: "pending",
-    }]);
+    });
+    if (enquiryError) {
+      console.error("Enquiry insert error:", enquiryError);
+      alert("Failed to save enquiry: " + enquiryError.message);
+      setLoading(false);
+      return;
+    }
 
-    await supabase.from("notifications").insert([{
+    const { error: notifError } = await supabase.from("notifications").insert([{
       title: "New Enquiry",
       message: `${form.name} from ${form.location || "Unknown"} enquired. Phone: ${form.phone}`,
       type: "lead",
       read: false,
     }]);
+    if (notifError) console.error("Notification insert error:", notifError);
 
     setLoading(false);
     setSubmitted(true);

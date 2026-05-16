@@ -143,6 +143,7 @@ CREATE TABLE IF NOT EXISTS enquiries (
   phone TEXT NOT NULL,
   location TEXT DEFAULT '',
   source TEXT DEFAULT 'website_popup',
+  status TEXT DEFAULT 'pending',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -233,8 +234,16 @@ INSERT INTO faq (question, answer, "order") VALUES
 ('Can I resell the plot later?', 'Absolutely. All our plots come with clear titles and market appreciation potential. We also offer resale assistance through our Property Exchange service.', 5)
 ON CONFLICT DO NOTHING;
 
--- Enable Row Level Security (RLS) - optional but recommended
--- You can add policies later based on your auth setup
+-- Enable Row Level Security (RLS) with policies for anonymous access
+-- The app uses anon key for all Supabase operations (both frontend forms and admin panel)
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE enquiries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+
+-- Allow all operations for anon role (website forms insert, admin panel reads/updates/deletes)
+CREATE POLICY IF NOT EXISTS allow_all_anon_leads ON leads FOR ALL TO anon USING (true) WITH CHECK (true);
+CREATE POLICY IF NOT EXISTS allow_all_anon_enquiries ON enquiries FOR ALL TO anon USING (true) WITH CHECK (true);
+CREATE POLICY IF NOT EXISTS allow_all_anon_notifications ON notifications FOR ALL TO anon USING (true) WITH CHECK (true);
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_projects_featured ON projects(featured);
