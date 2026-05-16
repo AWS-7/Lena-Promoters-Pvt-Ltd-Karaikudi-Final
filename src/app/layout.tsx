@@ -87,7 +87,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         <link rel="dns-prefetch" href="https://rjeydmqspxklsrtohumn.supabase.co" />
       </head>
-      <body className={`${poppins.variable} ${inter.variable} min-h-full flex flex-col pb-16 md:pb-0`}>
+      <body className={`${poppins.variable} ${inter.variable} min-h-full flex flex-col pb-[88px] md:pb-0`}>
         <WelcomeSound />
         <Preloader />
         {children}
