@@ -147,51 +147,51 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-black/50" />
 
       <div className="container-custom relative flex items-center min-h-[700px] sm:min-h-[780px] md:min-h-[600px] lg:min-h-[700px] py-10 md:py-10">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full max-w-full">
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="text-center md:text-center"
+            className="text-center md:text-center max-w-full"
           >
             <motion.div variants={itemVariants} className="inline-flex items-center gap-2 bg-white/10 backdrop-blur rounded-full px-4 py-1.5 text-sm mb-4 md:mb-6">
               <Shield size={14} />
               DTCP & RERA Approved Layouts
             </motion.div>
-            <motion.h1 variants={itemVariants} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-snug md:leading-tight mb-4 md:mb-6">
-              Premium DTCP Approved  <span className="block text-[#e6f2f9]">Land & Plot Layouts</span>
+            <motion.h1 variants={itemVariants} className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-snug md:leading-tight mb-4 md:mb-6">
+              Premium DTCP Approved <span className="block text-[#e6f2f9]">Land & Plot Layouts</span>
               in Karaikudi
             </motion.h1>
-            <motion.p variants={itemVariants} className="text-base sm:text-lg md:text-xl text-white/90 mb-6 md:mb-8 max-w-xl mx-auto md:mx-0">
+            <motion.p variants={itemVariants} className="text-sm sm:text-base md:text-xl text-white/90 mb-6 md:mb-8 max-w-xl mx-auto md:mx-0">
               Trusted land promoter in Tamil Nadu offering clear-title plots, legal assurance, and hassle-free registration at prime locations.
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-wrap gap-3 md:gap-4 mb-6 md:mb-8 justify-center md:justify-start">
               <a
                 href="#projects"
-                className="inline-flex items-center gap-2 rounded-lg bg-white text-[#0E6FA3] px-5 md:px-6 py-2.5 md:py-3 font-semibold hover:bg-gray-100 transition-colors hover:scale-105 active:scale-95 text-sm md:text-base"
+                className="inline-flex items-center gap-2 rounded-lg bg-white text-[#0E6FA3] px-4 sm:px-5 md:px-6 py-2.5 md:py-3 font-semibold hover:bg-gray-100 transition-colors hover:scale-105 active:scale-95 text-sm md:text-base"
               >
                 Explore Projects <ChevronRight size={16} className="md:w-[18px] md:h-[18px]" />
               </a>
               <a
                 href={`tel:${phone}`}
-                className="inline-flex items-center gap-2 rounded-lg bg-white/10 backdrop-blur border border-white/20 px-5 md:px-6 py-2.5 md:py-3 font-semibold hover:bg-white/20 transition-colors hover:scale-105 active:scale-95 text-sm md:text-base"
+                className="inline-flex items-center gap-2 rounded-lg bg-white/10 backdrop-blur border border-white/20 px-4 sm:px-5 md:px-6 py-2.5 md:py-3 font-semibold hover:bg-white/20 transition-colors hover:scale-105 active:scale-95 text-sm md:text-base"
               >
                 <Phone size={16} className="md:w-[18px] md:h-[18px]" /> Call Now
               </a>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-4 md:gap-6 text-xs sm:text-sm justify-center md:justify-start">
-              <div className="flex items-center gap-2">
-                <Award size={16} className="text-[#e6f2f9] md:w-[18px] md:h-[18px]" />
+            <motion.div variants={itemVariants} className="flex flex-wrap gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm justify-center md:justify-start">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Award size={14} className="text-[#e6f2f9] sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
                 <span>DTCP Approved</span>
               </div>
-              <div className="flex items-center gap-2">
-                <MapPin size={16} className="text-[#e6f2f9] md:w-[18px] md:h-[18px]" />
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <MapPin size={14} className="text-[#e6f2f9] sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
                 <span>Prime Locations</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Shield size={16} className="text-[#e6f2f9] md:w-[18px] md:h-[18px]" />
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Shield size={14} className="text-[#e6f2f9] sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
                 <span>Legal Clearance</span>
               </div>
             </motion.div>
@@ -201,58 +201,58 @@ export default function HeroSection() {
             initial={{ opacity: 0, x: 40, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative"
+            className="relative w-full max-w-full"
           >
             <motion.div
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="bg-white/10 backdrop-blur-2xl rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20"
+              className="bg-white/10 backdrop-blur-2xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl border border-white/20 w-full max-w-full"
             >
               {/* Header */}
-              <div className="mb-6">
-                <h3 className="text-white font-bold text-xl md:text-2xl mb-2">
+              <div className="mb-4 sm:mb-6">
+                <h3 className="text-white font-bold text-lg sm:text-xl md:text-2xl mb-1.5 sm:mb-2">
                   Find Your Ideal Plot in Karaikudi
                 </h3>
-                <p className="text-white/70 text-sm">
+                <p className="text-white/70 text-xs sm:text-sm">
                   DTCP Approved | Clear Title | Prime Locations
                 </p>
               </div>
 
               {/* Form */}
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {/* Location */}
                 <div className="relative">
-                  <label className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-2">Location</label>
+                  <label className="block text-[10px] sm:text-xs font-semibold text-white/80 uppercase tracking-wider mb-1.5 sm:mb-2">Location</label>
                   <div className="relative">
-                    <MapPin size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60" />
+                    <MapPin size={16} className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-white/60" />
                     <select
                       value={selectedLocation}
                       onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full appearance-none rounded-2xl border-2 border-white/30 bg-white/10 pl-12 pr-12 py-4 text-base text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent cursor-pointer hover:bg-white/20 transition-colors"
+                      className="w-full appearance-none rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent cursor-pointer hover:bg-white/20 transition-colors"
                     >
                       {locations.map((loc) => (
                         <option key={loc} value={loc}>{loc}</option>
                       ))}
                     </select>
-                    <ChevronRight size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 rotate-90 pointer-events-none" />
+                    <ChevronRight size={16} className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-white/60 rotate-90 pointer-events-none" />
                   </div>
                 </div>
 
                 {/* Budget */}
                 <div className="relative">
-                  <label className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-2">Budget</label>
+                  <label className="block text-[10px] sm:text-xs font-semibold text-white/80 uppercase tracking-wider mb-1.5 sm:mb-2">Budget</label>
                   <div className="relative">
-                    <Banknote size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60" />
+                    <Banknote size={16} className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-white/60" />
                     <select
                       value={selectedBudget}
                       onChange={(e) => setSelectedBudget(e.target.value)}
-                      className="w-full appearance-none rounded-2xl border-2 border-white/30 bg-white/10 pl-12 pr-12 py-4 text-base text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent cursor-pointer hover:bg-white/20 transition-colors"
+                      className="w-full appearance-none rounded-xl sm:rounded-2xl border-2 border-white/30 bg-white/10 pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent cursor-pointer hover:bg-white/20 transition-colors"
                     >
                       {budgetRanges.map((range) => (
                         <option key={range} value={range}>{range}</option>
                       ))}
                     </select>
-                    <ChevronRight size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 rotate-90 pointer-events-none" />
+                    <ChevronRight size={16} className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-white/60 rotate-90 pointer-events-none" />
                   </div>
                 </div>
 
@@ -261,39 +261,39 @@ export default function HeroSection() {
                   onClick={handleSearch}
                   whileHover={{ scale: 1.02, boxShadow: "0 10px 40px rgba(17, 149, 219, 0.3)" }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center justify-center gap-3 w-full rounded-2xl bg-gradient-to-r from-[#1195db] to-[#0E6FA3] text-white py-4.5 font-bold text-lg hover:from-[#0E6FA3] hover:to-[#0a5480] transition-all shadow-xl shadow-[#1195db]/30 mt-4"
+                  className="flex items-center justify-center gap-2 sm:gap-3 w-full rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#1195db] to-[#0E6FA3] text-white py-3 sm:py-4 font-bold text-sm sm:text-lg hover:from-[#0E6FA3] hover:to-[#0a5480] transition-all shadow-xl shadow-[#1195db]/30 mt-2 sm:mt-4"
                 >
                   View Available Plots
-                  <ChevronRight size={20} />
+                  <ChevronRight size={18} className="sm:w-5 sm:h-5" />
                 </motion.button>
               </div>
 
               {/* Trust Elements */}
-              <div className="mt-6 pt-6 border-t border-white/20">
-                <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                  <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-full border border-white/20">
-                    <Shield size={14} className="text-white" />
-                    <span className="text-xs font-medium text-white">DTCP Approved</span>
+              <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/20">
+                <div className="flex flex-wrap gap-2 sm:gap-3 justify-center md:justify-start">
+                  <div className="flex items-center gap-1.5 sm:gap-2 bg-white/10 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border border-white/20">
+                    <Shield size={12} className="text-white sm:w-3.5 sm:h-3.5" />
+                    <span className="text-[10px] sm:text-xs font-medium text-white">DTCP Approved</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-full border border-white/20">
-                    <Award size={14} className="text-white" />
-                    <span className="text-xs font-medium text-white">Bank Loan Available</span>
+                  <div className="flex items-center gap-1.5 sm:gap-2 bg-white/10 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border border-white/20">
+                    <Award size={12} className="text-white sm:w-3.5 sm:h-3.5" />
+                    <span className="text-[10px] sm:text-xs font-medium text-white">Bank Loan</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-full border border-white/20">
-                    <MapPin size={14} className="text-white" />
-                    <span className="text-xs font-medium text-white">Clear Documentation</span>
+                  <div className="flex items-center gap-1.5 sm:gap-2 bg-white/10 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border border-white/20">
+                    <MapPin size={12} className="text-white sm:w-3.5 sm:h-3.5" />
+                    <span className="text-[10px] sm:text-xs font-medium text-white">Clear Docs</span>
                   </div>
                 </div>
               </div>
 
               {/* Secondary Link */}
-              <div className="mt-4 text-center">
+              <div className="mt-3 sm:mt-4 text-center">
                 <a
                   href="#projects"
-                  className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors font-medium"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/70 hover:text-white transition-colors font-medium"
                 >
                   Explore All Projects
-                  <ChevronRight size={14} />
+                  <ChevronRight size={12} className="sm:w-4 sm:h-4" />
                 </a>
               </div>
 

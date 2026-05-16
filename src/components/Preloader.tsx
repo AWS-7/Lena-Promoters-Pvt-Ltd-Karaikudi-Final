@@ -4,13 +4,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+}
+
 export default function Preloader() {
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1200);
+    const timer = setTimeout(() => setLoading(false), isMobile ? 800 : 1200);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isMobile]);
 
   return (
     <AnimatePresence>
@@ -21,15 +33,19 @@ export default function Preloader() {
           transition={{ duration: 0.4, ease: "easeInOut" }}
           className="fixed inset-0 z-[200] bg-gradient-to-br from-[#0E6FA3] via-[#0E6FA3] to-[#0a5480] flex flex-col items-center justify-center overflow-hidden"
         >
-          {/* Animated gradient overlay */}
-          <motion.div
-            animate={{ opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.1)_0%,_transparent_70%)]"
-          />
+          {/* Gradient overlay - static on mobile */}
+          {isMobile ? (
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.08)_0%,_transparent_70%)]" />
+          ) : (
+            <motion.div
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.1)_0%,_transparent_70%)]"
+            />
+          )}
 
-          {/* Floating particles */}
-          {[
+          {/* Floating particles - desktop only */}
+          {!isMobile && [
             { left: 10, top: 15 }, { left: 25, top: 35 }, { left: 65, top: 45 },
             { left: 80, top: 25 }, { left: 15, top: 60 }, { left: 55, top: 55 },
             { left: 75, top: 70 }, { left: 90, top: 50 }
@@ -55,37 +71,45 @@ export default function Preloader() {
             />
           ))}
 
-          {/* Animated waves */}
-          <motion.div
-            animate={{ x: [0, -100, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white/10 to-transparent"
-          />
-          <motion.div
-            animate={{ x: [100, 0, 100] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/5 to-transparent"
-          />
+          {/* Animated waves - desktop only */}
+          {!isMobile && (
+            <>
+              <motion.div
+                animate={{ x: [0, -100, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white/10 to-transparent"
+              />
+              <motion.div
+                animate={{ x: [100, 0, 100] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/5 to-transparent"
+              />
+            </>
+          )}
 
-          {/* Spinning rings around logo */}
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="absolute w-56 h-56 md:w-72 md:h-72 border border-dashed border-white/15 rounded-full"
-          />
-          <motion.div
-            animate={{ rotate: -360 }}
-            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-            className="absolute w-72 h-72 md:w-96 md:h-96 border border-dotted border-white/10 rounded-full"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.18, 0.08] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute w-64 h-64 md:w-80 md:h-80 bg-white/5 rounded-full blur-2xl"
-          />
+          {/* Spinning rings - desktop only */}
+          {!isMobile && (
+            <>
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                className="absolute w-56 h-56 md:w-72 md:h-72 border border-dashed border-white/15 rounded-full"
+              />
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                className="absolute w-72 h-72 md:w-96 md:h-96 border border-dotted border-white/10 rounded-full"
+              />
+              <motion.div
+                animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.18, 0.08] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute w-64 h-64 md:w-80 md:h-80 bg-white/5 rounded-full blur-2xl"
+              />
+            </>
+          )}
 
-          {/* Pulsing circles */}
-          {[...Array(5)].map((_, i) => (
+          {/* Pulsing circles - desktop only */}
+          {!isMobile && [...Array(5)].map((_, i) => (
             <motion.div
               key={i}
               animate={{
@@ -108,28 +132,45 @@ export default function Preloader() {
             transition={{ duration: 0.5, ease: "backOut", delay: 0.1 }}
             className="relative z-10"
           >
-            {/* Glow behind logo */}
-            <motion.div
-              animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.7, 0.4] }}
-              transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0 bg-white/20 rounded-full blur-3xl scale-150 -z-10"
-            />
+            {/* Glow behind logo - simplified on mobile */}
+            {isMobile ? (
+              <div className="absolute inset-0 bg-white/15 rounded-full blur-3xl scale-150 -z-10" />
+            ) : (
+              <motion.div
+                animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.7, 0.4] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 bg-white/20 rounded-full blur-3xl scale-150 -z-10"
+              />
+            )}
 
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="relative w-32 h-32 md:w-44 md:h-44 mx-auto"
-            >
+            {isMobile ? (
+              <div className="relative w-28 h-28 sm:w-32 sm:h-32 md:w-44 md:h-44 mx-auto">
+                <div className="absolute inset-0 bg-white rounded-full shadow-2xl" />
+                <Image
+                  src="/images/logo-main.png"
+                  alt="Lena Promoters"
+                  fill
+                  className="object-contain p-4"
+                  priority
+                />
+              </div>
+            ) : (
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                className="relative w-32 h-32 md:w-44 md:h-44 mx-auto"
+              >
               {/* White background circle behind logo */}
               <div className="absolute inset-0 bg-white rounded-full shadow-2xl" />
-              <Image
-                src="/images/logo-main.png"
-                alt="Lena Promoters"
-                fill
-                className="object-contain p-4"
-                priority
-              />
-            </motion.div>
+                <Image
+                  src="/images/logo-main.png"
+                  alt="Lena Promoters"
+                  fill
+                  className="object-contain p-4"
+                  priority
+                />
+              </motion.div>
+            )}
 
             {/* Company name with typewriter-like stagger */}
             <motion.div
@@ -196,17 +237,19 @@ export default function Preloader() {
             </motion.p>
           </motion.div>
 
-          {/* Bottom decorative dots */}
-          <div className="absolute bottom-8 flex gap-2">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                animate={{ opacity: [0.2, 0.6, 0.2] }}
-                transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }}
-                className="w-1.5 h-1.5 bg-white rounded-full"
-              />
-            ))}
-          </div>
+          {/* Bottom decorative dots - desktop only */}
+          {!isMobile && (
+            <div className="absolute bottom-8 flex gap-2">
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  animate={{ opacity: [0.2, 0.6, 0.2] }}
+                  transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }}
+                  className="w-1.5 h-1.5 bg-white rounded-full"
+                />
+              ))}
+            </div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

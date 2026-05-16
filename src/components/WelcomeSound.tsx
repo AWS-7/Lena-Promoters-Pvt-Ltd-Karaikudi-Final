@@ -1,46 +1,72 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export default function WelcomeSound() {
+  const hasPlayed = useRef(false);
+
   useEffect(() => {
-    // Load voices first
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.getVoices();
-    }
+    if (!("speechSynthesis" in window)) return;
 
-    // Play welcome sound immediately on mount
-    const playWelcomeSound = () => {
-      if ("speechSynthesis" in window) {
-        const utterance = new SpeechSynthesisUtterance("Welcome To Lena Promoters Private Limited  Site");
-        utterance.rate = 0.9;
-        utterance.pitch = 1;
-        utterance.volume = 0.8;
-        
-        // Get voices and try to use a pleasant voice
-        const voices = window.speechSynthesis.getVoices();
-        const preferredVoice = voices.find(voice => 
-          voice.name.includes("Google") || 
-          voice.name.includes("Microsoft") ||
-          voice.name.includes("Samantha")
-        );
-        if (preferredVoice) {
-          utterance.voice = preferredVoice;
-        }
+    const playWelcome = () => {
+      if (hasPlayed.current) return;
+      hasPlayed.current = true;
 
-        // Cancel any ongoing speech and speak
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
+      const utterance = new SpeechSynthesisUtterance(
+        "Welcome to Lena Promoters Private Limited. DTCP and RERA approved land and plot layouts in Karaikudi."
+      );
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      utterance.volume = 0.7;
+
+      // Try to set a good voice
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(
+        (v) =>
+          v.name.includes("Google") ||
+          v.name.includes("Microsoft") ||
+          v.name.includes("Samantha") ||
+          v.name.includes("Female")
+      );
+      if (preferredVoice) utterance.voice = preferredVoice;
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    };
+
+    // Chrome mobile blocks speech without user interaction.
+    // Try immediate play first (works on some browsers).
+    // If voices aren't loaded yet, wait for them.
+    const tryPlay = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        playWelcome();
       }
     };
 
-    // Play immediately on mount (before preloader)
-    playWelcomeSound();
+    // Voices may load asynchronously
+    window.speechSynthesis.onvoiceschanged = tryPlay;
+    tryPlay();
+
+    // Fallback: play on first user interaction (required for Chrome mobile)
+    const interactionEvents = ["click", "touchstart", "scroll", "keydown"];
+    const handleInteraction = () => {
+      playWelcome();
+      interactionEvents.forEach((e) =>
+        window.removeEventListener(e, handleInteraction, { capture: true })
+      );
+    };
+
+    interactionEvents.forEach((e) =>
+      window.addEventListener(e, handleInteraction, { capture: true, once: true })
+    );
 
     return () => {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.onvoiceschanged = null;
+      interactionEvents.forEach((e) =>
+        window.removeEventListener(e, handleInteraction, { capture: true })
+      );
     };
   }, []);
 
