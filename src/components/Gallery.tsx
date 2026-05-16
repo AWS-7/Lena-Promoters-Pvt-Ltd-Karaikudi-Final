@@ -30,7 +30,7 @@ export default function Gallery() {
   }, []);
 
   return (
-    <section id="gallery" className="py-16 md:py-24 bg-white">
+    <section id="gallery" className="py-16 md:py-24 bg-white overflow-hidden">
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

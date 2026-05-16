@@ -211,12 +211,14 @@ export default function LatestOffers() {
         </motion.div>
 
         {/* Row 1 */}
-        <div className="mb-6">
+        <div className="mb-6 overflow-x-hidden">
           <ScrollRow images={row1Images} />
         </div>
 
         {/* Row 2 */}
-        <ScrollRow images={row2Images} reverse />
+        <div className="mb-6 overflow-x-hidden">
+          <ScrollRow images={row2Images} reverse />
+        </div>
       </div>
     </section>
   );

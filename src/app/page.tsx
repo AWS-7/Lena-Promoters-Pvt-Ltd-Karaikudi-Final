@@ -29,7 +29,7 @@ export default function Home() {
     <>
       <TopHeader />
       <Navbar />
-      <main>
+      <main className="overflow-x-hidden">
         <HeroSection />
         <ScrollReveal delay={0.1}>
           <StatsSection />

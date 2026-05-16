@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
   { label: "Home", href: "/" },
@@ -70,53 +71,61 @@ export default function Navbar() {
       </div>
 
       {/* Mobile side drawer */}
-      <div
-        className={`fixed inset-0 z-50 lg:hidden transition-opacity duration-300 ${
-          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        {/* Backdrop */}
-        <div
-          className="absolute inset-0 bg-black/40"
-          onClick={() => setMobileOpen(false)}
-        />
-        {/* Drawer panel */}
-        <div
-          className={`absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-white shadow-2xl transform transition-transform duration-300 ${
-            mobileOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          <div className="flex items-center justify-between p-4 border-b">
-            <span className="font-bold text-[#0E6FA3]">Menu</span>
-            <button
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 lg:hidden"
+          >
+            {/* Backdrop */}
+            <motion.div
+              className="absolute inset-0 bg-black/40"
               onClick={() => setMobileOpen(false)}
-              className="p-2 text-gray-700 hover:text-[#0E6FA3]"
-              aria-label="Close menu"
+            />
+            {/* Drawer panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-white shadow-2xl"
             >
-              <X size={22} />
-            </button>
-          </div>
-          <div className="p-4 flex flex-col gap-1">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="block px-3 py-3 rounded-lg text-sm font-medium text-gray-700 hover:text-[#0E6FA3] hover:bg-[#e6f2f9] transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <Link
-              href="/#contact"
-              onClick={() => setMobileOpen(false)}
-              className="mt-4 inline-flex items-center justify-center rounded-lg bg-[#0E6FA3] px-4 py-3 text-sm font-medium text-white hover:bg-[#0a5480] transition-colors"
-            >
-              Book Site Visit
-            </Link>
-          </div>
-        </div>
-      </div>
+              <div className="flex items-center justify-between p-4 border-b">
+                <span className="font-bold text-[#0E6FA3]">Menu</span>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="p-2 text-gray-700 hover:text-[#0E6FA3]"
+                  aria-label="Close menu"
+                >
+                  <X size={22} />
+                </button>
+              </div>
+              <div className="p-4 flex flex-col gap-1">
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="block px-3 py-3 rounded-lg text-sm font-medium text-gray-700 hover:text-[#0E6FA3] hover:bg-[#e6f2f9] transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                <Link
+                  href="/#contact"
+                  onClick={() => setMobileOpen(false)}
+                  className="mt-4 inline-flex items-center justify-center rounded-lg bg-[#0E6FA3] px-4 py-3 text-sm font-medium text-white hover:bg-[#0a5480] transition-colors"
+                >
+                  Book Site Visit
+                </Link>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

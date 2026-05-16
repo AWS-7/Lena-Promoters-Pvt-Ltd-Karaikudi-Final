@@ -57,7 +57,7 @@ export default function SiteVisitForm() {
   };
 
   return (
-    <section id="site-visit" className="py-16 md:py-24 bg-gray-50">
+    <section id="site-visit" className="py-16 md:py-24 bg-gray-50 overflow-hidden">
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

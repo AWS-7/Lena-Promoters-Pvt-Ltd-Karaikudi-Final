@@ -3,14 +3,18 @@
 import { useEffect, useRef } from "react";
 
 export default function WelcomeSound() {
-  const hasPlayed = useRef(false);
+  // Only true when speech ACTUALLY starts (onstart fires).
+  // Chrome blocks speak() without a user gesture — speak() returns void
+  // and does not throw, so we must NOT trust it as "played".
+  const hasStarted = useRef(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
     if (!("speechSynthesis" in window)) return;
 
     const playWelcome = () => {
-      if (hasPlayed.current) return;
-      hasPlayed.current = true;
+      // Prevent double-play across all paths
+      if (hasStarted.current) return;
 
       const utterance = new SpeechSynthesisUtterance(
         "Welcome to Lena Promoters Private Limited Site."
@@ -19,54 +23,88 @@ export default function WelcomeSound() {
       utterance.pitch = 1;
       utterance.volume = 0.7;
 
-      // Try to set a good voice
+      // Try to set a good English voice
       const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(
-        (v) =>
-          v.name.includes("Google") ||
-          v.name.includes("Microsoft") ||
-          v.name.includes("Samantha") ||
-          v.name.includes("Female")
-      );
+      const preferredVoice =
+        voices.find((v) => v.lang.startsWith("en") && v.name.includes("Google")) ||
+        voices.find((v) => v.lang.startsWith("en") && v.name.includes("Microsoft")) ||
+        voices.find((v) => v.lang.startsWith("en")) ||
+        voices[0];
       if (preferredVoice) utterance.voice = preferredVoice;
+
+      // Only mark as played when audio genuinely begins
+      utterance.onstart = () => {
+        hasStarted.current = true;
+      };
+
+      // If speech fails or ends without starting, allow retry
+      utterance.onerror = () => {
+        // onerror fires when Chrome blocks autoplay
+        // hasStarted stays false so fallback can retry
+      };
+
+      utteranceRef.current = utterance;
 
       window.speechSynthesis.cancel();
       window.speechSynthesis.speak(utterance);
     };
 
-    // Chrome mobile blocks speech without user interaction.
-    // Try immediate play first (works on some browsers).
-    // If voices aren't loaded yet, wait for them.
-    const tryPlay = () => {
+    // --- Path A: Immediate play (works on Edge, Safari, desktop) ---
+    const tryImmediate = () => {
       const voices = window.speechSynthesis.getVoices();
       if (voices.length > 0) {
         playWelcome();
       }
     };
 
-    // Voices may load asynchronously
-    window.speechSynthesis.onvoiceschanged = tryPlay;
-    tryPlay();
+    window.speechSynthesis.onvoiceschanged = tryImmediate;
+    tryImmediate();
 
-    // Fallback: play on first user interaction (required for Chrome mobile)
-    const interactionEvents = ["click", "touchstart", "scroll", "keydown"];
-    const handleInteraction = () => {
-      playWelcome();
-      interactionEvents.forEach((e) =>
-        window.removeEventListener(e, handleInteraction, { capture: true })
-      );
+    // --- Path B: User-interaction fallback (required for Chrome / Android Chrome) ---
+    // Chrome only allows speechSynthesis.speak() inside a user-gesture handler.
+    const triggerEvents = ["click", "touchstart", "touchend", "keydown"];
+    let interactionTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const onInteraction = () => {
+      // Slight delay ensures the gesture is fully registered by Chrome
+      if (interactionTimer) clearTimeout(interactionTimer);
+      interactionTimer = setTimeout(() => {
+        if (!hasStarted.current) {
+          playWelcome();
+        }
+      }, 50);
+
+      // Remove all listeners after first interaction
+      triggerEvents.forEach((evt) => {
+        window.removeEventListener(evt, onInteraction, { capture: true });
+      });
+      if (interactionTimer) {
+        clearTimeout(interactionTimer);
+        interactionTimer = null;
+      }
     };
 
-    interactionEvents.forEach((e) =>
-      window.addEventListener(e, handleInteraction, { capture: true, once: true })
-    );
+    triggerEvents.forEach((evt) => {
+      window.addEventListener(evt, onInteraction, { capture: true, passive: true });
+    });
+
+    // --- Path C: Page Visibility fallback ---
+    // When user switches back to the tab, try again (they interacted with the OS)
+    const onVisibility = () => {
+      if (!document.hidden && !hasStarted.current) {
+        playWelcome();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       window.speechSynthesis.cancel();
       window.speechSynthesis.onvoiceschanged = null;
-      interactionEvents.forEach((e) =>
-        window.removeEventListener(e, handleInteraction, { capture: true })
-      );
+      triggerEvents.forEach((evt) => {
+        window.removeEventListener(evt, onInteraction, { capture: true });
+      });
+      document.removeEventListener("visibilitychange", onVisibility);
+      if (interactionTimer) clearTimeout(interactionTimer);
     };
   }, []);
 

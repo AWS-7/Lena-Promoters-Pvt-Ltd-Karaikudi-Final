@@ -91,26 +91,27 @@ export default function Testimonials() {
         </motion.div>
 
         {/* Mobile: horizontal scroll | Desktop: grid */}
-        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory scroll-smooth -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={t.id}
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ 
-                type: "spring",
-                stiffness: 100,
-                damping: 15,
-                delay: i * 0.15 
-              }}
-              whileHover={{ 
-                y: -8, 
-                scale: 1.02,
-                transition: { type: "spring", stiffness: 300, damping: 20 }
-              }}
-              className="group relative bg-white rounded-2xl p-6 md:p-8 shadow-xl hover:shadow-2xl cursor-pointer flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-auto snap-start"
-            >
+        <div className="overflow-x-hidden w-full">
+          <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory scroll-smooth scrollbar-hide">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.id}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 15,
+                  delay: i * 0.15
+                }}
+                whileHover={{
+                  y: -8,
+                  scale: 1.02,
+                  transition: { type: "spring", stiffness: 300, damping: 20 }
+                }}
+                className="group relative bg-white rounded-2xl p-6 md:p-8 shadow-xl hover:shadow-2xl cursor-pointer flex-shrink-0 w-[calc(100vw-3rem)] max-w-[360px] sm:max-w-[400px] md:w-auto snap-start"
+              >
               {/* Large quote icon */}
               <motion.div 
                 className="absolute -top-4 left-6 w-10 h-10 bg-[#0E6FA3] rounded-full flex items-center justify-center shadow-lg"
@@ -145,6 +146,7 @@ export default function Testimonials() {
               </div>
             </motion.div>
           ))}
+          </div>
         </div>
 
         {/* Mobile scroll indicator */}

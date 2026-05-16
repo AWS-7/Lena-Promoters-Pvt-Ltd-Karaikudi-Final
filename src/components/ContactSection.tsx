@@ -50,7 +50,7 @@ export default function ContactSection() {
   const whatsapp = settings?.whatsapp || "+91 98765 43210";
 
   return (
-    <section id="contact" className="py-16 md:py-24 bg-white">
+    <section id="contact" className="py-16 md:py-24 bg-white overflow-hidden">
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
