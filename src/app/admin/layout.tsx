@@ -10,8 +10,6 @@ import {
   MessageSquare,
   Image,
   HelpCircle,
-  Building2,
-  FileCheck,
   Users,
   Settings,
   Menu,
@@ -61,8 +59,6 @@ const navGroups = [
       { label: "Gallery", href: "/admin/gallery", icon: Image },
       { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
       { label: "FAQ", href: "/admin/faq", icon: HelpCircle },
-      { label: "Partners", href: "/admin/partners", icon: Building2 },
-      { label: "Certificates", href: "/admin/certificates", icon: FileCheck },
     ],
   },
   {

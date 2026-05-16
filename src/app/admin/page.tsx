@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import {
   Briefcase, Users, MessageSquare, Image, TrendingUp,
   ArrowUpRight, ArrowDownRight, Zap, Calendar, Clock, MoreHorizontal,
-  FileText, Globe, Award, ChevronRight
+  FileText, Globe, ChevronRight
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
@@ -61,7 +61,6 @@ const quickActions = [
   { label: "View Enquiries", href: "/admin/enquiries", icon: FileText, color: "bg-emerald-50 text-emerald-600" },
   { label: "Update Gallery", href: "/admin/gallery", icon: Image, color: "bg-violet-50 text-violet-600" },
   { label: "Site Settings", href: "/admin/settings", icon: Globe, color: "bg-amber-50 text-amber-600" },
-  { label: "Certificates", href: "/admin/certificates", icon: Award, color: "bg-rose-50 text-rose-600" },
   { label: "Backup Data", href: "/admin/backup", icon: Zap, color: "bg-cyan-50 text-cyan-600" },
 ];
 
@@ -75,7 +74,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function loadStats() {
-      const tables = ["projects", "leads", "testimonials", "gallery", "services", "faq", "partners", "certificates", "enquiries"];
+      const tables = ["projects", "leads", "testimonials", "gallery", "services", "faq", "enquiries"];
       const counts: Record<string, number> = {};
       for (const table of tables) {
         const { count } = await supabase.from(table).select("*", { count: "exact", head: true });
@@ -255,8 +254,6 @@ export default function AdminDashboard() {
               {[
                 { label: "Services", value: stats.services || 0, total: 10, color: "bg-emerald-500" },
                 { label: "FAQs", value: stats.faq || 0, total: 20, color: "bg-violet-500" },
-                { label: "Partners", value: stats.partners || 0, total: 15, color: "bg-amber-500" },
-                { label: "Certificates", value: stats.certificates || 0, total: 10, color: "bg-rose-500" },
               ].map((s) => (
                 <div key={s.label}>
                   <div className="flex items-center justify-between mb-1.5">
