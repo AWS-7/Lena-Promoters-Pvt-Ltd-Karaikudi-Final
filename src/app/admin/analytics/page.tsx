@@ -6,7 +6,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell, Legend,
 } from "recharts";
-import { TrendingUp, Users, Calendar, Phone, MousePointer, CheckCircle, Clock, Eye, Smartphone, Monitor, Tablet, Search, Filter } from "lucide-react";
+import { TrendingUp, Users, Calendar, Phone, MousePointer, CheckCircle, Clock, Eye, Smartphone, Monitor, Tablet, Search, Filter, Trash2 } from "lucide-react";
 
 const COLORS = ["#0E6FA3", "#3b99cc", "#7cc4e8", "#0a5480", "#e6f2f9"];
 
@@ -415,7 +415,7 @@ export default function AnalyticsPage() {
             <div className="text-sm text-gray-400 py-4 text-center">No recent activity</div>
           )}
           {recentActivity.map((act: any) => (
-            <div key={act.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            <div key={act.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg group">
               <div className="w-8 h-8 bg-[#e6f2f9] rounded-full flex items-center justify-center">
                 <TrendingUp size={14} className="text-[#0E6FA3]" />
               </div>
@@ -423,8 +423,20 @@ export default function AnalyticsPage() {
                 <div className="text-sm font-medium text-gray-900">{act.title}</div>
                 <div className="text-xs text-gray-500 truncate">{act.message}</div>
               </div>
-              <div className="text-xs text-gray-400 shrink-0">
-                {new Date(act.created_at).toLocaleTimeString()}
+              <div className="flex items-center gap-2">
+                <div className="text-xs text-gray-400 shrink-0">
+                  {new Date(act.created_at).toLocaleTimeString()}
+                </div>
+                <button
+                  onClick={async () => {
+                    await supabase.from("notifications").delete().eq("id", act.id);
+                    setRecentActivity((prev) => prev.filter((a) => a.id !== act.id));
+                  }}
+                  className="opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                  title="Delete"
+                >
+                  <Trash2 size={14} />
+                </button>
               </div>
             </div>
           ))}
