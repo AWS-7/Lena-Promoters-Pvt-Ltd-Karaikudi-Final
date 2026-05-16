@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/favicon.ico",
+        destination: "/favicon.svg",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

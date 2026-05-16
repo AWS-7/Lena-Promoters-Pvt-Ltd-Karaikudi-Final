@@ -4,7 +4,13 @@ import { cookies } from "next/headers";
 export async function POST() {
   try {
     const cookieStore = await cookies();
-    cookieStore.delete("admin_auth");
+    cookieStore.set("admin_auth", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 0,
+      path: "/",
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {

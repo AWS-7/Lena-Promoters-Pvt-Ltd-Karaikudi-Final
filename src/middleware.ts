@@ -9,14 +9,19 @@ export function middleware(request: NextRequest) {
 
   // Get auth cookie
   const authCookie = request.cookies.get("admin_auth");
+  const hasAuth = authCookie && authCookie.value === "true";
+
+  console.log(`[Middleware] Path: ${path}, isAdmin: ${isAdminRoute}, isAuthPage: ${isAuthPage}, hasAuth: ${hasAuth}`);
 
   // If trying to access admin routes without auth, redirect to login
-  if (isAdminRoute && (!authCookie || authCookie.value !== "true")) {
+  if (isAdminRoute && !hasAuth) {
+    console.log(`[Middleware] Redirecting to login (no auth)`);
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // If already authenticated and trying to access login page, redirect to admin
-  if (isAuthPage && authCookie && authCookie.value === "true") {
+  if (isAuthPage && hasAuth) {
+    console.log(`[Middleware] Redirecting to admin (already auth)`);
     return NextResponse.redirect(new URL("/admin", request.url));
   }
 
@@ -24,5 +29,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/login"],
+  matcher: ["/admin", "/admin/:path*", "/login"],
 };
