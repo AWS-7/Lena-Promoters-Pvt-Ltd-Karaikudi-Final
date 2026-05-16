@@ -5,5 +5,11 @@
   "env": {
     "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME": "dqkm2utm4",
     "NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET": "lena_promoters"
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/backup",
+      "schedule": "0 2 * * *"
+    }
+  ]
 }

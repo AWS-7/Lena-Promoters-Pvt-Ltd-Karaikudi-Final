@@ -92,7 +92,7 @@ export default function EnquiryPopup() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={close}
-            className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 z-[105] backdrop-blur-sm"
           />
 
           {/* Popup */}
@@ -101,7 +101,7 @@ export default function EnquiryPopup() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed inset-0 z-[70] flex items-center justify-center p-4 pointer-events-none"
+            className="fixed inset-0 z-[110] flex items-center justify-center p-4 pt-20 pointer-events-none"
           >
             <div
               className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md pointer-events-auto overflow-hidden"

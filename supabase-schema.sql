@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS projects (
   description TEXT NOT NULL,
   approval_status TEXT NOT NULL,
   image_url TEXT DEFAULT '',
+  backup_url TEXT DEFAULT '',
   featured BOOLEAN DEFAULT true,
   category TEXT DEFAULT 'government', -- government | local | ready
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -37,6 +38,7 @@ CREATE TABLE IF NOT EXISTS testimonials (
   rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
   message TEXT NOT NULL,
   image_url TEXT DEFAULT '',
+  backup_url TEXT DEFAULT '',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -46,6 +48,7 @@ CREATE TABLE IF NOT EXISTS gallery (
   title TEXT NOT NULL,
   category TEXT NOT NULL,
   image_url TEXT NOT NULL,
+  backup_url TEXT DEFAULT '',
   "order" INTEGER DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -65,6 +68,7 @@ CREATE TABLE IF NOT EXISTS partners (
   name TEXT NOT NULL,
   type TEXT NOT NULL,
   logo_url TEXT DEFAULT '',
+  backup_logo_url TEXT DEFAULT '',
   website TEXT DEFAULT '',
   "order" INTEGER DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -76,6 +80,7 @@ CREATE TABLE IF NOT EXISTS certificates (
   title TEXT NOT NULL,
   type TEXT NOT NULL,
   image_url TEXT NOT NULL,
+  backup_url TEXT DEFAULT '',
   "order" INTEGER DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -99,6 +104,7 @@ CREATE TABLE IF NOT EXISTS leads (
 CREATE TABLE IF NOT EXISTS settings (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   logo_url TEXT DEFAULT '',
+  backup_logo_url TEXT DEFAULT '',
   phone TEXT NOT NULL DEFAULT '+91 98765 43210',
   email TEXT NOT NULL DEFAULT 'info@lenapromoters.com',
   address TEXT NOT NULL DEFAULT 'Karaikudi, Tamil Nadu',
@@ -109,6 +115,7 @@ CREATE TABLE IF NOT EXISTS settings (
   meta_title TEXT NOT NULL DEFAULT 'Lena Promoters - Premium Plots in Karaikudi',
   meta_description TEXT NOT NULL DEFAULT 'DTCP approved land layouts and plot sales in Karaikudi.',
   og_image TEXT DEFAULT '',
+  backup_og_image TEXT DEFAULT '',
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -160,6 +167,7 @@ CREATE TABLE IF NOT EXISTS project_layouts (
   project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   image_url TEXT NOT NULL,
+  backup_url TEXT DEFAULT '',
   width INTEGER DEFAULT 800,
   height INTEGER DEFAULT 600,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
