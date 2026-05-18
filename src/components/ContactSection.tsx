@@ -44,11 +44,11 @@ export default function ContactSection() {
     setTimeout(() => setSubmitted(false), 4000);
   };
 
-  const phone1 = "+91 81487 48140";
-  const phone2 = "+91 81481 48140";
+  const phone1 = "+91 814 874 8140";
+  const phone2 = "+91 814 814 8140";
   const email = settings?.email || "info@lenapromoters.com";
   const address = settings?.address || "123, Main Road, Karaikudi, Sivaganga District, Tamil Nadu - 630001";
-  const whatsapp = settings?.whatsapp || "+91 81487 48140";
+  const whatsapp = settings?.whatsapp || "+91 8148748140";
 
   return (
     <section id="contact" className="py-16 md:py-24 bg-white overflow-hidden">
