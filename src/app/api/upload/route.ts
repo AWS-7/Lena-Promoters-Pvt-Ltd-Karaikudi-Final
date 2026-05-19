@@ -1,18 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { logger } from "@/lib/logger";
+import { uploadRateLimiter, getRateLimitHeaders } from "@/lib/rate-limit";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
 export async function POST(request: NextRequest) {
+  let fileName = "unknown";
   try {
+    // Get IP for rate limiting
+    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+    const rateLimitKey = `upload:${ip}`;
+
+    // Check rate limit
+    const rateLimit = uploadRateLimiter.isAllowed(rateLimitKey);
+    if (!rateLimit.allowed) {
+      logger.warn("Rate limit exceeded for upload", { ip });
+      return NextResponse.json(
+        { error: "Too many upload attempts. Please try again later." },
+        {
+          status: 429,
+          headers: getRateLimitHeaders(rateLimit.remaining, rateLimit.resetTime),
+        }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File;
     const folder = (formData.get("folder") as string) || "backup-images";
 
     if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+      logger.warn("Upload attempt with no file", { ip });
+      return NextResponse.json(
+        { error: "No file provided" },
+        { status: 400, headers: getRateLimitHeaders(rateLimit.remaining, rateLimit.resetTime) }
+      );
     }
+
+    fileName = file.name;
+    logger.info("File upload started", { fileName, fileSize: file.size, ip });
 
     // 1. Upload to Cloudinary
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
@@ -52,13 +79,18 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({
-      success: true,
-      image_url: cloudinaryUrl,
-      backup_url: backupUrl,
-    });
+    logger.info("File upload completed", { fileName, cloudinaryUrl: !!cloudinaryUrl, backupUrl: !!backupUrl });
+
+    return NextResponse.json(
+      {
+        success: true,
+        image_url: cloudinaryUrl,
+        backup_url: backupUrl,
+      },
+      { headers: getRateLimitHeaders(rateLimit.remaining, rateLimit.resetTime) }
+    );
   } catch (error: any) {
-    console.error("Dual upload error:", error);
+    logger.error("Upload failed", error, { fileName, path: "/api/upload" });
     return NextResponse.json(
       { error: error.message || "Upload failed" },
       { status: 500 }

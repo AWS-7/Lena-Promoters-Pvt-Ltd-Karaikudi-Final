@@ -8,8 +8,12 @@ import { supabase } from "@/lib/supabase";
 
 export default function Footer() {
   const [settings, setSettings] = useState<any>(null);
+  const [year, setYear] = useState<number>(2025);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    setYear(new Date().getFullYear());
     supabase
       .from("settings")
       .select("*")
@@ -25,6 +29,21 @@ export default function Footer() {
   const address = settings?.address || "Karaikudi, Tamil Nadu";
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Prevent hydration mismatch - render consistent content on server
+  if (!mounted) {
+    return (
+      <footer className="bg-gray-900 text-gray-300 overflow-hidden">
+        <div className="container-custom py-12 md:py-16">
+          <div className="border-t border-gray-800 pt-6">
+            <div className="text-center text-sm text-gray-500">
+              © 2025 Lena Promoters Private Limited. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="bg-gray-900 text-gray-300 overflow-hidden">
@@ -96,13 +115,15 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Developer Credit - Simple Style */}
+        <div className="mt-8 mb-6 text-center">
+          <p className="text-gray-500 text-sm">
+            Developed by <span className="text-gray-400">AWS-Agni Web Solution</span> — <a href="tel:9080700642" className="text-[#1195db] hover:underline">9080700642</a>
+          </p>
+        </div>
+
         <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <div className="flex flex-col gap-1">
-            <div>&copy; {new Date().getFullYear()} Lena Promoters Private Limited. All rights reserved.</div>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <Code size={12} /> Developed by AWS-Agni Web Solution — 9080700642
-            </div>
-          </div>
+          <div>&copy; {year} Lena Promoters Private Limited. All rights reserved.</div>
           <motion.button
             onClick={scrollToTop}
             whileHover={{ y: -2 }}

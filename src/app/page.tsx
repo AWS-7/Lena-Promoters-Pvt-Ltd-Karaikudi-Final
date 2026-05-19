@@ -18,6 +18,7 @@ const FAQ = dynamic(() => import("@/components/FAQ"));
 const LayoutMap = dynamic(() => import("@/components/LayoutMap"));
 const JourneySection = dynamic(() => import("@/components/JourneySection"));
 const BranchesSection = dynamic(() => import("@/components/BranchesSection"));
+const SchemesSection = dynamic(() => import("@/components/SchemesSection"));
 const CTASection = dynamic(() => import("@/components/CTASection"));
 const SiteVisitForm = dynamic(() => import("@/components/SiteVisitForm"));
 const ContactSection = dynamic(() => import("@/components/ContactSection"));
@@ -69,6 +70,9 @@ export default function Home() {
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
           <BranchesSection />
+        </ScrollReveal>
+        <ScrollReveal delay={0.15}>
+          <SchemesSection />
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
           <FAQ />
