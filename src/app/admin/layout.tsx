@@ -22,6 +22,7 @@ import {
   Mail,
   Map,
   Archive,
+  Gift,
   ChevronRight,
   Bell,
   Shield,
@@ -59,6 +60,7 @@ const navGroups = [
       { label: "Gallery", href: "/admin/gallery", icon: Image },
       { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
       { label: "FAQ", href: "/admin/faq", icon: HelpCircle },
+      { label: "Schemes", href: "/admin/schemes", icon: Gift },
     ],
   },
   {

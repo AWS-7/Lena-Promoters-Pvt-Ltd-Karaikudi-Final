@@ -189,9 +189,58 @@ CREATE TABLE IF NOT EXISTS project_plots (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 16. SCHEMES (Special Offers/Schemes)
+CREATE TABLE IF NOT EXISTS schemes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  tag TEXT NOT NULL DEFAULT 'Limited Offer',
+  icon TEXT DEFAULT 'BadgePercent',
+  discount TEXT NOT NULL,
+  description TEXT NOT NULL,
+  benefits TEXT[] NOT NULL DEFAULT '{}',
+  valid_till TEXT NOT NULL,
+  cta TEXT NOT NULL DEFAULT 'Avail Offer',
+  color TEXT DEFAULT 'from-emerald-500 to-teal-600',
+  bg_color TEXT DEFAULT 'bg-emerald-50',
+  icon_color TEXT DEFAULT 'text-emerald-600',
+  active BOOLEAN DEFAULT true,
+  "order" INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- ============================================
 -- INSERT DEFAULT DATA
 -- ============================================
+
+-- Insert default schemes
+INSERT INTO schemes (title, tag, icon, discount, description, benefits, valid_till, cta, color, bg_color, icon_color)
+VALUES 
+  (
+    'Early Bird Discount',
+    'Limited Offer',
+    'BadgePercent',
+    '10% Off',
+    'Book your plot within 30 days of site visit and get exclusive 10% discount on total plot value.',
+    ARRAY['10% instant discount', 'Free site visit', 'Priority plot selection', 'Flexible payment options'],
+    'Valid till December 2025',
+    'Avail Offer',
+    'from-emerald-500 to-teal-600',
+    'bg-emerald-50',
+    'text-emerald-600'
+  ),
+  (
+    'Referral Rewards',
+    'Ongoing',
+    'Gift',
+    '₹10,000',
+    'Refer your friends or family to buy a plot and earn ₹10,000 cash reward on successful booking.',
+    ARRAY['₹10,000 per referral', 'Unlimited referrals', 'Direct bank transfer', 'No minimum purchase required'],
+    'Valid throughout the year',
+    'Refer Now',
+    'from-[#1195db] to-[#0E6FA3]',
+    'bg-[#e6f2f9]',
+    'text-[#0E6FA3]'
+  );
 
 -- Insert default settings
 INSERT INTO settings (phone, email, address, whatsapp, meta_title, meta_description)
