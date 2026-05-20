@@ -17,12 +17,12 @@ export default function TopHeader() {
       });
   }, []);
 
-  const phone1 = "+91 81487 48140";
-  const phone2 = "+91 81481 48140";
-  const email = settings?.email || "info@lenapromoters.com";
-  const address = settings?.address || "Karaikudi, Tamil Nadu";
+  const phone1 = "+91 814 814 8140";
+  const phone2 = "+91 814 874 8140";
+  const email = settings?.email || "lenapromoterspvtltd@gmail.com";
+  const address = settings?.address || "Karaikudi, Tamil Nadu, India";
   const facebook = settings?.facebook || "#";
-  const instagram = settings?.instagram || "#";
+  const instagram = settings?.instagram || "https://www.instagram.com/lena_promoters_pvt_ltd?igsh=MTR4MnJqbGZhcGZuYw==";
   const youtube = settings?.youtube || "#";
 
   return (

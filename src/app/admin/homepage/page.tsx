@@ -636,7 +636,7 @@ export default function HomepageAdmin() {
                 <label className="text-sm font-medium text-gray-700">Email</label>
                 <input
                   type="text"
-                  value={get("contact", "email", "info@lenapromoters.com")}
+                  value={get("contact", "email", "lenapromoterspvtltd@gmail.com")}
                   onChange={(e) => updateField("contact", "email", e.target.value)}
                   className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#1195db] focus:outline-none focus:ring-1 focus:ring-[#1195db]"
                 />

@@ -21,7 +21,8 @@ const milestones = [
   { year: "2022", title: "Lena Promoters Pvt Ltd", desc: "Incorporated as private limited company for professional real estate services.", icon: Award },
   { year: "2023", title: "Startup India", desc: "Recognized under Startup India initiative for innovation in real estate.", icon: Rocket },
   { year: "2024", title: "ISO 9001:2015 Certified", desc: "Achieved ISO 9001:2015 certification for quality management standards.", icon: Award },
-  { year: "2025", title: "ToyLink", desc: "Expanded into toy retail and distribution with ToyLink venture.", icon: Star },
+  { year: "2025", title: "Sivaganga Branch", desc: "Opened new branch at Collector Office Road, Kanjarangal, Sivaganga.", icon: Building2 },
+  { year: "2026", title: "Dubai Branch", desc: "Expanded internationally with Dubai office at Business Bay.", icon: MapPin },
 ];
 
 export default function JourneySection() {
