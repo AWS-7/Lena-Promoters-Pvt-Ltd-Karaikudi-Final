@@ -23,7 +23,7 @@ export default function TopHeader() {
   const address = settings?.address || "Karaikudi, Tamil Nadu, India";
   const facebook = settings?.facebook || "#";
   const instagram = settings?.instagram || "https://www.instagram.com/lena_promoters_pvt_ltd?igsh=MTR4MnJqbGZhcGZuYw==";
-  const youtube = settings?.youtube || "#";
+  const youtube = settings?.youtube || "https://www.youtube.com/@Lena_Promoters";
 
   return (
     <div className="bg-[#0E6FA3] text-white hidden md:block">
