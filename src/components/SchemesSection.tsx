@@ -62,7 +62,39 @@ export default function SchemesSection() {
     );
   }
 
-  if (schemes.length === 0) return null;
+  // Fallback default schemes if database is empty
+  const displaySchemes = schemes.length > 0 ? schemes : [
+    {
+      id: "1",
+      title: "Early Bird Discount",
+      tag: "Limited Offer",
+      icon: "BadgePercent",
+      discount: "5% Off",
+      description: "Book your plot now and get 5% discount on total plot value. Valid for first 10 bookings only.",
+      benefits: ["5% flat discount", "Free documentation", "Priority plot selection"],
+      valid_till: "March 31, 2025",
+      cta: "Avail Offer",
+      color: "from-emerald-500 to-teal-600",
+      bg_color: "bg-emerald-50",
+      icon_color: "text-emerald-600",
+      active: true,
+    },
+    {
+      id: "2",
+      title: "Referral Rewards",
+      tag: "Ongoing",
+      icon: "Gift",
+      discount: "₹10,000",
+      description: "Refer a friend and earn ₹10,000 cash reward when they complete their plot booking.",
+      benefits: ["₹10,000 per referral", "Unlimited referrals", "Instant cash reward"],
+      valid_till: "December 31, 2025",
+      cta: "Refer Now",
+      color: "from-blue-500 to-indigo-600",
+      bg_color: "bg-blue-50",
+      icon_color: "text-blue-600",
+      active: true,
+    },
+  ];
 
   return (
     <section id="schemes" className="py-16 md:py-24 bg-gray-50">
@@ -90,7 +122,7 @@ export default function SchemesSection() {
 
         {/* Scheme Cards */}
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
-          {schemes.map((scheme, index) => {
+          {displaySchemes.map((scheme, index) => {
             const IconComponent = iconMap[scheme.icon] || BadgePercent;
             return (
               <ScrollReveal key={scheme.id} delay={index * 0.15}>
