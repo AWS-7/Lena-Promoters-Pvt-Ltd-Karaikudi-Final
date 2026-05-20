@@ -46,9 +46,10 @@ export default function ContactSection() {
 
   const phone1 = "+91 814 874 8140";
   const phone2 = "+91 814 814 8140";
-  const email = settings?.email || "info@lenapromoters.com";
-  const address = settings?.address || "123, Main Road, Karaikudi, Sivaganga District, Tamil Nadu - 630001";
+  const email = settings?.email || "lenapromoterspvtltd@gmail.com";
+  const address = settings?.address || "No:49/3 Keelamel, 100 Feet Road, Soodamanipuram, Karaikudi - 630001";
   const whatsapp = settings?.whatsapp || "+91 8148748140";
+  const workingHours = "Monday to Sunday - 9 AM - 8 PM";
 
   return (
     <section id="contact" className="py-16 md:py-24 bg-white overflow-hidden">
@@ -111,7 +112,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500">Working Hours</div>
-                    <div className="font-semibold text-gray-900">Mon - Sat: 9:00 AM - 7:00 PM</div>
+                    <div className="font-semibold text-gray-900">{workingHours}</div>
                   </div>
                 </div>
               </div>

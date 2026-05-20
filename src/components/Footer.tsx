@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Phone, Mail, MapPin, ArrowUp, Code } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, ArrowUp, Code } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 
@@ -23,10 +23,11 @@ export default function Footer() {
       });
   }, []);
 
-  const phone1 = "+91 81487 48140";
-  const phone2 = "+91 81481 48140";
-  const email = settings?.email || "info@lenapromoters.com";
-  const address = settings?.address || "Karaikudi, Tamil Nadu";
+  const phone1 = "+91 814 874 8140";
+  const phone2 = "+91 814 814 8140";
+  const email = settings?.email || "lenapromoterspvtltd@gmail.com";
+  const address = settings?.address || "No:49/3 Keelamel, 100 Feet Road, Soodamanipuram, Karaikudi - 630001";
+  const workingHours = "Monday to Sunday - 9 AM - 8 PM";
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -110,6 +111,9 @@ export default function Footer() {
               </a>
               <div className="flex items-start gap-2">
                 <MapPin size={14} className="mt-0.5" /> {address}
+              </div>
+              <div className="flex items-start gap-2">
+                <Clock size={14} className="mt-0.5" /> {workingHours}
               </div>
             </div>
           </div>
