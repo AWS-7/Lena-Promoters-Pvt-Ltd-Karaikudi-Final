@@ -158,8 +158,8 @@ export default function SchemesSection() {
                     {/* Discount Highlight */}
                     <div className={`${scheme.bg_color} rounded-xl p-4 mb-6`}>
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                          <span className={`text-lg font-bold ${scheme.icon_color}`}>{scheme.discount}</span>
+                        <div className="min-w-14 h-14 px-3 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                          <span className={`text-base font-bold ${scheme.icon_color} whitespace-nowrap`}>{scheme.discount}</span>
                         </div>
                         <div>
                           <p className="text-sm text-gray-600">{scheme.description}</p>

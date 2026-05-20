@@ -33,19 +33,19 @@ const branches = [
 
 export default function BranchesSection() {
   return (
-    <section id="branches" className="py-16 md:py-24 bg-white">
+    <section id="branches" className="py-16 md:py-24 bg-[#1195db]">
       <div className="container-custom">
         {/* Header */}
         <ScrollReveal>
           <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-            <span className="inline-flex items-center gap-2 bg-[#1195db]/10 text-[#0E6FA3] rounded-full px-4 py-1.5 text-sm font-medium mb-4">
+            <span className="inline-flex items-center gap-2 bg-white/20 text-white rounded-full px-4 py-1.5 text-sm font-medium mb-4">
               <Navigation size={14} />
               Our Presence
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Our Branches
             </h2>
-            <p className="text-gray-500 text-base md:text-lg">
+            <p className="text-white/80 text-base md:text-lg">
               Serving you across multiple locations with the same commitment to excellence
             </p>
           </div>

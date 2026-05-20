@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Home, Briefcase, Phone, Wrench, Tag, ImageIcon } from "lucide-react";
+import { Home, Briefcase, Phone, Wrench, Tag, Gift } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,7 +12,7 @@ const navItems = [
   { label: "Projects", href: "/projects", icon: Briefcase },
   { label: "Services", href: "/services", icon: Wrench },
   { label: "Offers", href: "/offers", icon: Tag },
-  { label: "Gallery", href: "/gallery", icon: ImageIcon },
+  { label: "Schemes", href: "/#schemes", icon: Gift },
 ];
 
 export default function MobileBottomNav() {

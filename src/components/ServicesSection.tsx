@@ -54,7 +54,8 @@ export default function ServicesSection() {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* Mobile: Horizontal scroll | Desktop: Grid */}
+        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto pb-4 sm:overflow-visible snap-x snap-mandatory scrollbar-hide">
           {display.map((service, i) => (
             <motion.div
               key={service.id || i}
@@ -63,7 +64,7 @@ export default function ServicesSection() {
               viewport={{ once: true }}
               whileHover={{ y: -8, scale: 1.02 }}
               transition={{ duration: 0.4, delay: i * 0.05, type: "spring", stiffness: 300 }}
-              className="group bg-white rounded-xl p-6 border-t-4 border-[#f59e0b] shadow-lg hover:shadow-2xl transition-all cursor-default"
+              className="group bg-white rounded-xl p-6 border-t-4 border-[#f59e0b] shadow-lg hover:shadow-2xl transition-all cursor-default min-w-[280px] sm:min-w-0 snap-center"
             >
               {/* Number badge */}
               <div className="flex items-center justify-between mb-4">

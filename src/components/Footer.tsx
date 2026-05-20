@@ -25,7 +25,7 @@ export default function Footer() {
 
   const phone1 = "+91 814 874 8140";
   const phone2 = "+91 814 814 8140";
-  const email = settings?.email || "lenapromoterspvtltd@gmail.com";
+  const email = "lenapromoterspvtltd@gmail.com";
   const address = settings?.address || "No:49/3 Keelamel, 100 Feet Road, Soodamanipuram, Karaikudi - 630001";
   const workingHours = "Monday to Sunday - 9 AM - 8 PM";
 
