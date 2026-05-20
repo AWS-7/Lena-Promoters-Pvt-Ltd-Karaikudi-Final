@@ -4,10 +4,13 @@ import { useEffect, useState, useRef, useCallback, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { MapPin, CheckCircle, ArrowRight, ChevronLeft, ChevronRight, Landmark, Building2, Home, Filter, X } from "lucide-react";
+import { MapPin, CheckCircle, ArrowRight, ChevronLeft, ChevronRight, Landmark, Building2, Home, Filter, X, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import type { Project } from "@/lib/types";
 import Link from "next/link";
+
+// Blur placeholder for progressive loading
+const blurPlaceholder = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkLzVCN0A9LjpHQ1xERktVTktcT0tYXE1dWj9aYFRfWmdITVRkWf/2wBDAR";
 
 type Category = "government" | "local" | "ready";
 
@@ -23,18 +26,36 @@ const categories: { key: Category; icon: typeof Landmark; label: string; subtitl
   { key: "ready", icon: Home, label: "READY TO BUILD", subtitle: "House Projects", color: "#d97706" },
 ];
 
-function ProjectCard({ project }: { project: ProjectWithCategory }) {
+function ProjectCard({ project, index }: { project: ProjectWithCategory; index: number }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
     <div className="flex-shrink-0 w-[260px] sm:w-[300px] md:w-[340px] snap-start">
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all overflow-hidden group h-full">
         <div className="relative h-48">
           {project.image_url ? (
-            <Image
-              src={project.image_url}
-              alt={project.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
-            />
+            <>
+              <Image
+                src={project.image_url}
+                alt={project.title}
+                fill
+                sizes="(max-width: 640px) 90vw, (max-width: 768px) 300px, 340px"
+                className={`object-cover transition-all duration-500 group-hover:scale-110 ${
+                  isLoaded ? "opacity-100" : "opacity-0"
+                }`}
+                placeholder="blur"
+                blurDataURL={blurPlaceholder}
+                loading={index < 6 ? "eager" : "lazy"}
+                priority={index < 6}
+                quality={75}
+                onLoad={() => setIsLoaded(true)}
+              />
+              {!isLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1195db] to-[#0a5480]">
+                  <Loader2 className="animate-spin text-white/60" size={24} />
+                </div>
+              )}
+            </>
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-[#1195db] to-[#0a5480] flex items-center justify-center">
               <div className="text-center text-white p-6">
@@ -148,7 +169,7 @@ function ProjectScrollRow({ projects, color }: { projects: ProjectWithCategory[]
         style={{ scrollBehavior: "auto" }}
       >
         {displayProjects.map((project, i) => (
-          <ProjectCard key={`${project.id}-${i}`} project={project} />
+          <ProjectCard key={`${project.id}-${i}`} project={project} index={i} />
         ))}
       </div>
     </div>
