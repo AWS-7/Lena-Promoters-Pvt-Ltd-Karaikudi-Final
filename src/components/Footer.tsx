@@ -127,7 +127,10 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <div>&copy; {year} Lena Promoters Private Limited. All rights reserved.</div>
+          <div className="flex items-center gap-4">
+            <span>&copy; {year} Lena Promoters Private Limited. All rights reserved.</span>
+            <a href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+          </div>
           <motion.button
             onClick={scrollToTop}
             whileHover={{ y: -2 }}
