@@ -119,17 +119,32 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* RERA Disclaimer */}
+        <div className="mt-8 mb-6 p-4 bg-gray-800/50 border border-gray-700 rounded-xl">
+          <p className="text-xs text-gray-400 text-center leading-relaxed">
+            <strong className="text-gray-300">RERA Disclaimer:</strong> Projects are registered under applicable RERA regulations.
+            All approvals including DTCP / Local Body / Panchayat are subject to government verification.
+            Prices, layouts, and availability are subject to change without notice. Buyers are advised to verify
+            all documents and approvals independently before purchase.
+          </p>
+        </div>
+
         {/* Developer Credit - Simple Style */}
-        <div className="mt-8 mb-6 text-center">
+        <div className="mb-6 text-center">
           <p className="text-gray-500 text-sm">
             Developed by <span className="text-gray-400">AWS-Agni Web Solution</span> — <a href="tel:9080700642" className="text-[#1195db] hover:underline">9080700642</a>
           </p>
         </div>
 
         <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <div className="flex items-center gap-4">
-            <span>&copy; {year} Lena Promoters Private Limited. All rights reserved.</span>
+          <div className="flex flex-wrap items-center gap-3 md:gap-4">
+            <span>&copy; {year} Lena Promoters Private Limited</span>
+            <span className="hidden md:inline text-gray-700">|</span>
             <a href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+            <span className="hidden md:inline text-gray-700">|</span>
+            <a href="/terms-and-conditions" className="text-gray-400 hover:text-white transition-colors">Terms & Conditions</a>
+            <span className="hidden md:inline text-gray-700">|</span>
+            <a href="/refund-policy" className="text-gray-400 hover:text-white transition-colors">Refund Policy</a>
           </div>
           <motion.button
             onClick={scrollToTop}
