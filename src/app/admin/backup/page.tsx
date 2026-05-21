@@ -62,6 +62,8 @@ function UsageBar({ label, used, limit, percent, estimated, color = "blue" }: {
   );
 }
 
+type StorageProvider = "cloudinary" | "supabase";
+
 export default function BackupPage() {
   const [backingUp, setBackingUp] = useState(false);
   const [restoring, setRestoring] = useState(false);
@@ -73,6 +75,7 @@ export default function BackupPage() {
   const [quotaLoading, setQuotaLoading] = useState(false);
   const [lastBackup, setLastBackup] = useState<{ timestamp: string; triggered: boolean } | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [storageProvider, setStorageProvider] = useState<StorageProvider>("cloudinary");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const autoTriggeredRef = useRef(false);
 
@@ -130,6 +133,20 @@ export default function BackupPage() {
       setBackingUp(false);
     }
   }
+
+  // Load storage provider preference
+  useEffect(() => {
+    const saved = localStorage.getItem("lena_storage_provider") as StorageProvider;
+    if (saved && (saved === "cloudinary" || saved === "supabase")) {
+      setStorageProvider(saved);
+    }
+  }, []);
+
+  const handleProviderChange = (provider: StorageProvider) => {
+    setStorageProvider(provider);
+    localStorage.setItem("lena_storage_provider", provider);
+    addToast("info", "Storage Provider Changed", `Images will now upload to ${provider === "supabase" ? "Supabase Storage" : "Cloudinary"}`);
+  };
 
   useEffect(() => {
     fetch("/api/backup")
@@ -392,6 +409,64 @@ export default function BackupPage() {
             )}
           </div>
         )}
+      </div>
+
+      {/* Storage Provider Toggle */}
+      <div className="bg-white rounded-xl border p-6 shadow-sm">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-lg bg-[#e6f2f9] flex items-center justify-center">
+            <HardDrive size={20} className="text-[#1195db]" />
+          </div>
+          <div>
+            <h2 className="font-bold text-gray-900">Image Storage Provider</h2>
+            <p className="text-sm text-gray-500">Switch where uploaded images are stored</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 p-1 bg-gray-100 rounded-lg w-fit">
+          <button
+            onClick={() => handleProviderChange("cloudinary")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+              storageProvider === "cloudinary"
+                ? "bg-white text-[#1195db] shadow-sm"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            <Cloud size={16} />
+            Cloudinary
+          </button>
+          <button
+            onClick={() => handleProviderChange("supabase")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+              storageProvider === "supabase"
+                ? "bg-white text-emerald-600 shadow-sm"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            <Database size={16} />
+            Supabase Storage
+          </button>
+        </div>
+
+        <div className="mt-4 text-xs text-gray-500 space-y-1">
+          {storageProvider === "cloudinary" ? (
+            <>
+              <p className="flex items-center gap-1">
+                <CheckCircle size={12} className="text-green-500" />
+                Images upload to <strong>Cloudinary</strong> with Supabase backup
+              </p>
+              <p className="text-amber-600">Switch to Supabase if Cloudinary storage is full</p>
+            </>
+          ) : (
+            <>
+              <p className="flex items-center gap-1">
+                <CheckCircle size={12} className="text-green-500" />
+                Images upload directly to <strong>Supabase Storage</strong>
+              </p>
+              <p className="text-amber-600">Cloudinary quota exceeded — using Supabase as primary storage</p>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Config Status Banner */}

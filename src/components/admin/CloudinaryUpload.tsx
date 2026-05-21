@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { Upload, Check, Loader2, AlertCircle, ImagePlus, Trash2 } from "lucide-react";
-
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
-const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
+import { useState, useRef, useEffect } from "react";
+import { Upload, Check, Loader2, AlertCircle, ImagePlus, Trash2, HardDrive, Cloud } from "lucide-react";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const MAX_SIZE_MB = 2;
+const MAX_SIZE_MB = 5;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+type StorageProvider = "cloudinary" | "supabase";
 
 interface CloudinaryUploadProps {
   value: string;
@@ -16,11 +15,28 @@ interface CloudinaryUploadProps {
   label?: string;
 }
 
+function getStorageProvider(): StorageProvider {
+  if (typeof window === "undefined") return "cloudinary";
+  return (localStorage.getItem("lena_storage_provider") as StorageProvider) || "cloudinary";
+}
+
 export default function CloudinaryUpload({ value, onChange, label = "Upload Image" }: CloudinaryUploadProps) {
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(value);
   const [error, setError] = useState("");
+  const [provider, setProvider] = useState<StorageProvider>("cloudinary");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setProvider(getStorageProvider());
+  }, []);
+
+  // Listen for provider changes from other tabs/components
+  useEffect(() => {
+    const handler = () => setProvider(getStorageProvider());
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
 
   const validateFile = (file: File): string | null => {
     if (!ALLOWED_TYPES.includes(file.type)) {
@@ -39,11 +55,6 @@ export default function CloudinaryUpload({ value, onChange, label = "Upload Imag
       return;
     }
 
-    if (!CLOUD_NAME || !UPLOAD_PRESET) {
-      setError("Cloudinary environment variables are not configured. Please check your .env file.");
-      return;
-    }
-
     setLoading(true);
     setError("");
 
@@ -53,11 +64,15 @@ export default function CloudinaryUpload({ value, onChange, label = "Upload Imag
     reader.readAsDataURL(file);
 
     try {
+      const currentProvider = getStorageProvider();
+      const folder = currentProvider === "supabase" ? "admin-images" : "backup-images";
+
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("upload_preset", UPLOAD_PRESET);
+      formData.append("folder", folder);
+      formData.append("provider", currentProvider);
 
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+      const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
@@ -65,15 +80,19 @@ export default function CloudinaryUpload({ value, onChange, label = "Upload Imag
       const data = await res.json();
 
       if (!res.ok) {
-        const msg = data.error?.message || JSON.stringify(data);
+        const msg = data.error || JSON.stringify(data);
         setError(msg);
-        console.error("Cloudinary upload error:", data);
+        console.error("Upload error:", data);
         return;
       }
 
-      if (data.secure_url) {
-        onChange(data.secure_url);
-        setPreview(data.secure_url);
+      // Use the URL based on selected provider
+      const url = currentProvider === "supabase" ? data.backup_url : data.image_url;
+      if (url) {
+        onChange(url);
+        setPreview(url);
+      } else {
+        setError("Upload succeeded but no URL was returned.");
       }
     } catch (err: any) {
       setError(err.message || "Upload failed. Check console for details.");
@@ -132,11 +151,13 @@ export default function CloudinaryUpload({ value, onChange, label = "Upload Imag
         >
           {loading ? (
             <Loader2 size={32} className="text-[#1195db] animate-spin mb-2" />
+          ) : provider === "supabase" ? (
+            <HardDrive size={32} className="text-emerald-500 mb-2" />
           ) : (
-            <Upload size={32} className="text-gray-400 mb-2" />
+            <Cloud size={32} className="text-[#1195db] mb-2" />
           )}
           <span className="text-sm font-medium text-gray-600">
-            {loading ? "Uploading to Cloudinary..." : "Click or drag image here"}
+            {loading ? `Uploading to ${provider === "supabase" ? "Supabase Storage..." : "Cloudinary..."}` : "Click or drag image here"}
           </span>
           <span className="text-xs text-gray-400 mt-1">
             JPG, PNG, WEBP up to {MAX_SIZE_MB}MB
@@ -159,7 +180,7 @@ export default function CloudinaryUpload({ value, onChange, label = "Upload Imag
       )}
       {value && !error && !loading && (
         <p className="text-xs text-green-600 flex items-center gap-1">
-          <Check size={12} /> Uploaded to Cloudinary
+          <Check size={12} /> Uploaded to {provider === "supabase" ? "Supabase Storage" : "Cloudinary"}
         </p>
       )}
     </div>
