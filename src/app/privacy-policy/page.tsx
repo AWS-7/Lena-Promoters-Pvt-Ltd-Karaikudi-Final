@@ -19,9 +19,12 @@ export default function PrivacyPolicyPage() {
           >
             <ArrowLeft size={16} /> Back to Home
           </Link>
-          <div className="flex items-center gap-3 mb-4">
-            <Shield size={28} className="text-white/90" />
-            <h1 className="text-3xl md:text-4xl font-bold">Privacy Policy</h1>
+          <div className="flex items-center gap-4 mb-4">
+            <img src="/logo.png" alt="Lena Promoters Logo" className="h-12 w-auto" />
+            <div className="flex items-center gap-3">
+              <Shield size={28} className="text-white/90" />
+              <h1 className="text-3xl md:text-4xl font-bold">Privacy Policy</h1>
+            </div>
           </div>
           <p className="text-white/80 max-w-2xl">
             Lena Promoters Private Limited is committed to protecting your privacy. This policy explains how we collect, use, and safeguard your personal information.

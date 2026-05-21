@@ -15,9 +15,12 @@ export default function RefundPolicyPage() {
           <Link href="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm mb-6 transition-colors">
             <ArrowLeft size={16} /> Back to Home
           </Link>
-          <div className="flex items-center gap-3 mb-4">
-            <RefreshCw size={28} className="text-white/90" />
-            <h1 className="text-3xl md:text-4xl font-bold">Refund & Cancellation Policy</h1>
+          <div className="flex items-center gap-4 mb-4">
+            <img src="/logo.png" alt="Lena Promoters Logo" className="h-12 w-auto" />
+            <div className="flex items-center gap-3">
+              <RefreshCw size={28} className="text-white/90" />
+              <h1 className="text-3xl md:text-4xl font-bold">Refund & Cancellation Policy</h1>
+            </div>
           </div>
           <p className="text-white/80 max-w-2xl">
             Our policy regarding cancellations and refunds for plot bookings and registrations.

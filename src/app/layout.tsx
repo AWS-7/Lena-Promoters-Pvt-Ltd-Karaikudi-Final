@@ -50,10 +50,10 @@ export const metadata: Metadata = {
     siteName: 'Lena Promoters Private Limited',
     images: [
       {
-        url: '/images/logo.png',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Lena Promoters Logo',
+        alt: 'Lena Promoters Private Limited',
       },
     ],
   },
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Lena Promoters Private Limited | DTCP Approved Plots in Karaikudi',
     description: 'Premium DTCP approved land layouts and plot sales in Karaikudi, Tamil Nadu.',
-    images: ['/images/logo.png'],
+    images: ['/og-image.jpg'],
     creator: '@lenapromoters',
   },
   verification: {
@@ -69,11 +69,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/images/logo.png', type: 'image/png' },
+      { url: '/og-image.jpg', type: 'image/jpeg' },
     ],
-    shortcut: '/favicon.svg',
-    apple: '/images/logo.png',
+    shortcut: '/og-image.jpg',
+    apple: '/og-image.jpg',
   },
 };
 
