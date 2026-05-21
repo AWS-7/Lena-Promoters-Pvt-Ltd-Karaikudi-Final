@@ -115,7 +115,7 @@ export default function ServicesPage() {
               {[
                 { label: "Happy Customers", value: "1000+" },
                 { label: "Years Experience", value: "5+" },
-                { label: "Projects Completed", value: "1000+" },
+                { label: "Projects Completed", value: "30+" },
                 { label: "Ongoing Project", value: "27+" },
               ].map((stat, i) => (
                 <motion.div
@@ -228,7 +228,7 @@ export default function ServicesPage() {
                 <div className="bg-gradient-to-br from-[#1195db] to-[#0E6FA3] rounded-3xl p-8 text-white">
                   <div className="grid grid-cols-2 gap-6">
                     {[
-                      { icon: Building2, label: "Properties", value: "1000+" },
+                      { icon: Building2, label: "Properties", value: "30+" },
                       { icon: FileText, label: "Documents", value: "10K+" },
                       { icon: Scale, label: "Legal Cases", value: "200+" },
                       { icon: CheckCircle, label: "Satisfied", value: "1000+" },
