@@ -84,6 +84,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable} h-full antialiased`}>
       <head>
+        {/* Favicons */}
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="icon" type="image/jpeg" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/jpeg" sizes="192x192" href="/android-chrome-192x192.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/android-chrome-192x192.png" />
+        <link rel="manifest" href="/manifest.json" />
+
         <link rel="preconnect" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         <link rel="dns-prefetch" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         {/* Google tag (gtag.js) - AW-18145943083 */}
