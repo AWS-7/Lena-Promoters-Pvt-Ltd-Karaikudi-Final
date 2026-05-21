@@ -91,6 +91,9 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="192x192" href="/android-chrome-192x192.png" />
         <link rel="manifest" href="/manifest.json" />
 
+        {/* Google Search Console Verification */}
+        <meta name="google-site-verification" content="5DX8KNlqJsxw14QkpWWKITb5wStKlL23-aCMtARDQ5o" />
+
         <link rel="preconnect" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         <link rel="dns-prefetch" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         {/* Google tag (gtag.js) - AW-18145943083 */}
