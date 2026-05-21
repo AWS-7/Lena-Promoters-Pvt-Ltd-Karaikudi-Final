@@ -103,11 +103,6 @@ function ProjectCard({ project, index }: { project: ProjectWithCategory; index: 
 
 function ProjectScrollRow({ projects, color }: { projects: ProjectWithCategory[]; color: string }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-
-  // Only duplicate for seamless loop when 3+ projects to avoid visual duplicates
-  const shouldDuplicate = projects.length >= 3;
-  const displayProjects = shouldDuplicate ? [...projects, ...projects] : projects;
 
   const scroll = useCallback((dir: number) => {
     if (scrollRef.current) {
@@ -115,39 +110,8 @@ function ProjectScrollRow({ projects, color }: { projects: ProjectWithCategory[]
     }
   }, []);
 
-  // Auto scroll
-  useEffect(() => {
-    const el = scrollRef.current;
-    const shouldDup = projects.length >= 3;
-    if (!el || projects.length <= 1 || !shouldDup) return;
-
-    let rafId: number;
-    let lastTime = performance.now();
-    const speed = 0.5; // pixels per frame
-
-    const loop = (now: number) => {
-      if (!isPaused && el) {
-        const delta = now - lastTime;
-        el.scrollLeft += speed * (delta / 16);
-
-        // Infinite loop: reset when scrolled past half (original set)
-        const halfScroll = el.scrollWidth / 2;
-        if (el.scrollLeft >= halfScroll) el.scrollLeft = 0;
-      }
-      lastTime = now;
-      rafId = requestAnimationFrame(loop);
-    };
-
-    rafId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafId);
-  }, [isPaused, projects.length]);
-
   return (
-    <div
-      className="relative group"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
+    <div className="relative group">
       {/* Scroll buttons */}
       <button
         onClick={() => scroll(-1)}
@@ -162,14 +126,13 @@ function ProjectScrollRow({ projects, color }: { projects: ProjectWithCategory[]
         <ChevronRight size={20} />
       </button>
 
-      {/* Horizontal scroll strip */}
+      {/* Horizontal scroll strip - no duplication */}
       <div
         ref={scrollRef}
         className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2"
-        style={{ scrollBehavior: "auto" }}
       >
-        {displayProjects.map((project, i) => (
-          <ProjectCard key={`${project.id}-${i}`} project={project} index={i} />
+        {projects.map((project, i) => (
+          <ProjectCard key={project.id} project={project} index={i} />
         ))}
       </div>
     </div>
