@@ -134,13 +134,6 @@ export default function CloudinaryUpload({ value, onChange, label = "Upload Imag
               <Trash2 size={14} />
             </button>
           </div>
-          <input
-            ref={inputRef}
-            type="file"
-            accept=".jpg,.jpeg,.png,.webp"
-            className="hidden"
-            onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
-          />
         </div>
       ) : (
         <div
@@ -162,15 +155,24 @@ export default function CloudinaryUpload({ value, onChange, label = "Upload Imag
           <span className="text-xs text-gray-400 mt-1">
             JPG, PNG, WEBP up to {MAX_SIZE_MB}MB
           </span>
-          <input
-            ref={inputRef}
-            type="file"
-            accept=".jpg,.jpeg,.png,.webp"
-            className="hidden"
-            onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
-          />
         </div>
       )}
+
+      {/* Single input element outside the conditional */}
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".jpg,.jpeg,.png,.webp"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            handleFile(file);
+            // Reset input value to allow re-uploading the same file
+            e.target.value = "";
+          }
+        }}
+      />
 
       {error && (
         <div className="flex items-start gap-2 text-red-600 text-xs bg-red-50 p-2.5 rounded-lg">
