@@ -78,7 +78,7 @@ export default function ProjectsPage() {
 
     setShowForm(false);
     setEditing(null);
-    setForm({ featured: false, category: "government" });
+    setForm({ featured: false, category: "government", image_url: "" });
     await load();
     setLoading(false);
   }
@@ -107,7 +107,7 @@ export default function ProjectsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
         <button
-          onClick={() => { setEditing(null); setForm({ featured: false, category: "government" }); setShowForm(true); }}
+          onClick={() => { setEditing(null); setForm({ featured: false, category: "government", image_url: "" }); setShowForm(true); }}
           className="inline-flex items-center gap-2 rounded-lg bg-[#0E6FA3] text-white px-4 py-2 text-sm font-medium hover:bg-[#0a5480]"
         >
           <Plus size={16} /> Add Project
