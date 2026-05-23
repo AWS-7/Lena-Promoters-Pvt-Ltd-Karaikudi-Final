@@ -28,6 +28,12 @@ const categories: { key: Category; icon: typeof Landmark; label: string; subtitl
 
 function ProjectCard({ project, index }: { project: ProjectWithCategory; index: number }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [useFallback, setUseFallback] = useState(false);
+
+  // Debug logging
+  useEffect(() => {
+    console.log(`[ProjectCard] Category: ${project.category}, Image URL: ${project.image_url}, Title: ${project.title}`);
+  }, [project.category, project.image_url, project.title]);
 
   return (
     <div className="flex-shrink-0 w-[260px] sm:w-[300px] md:w-[340px] snap-start">
@@ -35,25 +41,43 @@ function ProjectCard({ project, index }: { project: ProjectWithCategory; index: 
         <div className="relative h-48">
           {project.image_url ? (
             <>
-              <Image
-                src={project.image_url}
-                alt={project.title}
-                fill
-                sizes="(max-width: 640px) 90vw, (max-width: 768px) 300px, 340px"
-                className={`object-cover transition-all duration-500 group-hover:scale-110 ${
-                  isLoaded ? "opacity-100" : "opacity-0"
-                }`}
-                placeholder="blur"
-                blurDataURL={blurPlaceholder}
-                loading={index < 6 ? "eager" : "lazy"}
-                priority={index < 6}
-                quality={75}
-                onLoad={() => setIsLoaded(true)}
-              />
-              {!isLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1195db] to-[#0a5480]">
-                  <Loader2 className="animate-spin text-white/60" size={24} />
-                </div>
+              {useFallback ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={project.image_url}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                  onLoad={() => setIsLoaded(true)}
+                />
+              ) : (
+                <>
+                  <Image
+                    src={project.image_url}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 640px) 90vw, (max-width: 768px) 300px, 340px"
+                    className={`object-cover transition-all duration-500 group-hover:scale-110 ${
+                      isLoaded ? "opacity-100" : "opacity-0"
+                    }`}
+                    placeholder="blur"
+                    blurDataURL={blurPlaceholder}
+                    loading={index < 6 ? "eager" : "lazy"}
+                    priority={index < 6}
+                    quality={75}
+                    onLoad={() => setIsLoaded(true)}
+                    onError={(e) => {
+                      console.error(`[ProjectCard] Image load error for ${project.title}:`, e);
+                      // Fallback to regular img if Next.js Image fails
+                      setUseFallback(true);
+                      setIsLoaded(true);
+                    }}
+                  />
+                  {!isLoaded && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1195db] to-[#0a5480]">
+                      <Loader2 className="animate-spin text-white/60" size={24} />
+                    </div>
+                  )}
+                </>
               )}
             </>
           ) : (
