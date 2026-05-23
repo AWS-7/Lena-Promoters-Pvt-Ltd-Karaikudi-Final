@@ -48,7 +48,7 @@ class RateLimiter {
 // Global rate limiters
 export const apiRateLimiter = new RateLimiter(60000, 30); // 30 requests per minute for API
 export const loginRateLimiter = new RateLimiter(300000, 5); // 5 login attempts per 5 minutes
-export const uploadRateLimiter = new RateLimiter(60000, 20); // 20 uploads per minute
+export const uploadRateLimiter = new RateLimiter(60000, 1000); // Unlimited uploads (1000 per minute)
 
 // Cleanup every 10 minutes
 setInterval(() => {
