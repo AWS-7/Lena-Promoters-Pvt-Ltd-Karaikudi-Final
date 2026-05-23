@@ -37,6 +37,8 @@ export default function ProjectsPage() {
     if (loading) return; // Prevent double submission
     setLoading(true);
 
+    console.log(`[Admin Projects] Saving project - Category: ${form.category}, Image URL: ${form.image_url}`);
+
     // Build clean payload: strip Supabase-managed fields, set empty string defaults
     const { id, created_at, ...payloadRaw } = form as any;
     const payload = {
@@ -50,6 +52,8 @@ export default function ProjectsPage() {
       featured: !!payloadRaw.featured,
       category: payloadRaw.category || "government",
     };
+
+    console.log(`[Admin Projects] Payload to save:`, payload);
 
     let error;
     if (editing) {
@@ -76,6 +80,7 @@ export default function ProjectsPage() {
       return;
     }
 
+    console.log(`[Admin Projects] Save successful - Category: ${payload.category}`);
     setShowForm(false);
     setEditing(null);
     setForm({ featured: false, category: "government", image_url: "" });
@@ -155,7 +160,10 @@ export default function ProjectsPage() {
             <div className="md:col-span-2">
               <CloudinaryUpload
                 value={form.image_url || ""}
-                onChange={(url) => setForm({ ...form, image_url: url })}
+                onChange={(url) => {
+                  console.log(`[Admin Projects] Image URL updated - Category: ${form.category}, URL: ${url}`);
+                  setForm({ ...form, image_url: url });
+                }}
                 label="Project Image"
               />
             </div>
