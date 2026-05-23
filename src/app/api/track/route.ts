@@ -24,6 +24,24 @@ function getClientIP(request: NextRequest): string {
   return "0.0.0.0";
 }
 
+async function getLocationFromIP(ip: string): Promise<{ city: string; country: string; region: string } | null> {
+  try {
+    // Use free IP geolocation API
+    const response = await fetch(`https://ipapi.co/${ip}/json/`, {
+      signal: AbortSignal.timeout(3000), // 3 second timeout
+    });
+    if (!response.ok) return null;
+    const data = await response.json();
+    return {
+      city: data.city || "Unknown",
+      country: data.country_name || "Unknown",
+      region: data.region || "Unknown",
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     if (!supabaseUrl || !supabaseServiceKey) {
@@ -34,6 +52,9 @@ export async function POST(request: NextRequest) {
     const { cookieId, device = "desktop", page = "/" } = body;
     const ip = getClientIP(request);
     const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+
+    // Get location from IP (fire and forget, don't block on failure)
+    const location = await getLocationFromIP(ip);
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
@@ -54,6 +75,7 @@ export async function POST(request: NextRequest) {
           last_visit: new Date().toISOString(),
           ip_address: ip, // Update IP in case it changed
           device,
+          ...(location && { city: location.city, country: location.country, region: location.region }),
         })
         .eq("id", existing.id);
     } else {
@@ -67,6 +89,7 @@ export async function POST(request: NextRequest) {
         last_visit: new Date().toISOString(),
         device,
         page,
+        ...(location && { city: location.city, country: location.country, region: location.region }),
       });
     }
 
