@@ -13,7 +13,6 @@ const LatestOffers = dynamic(() => import("@/components/LatestOffers"));
 const ServicesSection = dynamic(() => import("@/components/ServicesSection"));
 const WhyChooseUs = dynamic(() => import("@/components/WhyChooseUs"));
 const Testimonials = dynamic(() => import("@/components/Testimonials"));
-const Gallery = dynamic(() => import("@/components/Gallery"));
 const FAQ = dynamic(() => import("@/components/FAQ"));
 const JourneySection = dynamic(() => import("@/components/JourneySection"));
 const BranchesSection = dynamic(() => import("@/components/BranchesSection"));
@@ -54,9 +53,6 @@ export default function Home() {
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
           <ServicesSection />
-        </ScrollReveal>
-        <ScrollReveal delay={0.15}>
-          <Gallery />
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
           <Testimonials />

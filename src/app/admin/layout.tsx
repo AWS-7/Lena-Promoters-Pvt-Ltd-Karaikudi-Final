@@ -56,7 +56,6 @@ const navGroups = [
       { label: "Projects", href: "/admin/projects", icon: Briefcase },
       { label: "Schemes", href: "/admin/schemes", icon: Gift },
       { label: "Services", href: "/admin/services", icon: Layers },
-      { label: "Gallery", href: "/admin/gallery", icon: Image },
       { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
       { label: "FAQ", href: "/admin/faq", icon: HelpCircle },
     ],
