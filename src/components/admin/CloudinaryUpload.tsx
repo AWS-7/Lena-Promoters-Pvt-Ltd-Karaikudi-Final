@@ -13,6 +13,7 @@ interface CloudinaryUploadProps {
   value: string;
   onChange: (url: string) => void;
   label?: string;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
 function getStorageProvider(): StorageProvider {
@@ -20,12 +21,17 @@ function getStorageProvider(): StorageProvider {
   return (localStorage.getItem("lena_storage_provider") as StorageProvider) || "cloudinary";
 }
 
-export default function CloudinaryUpload({ value, onChange, label = "Upload Image" }: CloudinaryUploadProps) {
+export default function CloudinaryUpload({ value, onChange, label = "Upload Image", onLoadingChange }: CloudinaryUploadProps) {
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(value);
   const [error, setError] = useState("");
   const [provider, setProvider] = useState<StorageProvider>("cloudinary");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Notify parent of loading state changes
+  useEffect(() => {
+    onLoadingChange?.(loading);
+  }, [loading, onLoadingChange]);
 
   useEffect(() => {
     setProvider(getStorageProvider());

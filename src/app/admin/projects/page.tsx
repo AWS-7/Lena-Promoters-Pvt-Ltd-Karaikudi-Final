@@ -21,6 +21,7 @@ export default function ProjectsPage() {
   const [editing, setEditing] = useState<Project | null>(null);
   const [form, setForm] = useState<Partial<Project>>({ featured: false, category: "government" });
   const [loading, setLoading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
   const [activeTab, setActiveTab] = useState<CategoryKey | "all">("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -164,6 +165,7 @@ export default function ProjectsPage() {
                   console.log(`[Admin Projects] Image URL updated - Category: ${form.category}, URL: ${url}`);
                   setForm({ ...form, image_url: url });
                 }}
+                onLoadingChange={setImageUploading}
                 label="Project Image"
               />
             </div>
@@ -196,8 +198,8 @@ export default function ProjectsPage() {
           <label className="flex items-center gap-2 text-sm mb-4">
             <input type="checkbox" checked={!!form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} /> Featured on Homepage
           </label>
-          <button type="submit" disabled={loading} className="rounded-lg bg-[#0E6FA3] text-white px-5 py-2 text-sm font-medium hover:bg-[#0a5480] disabled:opacity-50">
-            {loading ? "Saving..." : "Save"}
+          <button type="submit" disabled={loading || imageUploading} className="rounded-lg bg-[#0E6FA3] text-white px-5 py-2 text-sm font-medium hover:bg-[#0a5480] disabled:opacity-50">
+            {loading ? "Saving..." : imageUploading ? "Uploading image..." : "Save"}
           </button>
         </form>
       )}
