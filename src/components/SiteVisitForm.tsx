@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, MapPin, CheckCircle, Phone, User, FileText } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -14,15 +14,23 @@ const timeSlots = [
   "4:00 PM - 5:00 PM",
 ];
 
-const projectOptions = [
-  "Lena Nagar Phase 1",
-  "Lena Garden",
-  "Lena Enclave",
-  "Lena City",
-  "Any Project",
-];
-
 export default function SiteVisitForm() {
+  const [projectOptions, setProjectOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data } = await supabase
+        .from("projects")
+        .select("name")
+        .order("created_at", { ascending: false });
+      const names = Array.from(
+        new Set((data ?? []).map((p: { name: string }) => p.name).filter(Boolean))
+      );
+      setProjectOptions([...names, "Any Project"]);
+    };
+    fetchProjects();
+  }, []);
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
