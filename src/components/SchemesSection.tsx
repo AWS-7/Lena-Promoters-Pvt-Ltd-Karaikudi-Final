@@ -1,58 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
-import { supabase } from "@/lib/supabase";
 
-interface SchemeImage {
-  id: string;
-  image_url: string;
-  title: string | null;
-  order: number;
-  active: boolean;
-}
+const schemes = [
+  { src: "/schemes/scheme-1.jpg", alt: "விதிமுறைகள் மற்றும் நிபந்தனைகள்" },
+  { src: "/schemes/scheme-2.jpg", alt: "Lena's Lucky Buyer Scheme" },
+  { src: "/schemes/scheme-3.jpg", alt: "வீட்டு மனை சேமிப்பு திட்டம்" },
+];
 
 export default function SchemesSection() {
-  const [schemes, setSchemes] = useState<SchemeImage[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadSchemes() {
-      try {
-        const { data } = await supabase
-          .from("schemes")
-          .select("id, image_url, title, order, active")
-          .eq("active", true)
-          .not("image_url", "is", null)
-          .order("order", { ascending: true });
-
-        if (data) setSchemes(data as SchemeImage[]);
-      } catch (error) {
-        console.error("Error loading schemes:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadSchemes();
-  }, []);
-
-  if (loading) {
-    return (
-      <section id="schemes" className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container-custom flex items-center justify-center">
-          <Loader2 className="animate-spin text-[#1195db]" size={32} />
-        </div>
-      </section>
-    );
-  }
-
-  if (schemes.length === 0) {
-    return null;
-  }
-
   return (
     <section id="schemes" className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
       <div className="container-custom">
@@ -69,7 +28,10 @@ export default function SchemesSection() {
               Exclusive Schemes
             </motion.div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-              Our Special <span className="bg-gradient-to-r from-[#0E6FA3] to-[#1195db] bg-clip-text text-transparent">Schemes</span>
+              Our Special{" "}
+              <span className="bg-gradient-to-r from-[#0E6FA3] to-[#1195db] bg-clip-text text-transparent">
+                Schemes
+              </span>
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
               Discover our exclusive offers designed to make your dream of owning a plot a reality
@@ -78,33 +40,23 @@ export default function SchemesSection() {
         </ScrollReveal>
 
         {/* Image Grid */}
-        <div
-          className={`grid gap-6 md:gap-8 max-w-6xl mx-auto ${
-            schemes.length === 1
-              ? "grid-cols-1 max-w-md"
-              : schemes.length === 2
-              ? "grid-cols-1 sm:grid-cols-2 max-w-3xl"
-              : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-          }`}
-        >
+        <div className="grid gap-6 md:gap-8 max-w-6xl mx-auto grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {schemes.map((scheme, index) => (
-            <ScrollReveal key={scheme.id} delay={index * 0.1}>
+            <ScrollReveal key={index} delay={index * 0.1}>
               <motion.div
                 whileHover={{ y: -8, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-gray-100"
               >
-                {/* Image Container */}
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100">
                   <Image
-                    src={scheme.image_url}
-                    alt={scheme.title || `Scheme ${index + 1}`}
+                    src={scheme.src}
+                    alt={scheme.alt}
                     fill
                     sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     priority={index < 3}
                   />
-                  {/* Gradient overlay on hover */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               </motion.div>

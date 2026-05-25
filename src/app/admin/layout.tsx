@@ -54,7 +54,6 @@ const navGroups = [
     items: [
       { label: "Homepage", href: "/admin/homepage", icon: Home },
       { label: "Projects", href: "/admin/projects", icon: Briefcase },
-      { label: "Schemes", href: "/admin/schemes", icon: Gift },
       { label: "Services", href: "/admin/services", icon: Layers },
       { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
       { label: "FAQ", href: "/admin/faq", icon: HelpCircle },
