@@ -69,10 +69,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/og-image.jpg', type: 'image/jpeg' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/android-chrome-192x192.png', type: 'image/png', sizes: '192x192' },
     ],
-    shortcut: '/og-image.jpg',
-    apple: '/og-image.jpg',
+    shortcut: '/favicon.ico',
+    apple: '/android-chrome-192x192.png',
   },
 };
 
