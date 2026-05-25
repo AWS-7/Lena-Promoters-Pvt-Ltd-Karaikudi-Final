@@ -1,93 +1,59 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
-import { Plus, Pencil, Trash2, X, Check, Gift, BadgePercent, Percent } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Check, ImageIcon } from "lucide-react";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
+import CloudinaryUpload from "@/components/admin/CloudinaryUpload";
 
 interface Scheme {
   id: string;
-  title: string;
-  tag: string;
-  icon: string;
-  discount: string;
-  description: string;
-  benefits: string[];
-  valid_till: string;
-  cta: string;
-  color: string;
-  bg_color: string;
-  icon_color: string;
-  active: boolean;
+  image_url: string;
+  title: string | null;
   order: number;
+  active: boolean;
   created_at: string;
 }
-
-const iconOptions = [
-  { key: "BadgePercent", label: "Badge Percent", icon: BadgePercent },
-  { key: "Gift", label: "Gift", icon: Gift },
-  { key: "Percent", label: "Percent", icon: Percent },
-];
-
-const colorOptions = [
-  { key: "emerald", label: "Emerald", color: "from-emerald-500 to-teal-600", bg: "bg-emerald-50", iconColor: "text-emerald-600" },
-  { key: "blue", label: "Blue", color: "from-[#1195db] to-[#0E6FA3]", bg: "bg-[#e6f2f9]", iconColor: "text-[#0E6FA3]" },
-  { key: "amber", label: "Amber", color: "from-amber-500 to-orange-600", bg: "bg-amber-50", iconColor: "text-amber-600" },
-  { key: "violet", label: "Violet", color: "from-violet-500 to-purple-600", bg: "bg-violet-50", iconColor: "text-violet-600" },
-  { key: "rose", label: "Rose", color: "from-rose-500 to-pink-600", bg: "bg-rose-50", iconColor: "text-rose-600" },
-];
 
 export default function SchemesPage() {
   const [items, setItems] = useState<Scheme[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Scheme | null>(null);
-  const [form, setForm] = useState<Partial<Scheme>>({ active: true, benefits: [] });
+  const [form, setForm] = useState<Partial<Scheme>>({ active: true, order: 0, image_url: "" });
   const [loading, setLoading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [benefitInput, setBenefitInput] = useState("");
 
   async function load() {
-    const { data } = await supabase.from("schemes").select("*").order("order", { ascending: true });
-    if (data) setItems(data);
+    const { data } = await supabase
+      .from("schemes")
+      .select("id, image_url, title, order, active, created_at")
+      .order("order", { ascending: true });
+    if (data) setItems(data as Scheme[]);
   }
 
-  useEffect(() => { load(); }, []);
-
-  function addBenefit() {
-    if (benefitInput.trim()) {
-      setForm({ ...form, benefits: [...(form.benefits || []), benefitInput.trim()] });
-      setBenefitInput("");
-    }
-  }
-
-  function removeBenefit(index: number) {
-    const newBenefits = form.benefits?.filter((_, i) => i !== index) || [];
-    setForm({ ...form, benefits: newBenefits });
-  }
+  useEffect(() => {
+    load();
+  }, []);
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    if (loading) return;
+    if (loading || imageUploading) return;
+
+    if (!form.image_url?.trim()) {
+      alert("Please upload an image before saving.");
+      return;
+    }
+
     setLoading(true);
 
-    const { id, created_at, ...payloadRaw } = form as any;
-    const selectedColor = colorOptions.find(c => c.key === payloadRaw.color_theme) || colorOptions[0];
-    
     const payload = {
-      title: payloadRaw.title?.trim() || "",
-      tag: payloadRaw.tag?.trim() || "Limited Offer",
-      icon: payloadRaw.icon || "BadgePercent",
-      discount: payloadRaw.discount?.trim() || "",
-      description: payloadRaw.description?.trim() || "",
-      benefits: payloadRaw.benefits || [],
-      valid_till: payloadRaw.valid_till?.trim() || "",
-      cta: payloadRaw.cta?.trim() || "Avail Offer",
-      color: selectedColor.color,
-      bg_color: selectedColor.bg,
-      icon_color: selectedColor.iconColor,
-      active: !!payloadRaw.active,
-      order: payloadRaw.order || 0,
+      image_url: form.image_url.trim(),
+      title: form.title?.trim() || null,
+      order: Number(form.order) || 0,
+      active: !!form.active,
     };
 
     let error;
@@ -111,7 +77,7 @@ export default function SchemesPage() {
 
     setShowForm(false);
     setEditing(null);
-    setForm({ active: true, benefits: [] });
+    setForm({ active: true, order: 0, image_url: "" });
     load();
   }
 
@@ -123,17 +89,18 @@ export default function SchemesPage() {
 
   function startEdit(item: Scheme) {
     setEditing(item);
-    const colorKey = colorOptions.find(c => c.color === item.color)?.key || "emerald";
     setForm({
-      ...item,
-      color_theme: colorKey,
-    } as any);
+      image_url: item.image_url,
+      title: item.title,
+      order: item.order,
+      active: item.active,
+    });
     setShowForm(true);
   }
 
   function startAdd() {
     setEditing(null);
-    setForm({ active: true, benefits: [], color_theme: "emerald" } as any);
+    setForm({ active: true, order: items.length, image_url: "" });
     setShowForm(true);
   }
 
@@ -142,132 +109,54 @@ export default function SchemesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Schemes Management</h1>
-          <p className="text-gray-500">Manage special offers and referral programs</p>
+          <p className="text-gray-500">Upload scheme posters / images shown on the homepage</p>
         </div>
         <button
           onClick={startAdd}
           className="bg-[#1195db] hover:bg-[#0E6FA3] text-white px-4 py-2 rounded-lg flex items-center gap-2"
         >
-          <Plus size={20} /> Add Scheme
+          <Plus size={20} /> Add Scheme Image
         </button>
       </div>
 
       {showForm && (
         <form onSubmit={save} className="bg-white p-6 rounded-xl border border-gray-200 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">{editing ? "Edit Scheme" : "Add New Scheme"}</h2>
+            <h2 className="text-lg font-semibold">{editing ? "Edit Scheme Image" : "Add New Scheme Image"}</h2>
             <button type="button" onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600">
               <X size={20} />
             </button>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-              <input
-                type="text"
-                required
-                value={form.title || ""}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
-                placeholder="e.g., Early Bird Discount"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tag</label>
-              <input
-                type="text"
-                value={form.tag || ""}
-                onChange={(e) => setForm({ ...form, tag: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
-                placeholder="e.g., Limited Offer"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Discount/Offer</label>
-              <input
-                type="text"
-                required
-                value={form.discount || ""}
-                onChange={(e) => setForm({ ...form, discount: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
-                placeholder="e.g., 10% Off or ₹10,000"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Valid Till</label>
-              <input
-                type="text"
-                value={form.valid_till || ""}
-                onChange={(e) => setForm({ ...form, valid_till: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
-                placeholder="e.g., Valid till December 2025"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">CTA Button Text</label>
-              <input
-                type="text"
-                value={form.cta || ""}
-                onChange={(e) => setForm({ ...form, cta: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
-                placeholder="e.g., Avail Offer"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Color Theme</label>
-              <select
-                value={(form as any).color_theme || "emerald"}
-                onChange={(e) => setForm({ ...form, color_theme: e.target.value } as any)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
-              >
-                {colorOptions.map((c) => (
-                  <option key={c.key} value={c.key}>{c.label}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea
-              required
-              value={form.description || ""}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
-              rows={3}
-              placeholder="Describe the scheme..."
+            <CloudinaryUpload
+              value={form.image_url || ""}
+              onChange={(url) => setForm({ ...form, image_url: url })}
+              onLoadingChange={setImageUploading}
+              label="Scheme Image (Portrait recommended, e.g. 800x1200)"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Benefits</label>
-            <div className="flex gap-2 mb-2">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Title (optional, for alt text)</label>
               <input
                 type="text"
-                value={benefitInput}
-                onChange={(e) => setBenefitInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addBenefit())}
-                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
-                placeholder="Add a benefit and press Enter"
+                value={form.title || ""}
+                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
+                placeholder="e.g., Lucky Buyer Scheme"
               />
-              <button
-                type="button"
-                onClick={addBenefit}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg"
-              >
-                Add
-              </button>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {form.benefits?.map((benefit, index) => (
-                <span key={index} className="bg-[#e6f2f9] text-[#0E6FA3] px-3 py-1 rounded-full text-sm flex items-center gap-2">
-                  {benefit}
-                  <button type="button" onClick={() => removeBenefit(index)} className="hover:text-red-500">
-                    <X size={14} />
-                  </button>
-                </span>
-              ))}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+              <input
+                type="number"
+                min={0}
+                value={form.order ?? 0}
+                onChange={(e) => setForm({ ...form, order: Number(e.target.value) })}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1195db] focus:border-transparent"
+              />
             </div>
           </div>
 
@@ -279,7 +168,9 @@ export default function SchemesPage() {
               onChange={(e) => setForm({ ...form, active: e.target.checked })}
               className="w-4 h-4 text-[#1195db] rounded focus:ring-[#1195db]"
             />
-            <label htmlFor="active" className="text-sm font-medium text-gray-700">Active</label>
+            <label htmlFor="active" className="text-sm font-medium text-gray-700">
+              Active (show on website)
+            </label>
           </div>
 
           <div className="flex justify-end gap-2 pt-4">
@@ -292,60 +183,73 @@ export default function SchemesPage() {
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || imageUploading}
               className="bg-[#1195db] hover:bg-[#0E6FA3] text-white px-4 py-2 rounded-lg flex items-center gap-2 disabled:opacity-50"
             >
-              {loading ? "Saving..." : <><Check size={18} /> Save</>}
+              {loading ? "Saving..." : imageUploading ? "Uploading image..." : (<><Check size={18} /> Save</>)}
             </button>
           </div>
         </form>
       )}
 
-      <div className="grid gap-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.length === 0 && (
+          <div className="col-span-full bg-white p-10 rounded-xl border border-dashed border-gray-300 text-center text-gray-500">
+            <ImageIcon className="mx-auto mb-3 text-gray-400" size={36} />
+            No scheme images yet. Click "Add Scheme Image" to upload your first one.
+          </div>
+        )}
+
         {items.map((item) => (
-          <div key={item.id} className="bg-white p-6 rounded-xl border border-gray-200">
-            <div className="flex items-start justify-between">
-              <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 ${item.bg_color} rounded-xl flex items-center justify-center shrink-0`}>
-                  {item.icon === "Gift" && <Gift size={24} className={item.icon_color} />}
-                  {item.icon === "BadgePercent" && <BadgePercent size={24} className={item.icon_color} />}
-                  {item.icon === "Percent" && <Percent size={24} className={item.icon_color} />}
+          <div key={item.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="relative aspect-[3/4] w-full bg-gray-100">
+              {item.image_url ? (
+                <Image
+                  src={item.image_url}
+                  alt={item.title || "Scheme"}
+                  fill
+                  sizes="(max-width: 640px) 90vw, 30vw"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-400">
+                  <ImageIcon size={36} />
                 </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-lg">{item.title}</h3>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${item.active ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-600"}`}>
-                      {item.active ? "Active" : "Inactive"}
-                    </span>
-                    <span className="px-2 py-0.5 bg-[#e6f2f9] text-[#0E6FA3] rounded-full text-xs">{item.tag}</span>
-                  </div>
-                  <p className="text-gray-600 text-sm mb-2">{item.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {item.benefits.map((benefit, i) => (
-                      <span key={i} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                        {benefit}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    <span className="font-semibold text-[#1195db]">{item.discount}</span> • {item.valid_till}
-                  </div>
-                </div>
+              )}
+              <div className="absolute top-2 left-2 flex gap-2">
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                    item.active ? "bg-emerald-100 text-emerald-700" : "bg-gray-200 text-gray-700"
+                  }`}
+                >
+                  {item.active ? "Active" : "Inactive"}
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-white/90 text-gray-700">
+                  #{item.order}
+                </span>
               </div>
-              <div className="flex gap-2">
+            </div>
+            <div className="p-3 flex items-center justify-between">
+              <div className="text-sm font-medium text-gray-800 truncate">
+                {item.title || "Untitled"}
+              </div>
+              <div className="flex gap-1">
                 <button
                   onClick={() => startEdit(item)}
                   className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
                   title="Edit"
                 >
-                  <Pencil size={18} />
+                  <Pencil size={16} />
                 </button>
                 <button
-                  onClick={() => { setSelectedId(item.id); setDialogOpen(true); }}
+                  onClick={() => {
+                    setSelectedId(item.id);
+                    setDialogOpen(true);
+                  }}
                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
                   title="Delete"
                 >
-                  <Trash2 size={18} />
+                  <Trash2 size={16} />
                 </button>
               </div>
             </div>
@@ -356,9 +260,12 @@ export default function SchemesPage() {
       <ConfirmDialog
         open={dialogOpen}
         onCancel={() => setDialogOpen(false)}
-        onConfirm={() => { if (selectedId) remove(selectedId); setDialogOpen(false); }}
-        title="Delete Scheme"
-        message="Are you sure you want to delete this scheme? This action cannot be undone."
+        onConfirm={() => {
+          if (selectedId) remove(selectedId);
+          setDialogOpen(false);
+        }}
+        title="Delete Scheme Image"
+        message="Are you sure you want to delete this scheme image? This action cannot be undone."
       />
     </div>
   );
