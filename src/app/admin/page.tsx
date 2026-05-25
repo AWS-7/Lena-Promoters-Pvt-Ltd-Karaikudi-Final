@@ -44,14 +44,14 @@ const statCards = [
     trend: "up",
   },
   {
-    label: "Gallery Images",
+    label: "FAQs",
     icon: Image,
     gradient: "from-amber-500 to-orange-500",
     iconBg: "bg-white/20",
     iconColor: "text-white",
     textColor: "text-white",
     subColor: "text-white/70",
-    key: "gallery",
+    key: "faq",
     trend: "up",
   },
 ];
@@ -59,7 +59,7 @@ const statCards = [
 const quickActions = [
   { label: "Add Project", href: "/admin/projects", icon: Briefcase, color: "bg-blue-50 text-[#0E6FA3]" },
   { label: "View Enquiries", href: "/admin/enquiries", icon: FileText, color: "bg-emerald-50 text-emerald-600" },
-  { label: "Update Gallery", href: "/admin/gallery", icon: Image, color: "bg-violet-50 text-violet-600" },
+  { label: "Edit Homepage", href: "/admin/homepage", icon: Image, color: "bg-violet-50 text-violet-600" },
   { label: "Site Settings", href: "/admin/settings", icon: Globe, color: "bg-amber-50 text-amber-600" },
   { label: "Backup Data", href: "/admin/backup", icon: Zap, color: "bg-cyan-50 text-cyan-600" },
 ];
@@ -74,7 +74,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function loadStats() {
-      const tables = ["projects", "leads", "testimonials", "gallery", "services", "faq", "enquiries"];
+      const tables = ["projects", "leads", "testimonials", "services", "faq", "enquiries"];
       const counts: Record<string, number> = {};
       for (const table of tables) {
         const { count } = await supabase.from(table).select("*", { count: "exact", head: true });
