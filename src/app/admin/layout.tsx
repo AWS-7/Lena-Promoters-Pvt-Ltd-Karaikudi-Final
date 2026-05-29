@@ -22,6 +22,7 @@ import {
   Mail,
   Archive,
   Gift,
+  FileText,
   ChevronRight,
   Bell,
   Shield,
@@ -47,6 +48,7 @@ const navGroups = [
       { label: "CRM", href: "/admin/crm", icon: ClipboardList },
       { label: "Bookings", href: "/admin/bookings", icon: CalendarCheck },
       { label: "Leads", href: "/admin/leads", icon: Users },
+      { label: "Invoices", href: "/admin/invoices", icon: FileText },
     ],
   },
   {
