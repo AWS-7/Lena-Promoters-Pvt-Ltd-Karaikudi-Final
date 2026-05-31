@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import TopHeader from "@/components/TopHeader";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import StatsSection from "@/components/StatsSection";
 import ScrollReveal from "@/components/ScrollReveal";
+
+export const metadata: Metadata = {
+  title: "DTCP Approved Plots in Karaikudi, Tamil Nadu | Buy Land with Clear Title",
+  description:
+    "Buy DTCP approved residential & commercial plots in Karaikudi, Tamil Nadu from Lena Promoters. 18+ years experience, 1200+ happy customers, clear legal titles, bank loan assistance & free site visit.",
+  alternates: {
+    canonical: "https://www.lenapromoterspvtltd.com",
+  },
+};
 
 const AboutSection = dynamic(() => import("@/components/AboutSection"));
 const TrustSection = dynamic(() => import("@/components/TrustSection"));

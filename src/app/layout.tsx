@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Preloader from "@/components/Preloader";
 import WelcomeSound from "@/components/WelcomeSound";
 import VisitorTracker from "@/components/VisitorTracker";
+import { LocalBusinessJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -20,19 +21,57 @@ const inter = Inter({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#1195db",
+};
+
 export const metadata: Metadata = {
   title: {
-    default: "Lena Promoters Private Limited | DTCP Approved Plots in Karaikudi",
+    default: "Lena Promoters Private Limited | DTCP Approved Plots in Karaikudi, Tamil Nadu",
     template: "%s | Lena Promoters Private Limited"
   },
-  description: "Premium DTCP approved land layouts and plot sales in Karaikudi, Tamil Nadu. Trusted land promoter with 18+ years experience, 1200+ happy customers. Buy residential and commercial plots with clear titles.",
-  keywords: "DTCP approved plots, land promoter Karaikudi, plot sales Tamil Nadu, real estate Karaikudi, Lena Promoters, residential plots, commercial land, DTCP layouts, Karaikudi real estate",
-  authors: [{ name: "Lena Promoters Private Limited" }],
+  description: "Buy DTCP approved residential & commercial plots in Karaikudi, Tamil Nadu from Lena Promoters — a trusted real estate company with 18+ years experience, 1200+ happy customers, clear legal titles, and bank loan assistance.",
+  keywords: [
+    "DTCP approved plots Karaikudi",
+    "land promoter Karaikudi",
+    "plot sales Tamil Nadu",
+    "real estate Karaikudi",
+    "Lena Promoters",
+    "residential plots Sivaganga",
+    "commercial land Karaikudi",
+    "DTCP layouts Tamil Nadu",
+    "Karaikudi real estate",
+    "buy plot Karaikudi",
+    "land for sale Karaikudi",
+    "property dealer Karaikudi",
+    "house site Karaikudi",
+    "villament plots",
+    " CMDA approved plots",
+    "RERA approved plots",
+    "land investment Karaikudi",
+    "Chettinad plots",
+    "Sivaganga district plots",
+    "plot with patta Karaikudi",
+    "clear title plots",
+    "bank loan for plot purchase",
+    "real estate company Karaikudi",
+    "land developers Tamil Nadu",
+    "affordable plots Karaikudi",
+    "premium land layouts",
+  ].join(", "),
+  authors: [{ name: "Lena Promoters Private Limited", url: "https://www.lenapromoterspvtltd.com" }],
   creator: "Lena Promoters Private Limited",
   publisher: "Lena Promoters Private Limited",
+  category: "Real Estate",
+  classification: "Business",
+  referrer: "origin-when-cross-origin",
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -41,31 +80,35 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  alternates: {
+    canonical: "https://www.lenapromoterspvtltd.com",
+  },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://lenapromoters.com',
+    url: 'https://www.lenapromoterspvtltd.com',
     title: 'Lena Promoters Private Limited | DTCP Approved Plots in Karaikudi',
-    description: 'Premium DTCP approved land layouts and plot sales in Karaikudi, Tamil Nadu. Trusted land promoter with 18+ years experience.',
+    description: 'Buy DTCP approved plots in Karaikudi, Tamil Nadu. Trusted land promoter with 18+ years experience, 1200+ happy customers, clear titles & bank loan support.',
     siteName: 'Lena Promoters Private Limited',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://www.lenapromoterspvtltd.com/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Lena Promoters Private Limited',
+        alt: 'Lena Promoters Private Limited - DTCP Approved Plots in Karaikudi',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Lena Promoters Private Limited | DTCP Approved Plots in Karaikudi',
-    description: 'Premium DTCP approved land layouts and plot sales in Karaikudi, Tamil Nadu.',
-    images: ['/og-image.jpg'],
+    description: 'Buy DTCP approved plots in Karaikudi, Tamil Nadu. 18+ years experience, 1200+ happy customers.',
+    images: ['https://www.lenapromoterspvtltd.com/og-image.jpg'],
     creator: '@lenapromoters',
+    site: '@lenapromoters',
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: '5DX8KNlqJsxw14QkpWWKITb5wStKlL23-aCMtARDQ5o',
   },
   icons: {
     icon: [
@@ -97,6 +140,8 @@ export default function RootLayout({
         {/* Google Search Console Verification */}
         <meta name="google-site-verification" content="5DX8KNlqJsxw14QkpWWKITb5wStKlL23-aCMtARDQ5o" />
 
+        <LocalBusinessJsonLd />
+        <WebsiteJsonLd />
         <link rel="preconnect" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         <link rel="dns-prefetch" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         {/* Google tag (gtag.js) - AW-18145943083 */}

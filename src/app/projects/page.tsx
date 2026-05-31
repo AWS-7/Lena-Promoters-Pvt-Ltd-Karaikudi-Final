@@ -1,6 +1,40 @@
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import FeaturedProjects from "@/components/FeaturedProjects";
 import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "DTCP Approved Land Projects in Karaikudi | Lena Promoters",
+  description:
+    "Explore DTCP approved residential & commercial land layouts in Karaikudi, Sivaganga, and Chettinad. Premium plots with clear titles, patta, and bank loan support from Lena Promoters.",
+  keywords: [
+    "DTCP approved projects Karaikudi",
+    "land layouts Tamil Nadu",
+    "residential plots Karaikudi",
+    "commercial plots Sivaganga",
+    "Chettinad land projects",
+    "premium plots Karaikudi",
+    "Lena Nagar Phase 1",
+    "Lena Garden",
+    "Lena Enclave",
+    "Lena City",
+    "plot with patta",
+    "clear title land",
+    "bank loan approved plots",
+    "villament plots Karaikudi",
+    "land for sale Tamil Nadu",
+  ].join(", "),
+  alternates: {
+    canonical: "https://www.lenapromoterspvtltd.com/projects",
+  },
+  openGraph: {
+    title: "DTCP Approved Land Projects in Karaikudi | Lena Promoters",
+    description:
+      "Explore DTCP approved residential & commercial land layouts with clear titles and bank loan support.",
+    url: "https://www.lenapromoterspvtltd.com/projects",
+    images: ["https://www.lenapromoterspvtltd.com/og-image.jpg"],
+  },
+};
 
 export default function ProjectsPage() {
   return (

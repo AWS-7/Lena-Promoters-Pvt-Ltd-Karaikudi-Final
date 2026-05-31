@@ -5,6 +5,10 @@ import { ArrowLeft, Shield } from "lucide-react";
 export const metadata: Metadata = {
   title: "Privacy Policy | Lena Promoters Private Limited",
   description: "Privacy Policy of Lena Promoters Private Limited. Learn how we collect, use, and protect your personal information.",
+  keywords: "privacy policy Lena Promoters, data protection real estate Karaikudi, customer privacy Tamil Nadu, plot booking privacy",
+  alternates: {
+    canonical: "https://www.lenapromoterspvtltd.com/privacy-policy",
+  },
 };
 
 export default function PrivacyPolicyPage() {

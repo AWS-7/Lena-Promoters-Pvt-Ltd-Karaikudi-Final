@@ -4,7 +4,11 @@ import { ArrowLeft, RefreshCw } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Refund & Cancellation Policy | Lena Promoters Private Limited",
-  description: "Refund and Cancellation Policy of Lena Promoters Private Limited.",
+  description: "Refund and Cancellation Policy of Lena Promoters Private Limited. Know our plot booking refund process, cancellation rules and payment terms.",
+  keywords: "refund policy Lena Promoters, plot booking cancellation Karaikudi, land purchase refund Tamil Nadu, booking cancellation real estate",
+  alternates: {
+    canonical: "https://www.lenapromoterspvtltd.com/refund-policy",
+  },
 };
 
 export default function RefundPolicyPage() {

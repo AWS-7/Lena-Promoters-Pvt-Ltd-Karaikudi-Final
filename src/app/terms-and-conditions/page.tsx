@@ -4,7 +4,11 @@ import { ArrowLeft, FileText } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions | Lena Promoters Private Limited",
-  description: "Terms and Conditions for using Lena Promoters Private Limited services and website.",
+  description: "Terms and Conditions for using Lena Promoters Private Limited services and website. Read our booking, payment and plot purchase terms.",
+  keywords: "terms and conditions Lena Promoters, plot booking terms Karaikudi, land purchase agreement Tamil Nadu, real estate terms",
+  alternates: {
+    canonical: "https://www.lenapromoterspvtltd.com/terms-and-conditions",
+  },
 };
 
 export default function TermsPage() {
