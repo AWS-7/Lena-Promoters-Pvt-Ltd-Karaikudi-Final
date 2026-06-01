@@ -77,8 +77,14 @@ export default function AdminDashboard() {
       const tables = ["projects", "leads", "testimonials", "services", "faq", "enquiries"];
       const counts: Record<string, number> = {};
       for (const table of tables) {
-        const { count } = await supabase.from(table).select("*", { count: "exact", head: true });
-        counts[table] = count || 0;
+        try {
+          const { count } = await supabase.from(table).select("*", { count: "exact", head: true });
+          counts[table] = count || 0;
+        } catch {
+          counts[table] = 0;
+        }
+        // Small delay to avoid free-tier rate limits (~60 req/min)
+        await new Promise((r) => setTimeout(r, 150));
       }
       setStats(counts);
     }

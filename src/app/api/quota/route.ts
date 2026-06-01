@@ -89,7 +89,7 @@ export async function GET() {
         throw new Error("RPC not available");
       }
     } catch {
-      // Fallback: use pg_stat_user_tables for approximate row count + size
+      // Fallback: use pg_stat_user_tables for approximate row count in ONE query
       usingEstimate = true;
       try {
         const { data: stats } = await supabase
@@ -101,17 +101,9 @@ export async function GET() {
         for (const row of stats || []) {
           totalRows += row.n_live_tup || 0;
         }
-        // Rough estimate: ~2.5KB per row average including indexes
         dbSizeMB = (totalRows * 2.5) / 1024;
       } catch {
-        // Final fallback: count rows from known tables
-        const tables = ["projects","services","testimonials","gallery","faq","partners","certificates","leads","settings","notifications","site_visit_bookings","enquiries","homepage_content","project_layouts","project_plots"];
-        let totalRows = 0;
-        for (const t of tables) {
-          const { count } = await supabase.from(t).select("*", { count: "exact", head: true });
-          totalRows += count || 0;
-        }
-        dbSizeMB = (totalRows * 2.5) / 1024;
+        dbSizeMB = 0;
       }
     }
 

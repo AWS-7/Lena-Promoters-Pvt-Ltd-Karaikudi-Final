@@ -87,13 +87,17 @@ export default function BackupPage() {
     }, 6000);
   }, []);
 
-  async function fetchQuota() {
+  async function fetchQuota(retry = 0) {
     setQuotaLoading(true);
     try {
-      const res = await fetch("/api/quota");
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      const res = await fetch("/api/quota", { signal: controller.signal });
+      clearTimeout(timeout);
       const data = await res.json();
       if (res.ok) {
         setQuota(data);
+        setError("");
         // Auto-backup trigger at 90%
         if (data.status === "critical" && !autoTriggeredRef.current) {
           autoTriggeredRef.current = true;
@@ -104,7 +108,11 @@ export default function BackupPage() {
         setError(data.error || "Quota check failed");
       }
     } catch (err: any) {
-      console.error("Quota fetch error:", err);
+      if (retry < 1 && err?.name !== "AbortError") {
+        setTimeout(() => fetchQuota(retry + 1), 3000);
+        return;
+      }
+      console.error("Quota fetch error:", err?.message || err);
     } finally {
       setQuotaLoading(false);
     }
@@ -154,8 +162,8 @@ export default function BackupPage() {
       .then((data) => setConfigStatus(data))
       .catch(() => setConfigStatus({ configured: false, message: "Could not check config" }));
     fetchQuota();
-    // Poll every 30 minutes
-    const interval = setInterval(fetchQuota, 30 * 60 * 1000);
+    // Poll every 60 minutes to avoid free-tier rate limits
+    const interval = setInterval(() => fetchQuota(), 60 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -303,7 +311,7 @@ export default function BackupPage() {
             </div>
           </div>
           <button
-            onClick={fetchQuota}
+            onClick={() => fetchQuota()}
             disabled={quotaLoading}
             className="text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
             title="Refresh quota"

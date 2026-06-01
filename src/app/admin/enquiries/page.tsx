@@ -33,14 +33,15 @@ export default function EnquiriesPage() {
         .select("*")
         .order("created_at", { ascending: false });
       if (error) {
-        console.error("Error fetching enquiries:", error);
-        setError("Error fetching enquiries. Please check if the status column exists in the database.");
+        const msg = (error as any)?.message || String(error);
+        console.error("Error fetching enquiries:", msg, error);
+        setError(`Error fetching enquiries: ${msg}. If "row-level security", add an RLS policy for anon read access.`);
       } else {
         setItems(data || []);
       }
-    } catch (err) {
-      console.error("Error fetching enquiries:", err);
-      setError("Error fetching enquiries. Please try again.");
+    } catch (err: any) {
+      console.error("Error fetching enquiries:", err?.message || err);
+      setError(`Error fetching enquiries: ${err?.message || "Please try again."}`);
     } finally {
       setLoading(false);
     }
