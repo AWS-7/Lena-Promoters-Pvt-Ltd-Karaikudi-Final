@@ -21,13 +21,11 @@ const OffersSection = dynamic(() => import("@/components/OffersSection"));
 const FeaturedProjects = dynamic(() => import("@/components/FeaturedProjects"));
 const LatestOffers = dynamic(() => import("@/components/LatestOffers"));
 const ServicesSection = dynamic(() => import("@/components/ServicesSection"));
-const WhyChooseUs = dynamic(() => import("@/components/WhyChooseUs"));
 const Testimonials = dynamic(() => import("@/components/Testimonials"));
 const FAQ = dynamic(() => import("@/components/FAQ"));
 const BranchesSection = dynamic(() => import("@/components/BranchesSection"));
 const CTASection = dynamic(() => import("@/components/CTASection"));
 const SchemesSection = dynamic(() => import("@/components/SchemesSection"));
-const SiteVisitForm = dynamic(() => import("@/components/SiteVisitForm"));
 const ContactSection = dynamic(() => import("@/components/ContactSection"));
 const Footer = dynamic(() => import("@/components/Footer"));
 const EnquiryPopup = dynamic(() => import("@/components/EnquiryPopup"));
@@ -57,9 +55,6 @@ export default function Home() {
         <ScrollReveal>
           <LatestOffers />
         </ScrollReveal>
-        <ScrollReveal delay={0.15}>
-          <WhyChooseUs />
-        </ScrollReveal>
         <ScrollReveal delay={0.1}>
           <ServicesSection />
         </ScrollReveal>
@@ -77,9 +72,6 @@ export default function Home() {
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <CTASection />
-        </ScrollReveal>
-        <ScrollReveal delay={0.1}>
-          <SiteVisitForm />
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <ContactSection />

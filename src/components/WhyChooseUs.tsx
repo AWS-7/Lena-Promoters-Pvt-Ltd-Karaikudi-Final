@@ -13,7 +13,7 @@ const features = [
   { icon: Award, title: "Trusted Development", desc: `${SITE_STATS.yearsExperience}+ years of trusted land development with ${SITE_STATS.happyCustomers}+ happy customers.` },
 ];
 
-export default function WhyChooseUs() {
+export default function WhyChooseUs({ showHeader = true }: { showHeader?: boolean }) {
   return (
     <section id="why-us" className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
       {/* Background decorative shapes */}
@@ -21,7 +21,7 @@ export default function WhyChooseUs() {
       <div className="absolute bottom-20 left-0 w-56 h-56 bg-[#f59e0b]/5 rounded-full -translate-x-1/2" />
 
       <div className="container-custom relative">
-        {/* Header */}
+        {showHeader && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -40,6 +40,7 @@ export default function WhyChooseUs() {
             We are a trusted name in Karaikudi real estate with a commitment to transparency, legal clarity, and customer satisfaction.
           </p>
         </motion.div>
+        )}
 
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* Features Grid */}
@@ -100,7 +101,7 @@ export default function WhyChooseUs() {
                 ))}
               </ul>
               <a
-                href="/#contact"
+                href="/#site-visit"
                 className="inline-flex items-center gap-2 rounded-xl bg-white text-[#1195db] px-6 py-3 font-semibold hover:bg-gray-100 transition-colors shadow-lg w-full justify-center"
               >
                 Book Now

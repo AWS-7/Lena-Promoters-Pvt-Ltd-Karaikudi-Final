@@ -37,6 +37,7 @@ export default function Footer() {
     { label: "Lena Group", href: "/lena-group" },
     { label: "Projects", href: "/projects" },
     { label: "Services", href: "/services" },
+    { label: "Why Us", href: "/why-us" },
     { label: "Offers", href: "/offers" },
     { label: "Contact", href: "/#contact" },
   ];

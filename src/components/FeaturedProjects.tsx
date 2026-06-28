@@ -148,27 +148,27 @@ function ProjectScrollRow({ projects, color }: { projects: ProjectWithCategory[]
   }, []);
 
   return (
-    <div className="relative px-10 sm:px-14 md:px-16">
+    <div className="relative">
       <button
         type="button"
         onClick={() => scroll(-1)}
         aria-label="Previous projects"
-        className="absolute -left-1 sm:left-0 md:-left-2 top-[42%] -translate-y-1/2 z-30 w-12 h-12 bg-white rounded-full border-2 border-[#0E6FA3] shadow-xl flex items-center justify-center text-[#0E6FA3] hover:bg-[#0E6FA3] hover:text-white transition-colors"
+        className="absolute left-2 sm:left-4 md:left-6 top-[40%] -translate-y-1/2 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#0E6FA3] text-white shadow-[0_4px_24px_rgba(14,111,163,0.55)] ring-4 ring-white flex items-center justify-center hover:bg-[#0a5480] hover:scale-105 transition-all"
       >
-        <ChevronLeft size={24} strokeWidth={2.5} />
+        <ChevronLeft size={26} strokeWidth={2.5} />
       </button>
       <button
         type="button"
         onClick={() => scroll(1)}
         aria-label="Next projects"
-        className="absolute -right-1 sm:right-0 md:-right-2 top-[42%] -translate-y-1/2 z-30 w-12 h-12 bg-white rounded-full border-2 border-[#0E6FA3] shadow-xl flex items-center justify-center text-[#0E6FA3] hover:bg-[#0E6FA3] hover:text-white transition-colors"
+        className="absolute right-2 sm:right-4 md:right-6 top-[40%] -translate-y-1/2 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#0E6FA3] text-white shadow-[0_4px_24px_rgba(14,111,163,0.55)] ring-4 ring-white flex items-center justify-center hover:bg-[#0a5480] hover:scale-105 transition-all"
       >
-        <ChevronRight size={24} strokeWidth={2.5} />
+        <ChevronRight size={26} strokeWidth={2.5} />
       </button>
 
       <div
         ref={scrollRef}
-        className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2"
+        className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-3 pl-14 pr-14 sm:pl-16 sm:pr-16 md:pl-20 md:pr-20"
       >
         {projects.map((project, i) => (
           <ProjectCard key={project.id} project={project} index={i} />
@@ -244,11 +244,11 @@ function FeaturedProjectsContent() {
   const getProjectsByCategory = (cat: Category) => displayProjects.filter((p) => p.category === cat);
 
   return (
-    <section id="projects" className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-x-clip">
+    <section id="projects" className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-visible">
       {/* Background decoration */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] sm:w-[800px] sm:h-[800px] bg-[#1195db]/3 rounded-full -translate-y-1/2" />
 
-      <div className="container-custom relative">
+      <div className="container-custom relative overflow-visible">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -362,7 +362,9 @@ function FeaturedProjectsContent() {
 
                   {/* Horizontal Scrolling Row */}
                   {catProjects.length > 0 ? (
-                    <ProjectScrollRow projects={catProjects} color={cat.color} />
+                    <div className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 px-3 sm:px-6 md:px-10">
+                      <ProjectScrollRow projects={catProjects} color={cat.color} />
+                    </div>
                   ) : (
                     <div className="p-8 bg-gray-50 rounded-2xl text-center border border-dashed border-gray-200">
                       <p className="text-gray-500 text-sm">No projects in this category yet.</p>

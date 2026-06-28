@@ -10,6 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/services`, lastModified: now, priority: 0.9, changeFrequency: "weekly" },
     { url: `${baseUrl}/projects`, lastModified: now, priority: 0.9, changeFrequency: "daily" },
     { url: `${baseUrl}/lena-group`, lastModified: now, priority: 0.8, changeFrequency: "monthly" },
+    { url: `${baseUrl}/why-us`, lastModified: now, priority: 0.8, changeFrequency: "monthly" },
     { url: `${baseUrl}/offers`, lastModified: now, priority: 0.8, changeFrequency: "daily" },
     { url: `${baseUrl}/privacy-policy`, lastModified: now, priority: 0.3, changeFrequency: "monthly" },
     { url: `${baseUrl}/terms-and-conditions`, lastModified: now, priority: 0.3, changeFrequency: "monthly" },
