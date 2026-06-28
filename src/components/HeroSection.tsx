@@ -8,6 +8,7 @@ import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { CONTACT, telHref } from "@/lib/contact";
 import { HERO_BG_FALLBACK, resolveHeroBackground } from "@/lib/images";
+import { pickReachableImageUrl } from "@/lib/sanitize-images-client";
 import type { Project } from "@/lib/types";
 
 const containerVariants = {
@@ -108,8 +109,20 @@ export default function HeroSection() {
   }, []);
 
   useEffect(() => {
-    setHeroBgSrc(resolveHeroBackground(heroContent?.bgImage));
-    setHeroBgFailed(false);
+    let cancelled = false;
+
+    (async () => {
+      const candidate = resolveHeroBackground(heroContent?.bgImage);
+      const resolved = await pickReachableImageUrl(candidate, HERO_BG_FALLBACK);
+      if (!cancelled) {
+        setHeroBgSrc(resolved);
+        setHeroBgFailed(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [heroContent?.bgImage]);
 
   const phone = CONTACT.phonePrimary;

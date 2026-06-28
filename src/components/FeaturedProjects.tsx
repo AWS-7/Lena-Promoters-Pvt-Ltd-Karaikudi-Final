@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { MapPin, ChevronLeft, ChevronRight, Landmark, Building2, Home, Filter, X, Loader2, Ruler, ShieldCheck, Layers } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { sanitizeProjectImageUrls } from "@/lib/sanitize-images-client";
 import type { Project } from "@/lib/types";
 import Link from "next/link";
 
@@ -210,7 +211,8 @@ function FeaturedProjectsContent() {
       const uniqueProjects = data?.filter((project, index, self) =>
         index === self.findIndex((p) => p.id === project.id)
       ) || [];
-      setProjects(uniqueProjects);
+      const sanitized = await sanitizeProjectImageUrls(uniqueProjects);
+      setProjects(sanitized);
       setLoading(false);
     };
     fetchProjects();
