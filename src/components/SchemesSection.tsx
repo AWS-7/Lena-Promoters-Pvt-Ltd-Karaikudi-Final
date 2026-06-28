@@ -71,7 +71,7 @@ export default function SchemesSection() {
                   type="button"
                   onClick={() => setActiveIndex(index)}
                   aria-label={`Open ${scheme.alt} in fullscreen`}
-                  className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100 block cursor-zoom-in focus:outline-none focus-visible:ring-4 focus-visible:ring-[#1195db]/40"
+                  className="relative aspect-[5/6] w-full overflow-hidden bg-gray-100 block cursor-zoom-in focus:outline-none focus-visible:ring-4 focus-visible:ring-[#1195db]/40"
                 >
                   <Image
                     src={scheme.src}
