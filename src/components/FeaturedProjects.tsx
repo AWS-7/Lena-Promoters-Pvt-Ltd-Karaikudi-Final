@@ -148,22 +148,24 @@ function ProjectScrollRow({ projects, color }: { projects: ProjectWithCategory[]
   }, []);
 
   return (
-    <div className="relative group">
-      {/* Scroll buttons */}
+    <div className="relative px-10 sm:px-14 md:px-16">
       <button
+        type="button"
         onClick={() => scroll(-1)}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#1195db] hover:text-white"
+        aria-label="Previous projects"
+        className="absolute -left-1 sm:left-0 md:-left-2 top-[42%] -translate-y-1/2 z-30 w-12 h-12 bg-white rounded-full border-2 border-[#0E6FA3] shadow-xl flex items-center justify-center text-[#0E6FA3] hover:bg-[#0E6FA3] hover:text-white transition-colors"
       >
-        <ChevronLeft size={20} />
+        <ChevronLeft size={24} strokeWidth={2.5} />
       </button>
       <button
+        type="button"
         onClick={() => scroll(1)}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#1195db] hover:text-white"
+        aria-label="Next projects"
+        className="absolute -right-1 sm:right-0 md:-right-2 top-[42%] -translate-y-1/2 z-30 w-12 h-12 bg-white rounded-full border-2 border-[#0E6FA3] shadow-xl flex items-center justify-center text-[#0E6FA3] hover:bg-[#0E6FA3] hover:text-white transition-colors"
       >
-        <ChevronRight size={20} />
+        <ChevronRight size={24} strokeWidth={2.5} />
       </button>
 
-      {/* Horizontal scroll strip - no duplication */}
       <div
         ref={scrollRef}
         className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2"
@@ -242,7 +244,7 @@ function FeaturedProjectsContent() {
   const getProjectsByCategory = (cat: Category) => displayProjects.filter((p) => p.category === cat);
 
   return (
-    <section id="projects" className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+    <section id="projects" className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-x-clip">
       {/* Background decoration */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] sm:w-[800px] sm:h-[800px] bg-[#1195db]/3 rounded-full -translate-y-1/2" />
 
