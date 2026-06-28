@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { MapPin, CheckCircle, ArrowRight, ChevronLeft, ChevronRight, Landmark, Building2, Home, Filter, X, Loader2 } from "lucide-react";
+import { MapPin, ChevronLeft, ChevronRight, Landmark, Building2, Home, Filter, X, Loader2, Ruler, ShieldCheck, Layers } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import type { Project } from "@/lib/types";
 import Link from "next/link";
@@ -26,19 +26,26 @@ const categories: { key: Category; icon: typeof Landmark; label: string; subtitl
   { key: "ready", icon: Home, label: "READY TO BUILD", subtitle: "House Projects", color: "#d97706" },
 ];
 
+function getStatusLabel(status: string) {
+  if (!status) return "Available";
+  return status;
+}
+
 function ProjectCard({ project, index }: { project: ProjectWithCategory; index: number }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [useFallback, setUseFallback] = useState(false);
 
-  // Debug logging
-  useEffect(() => {
-    console.log(`[ProjectCard] Category: ${project.category}, Image URL: ${project.image_url}, Title: ${project.title}`);
-  }, [project.category, project.image_url, project.title]);
+  const detailRows = [
+    { icon: MapPin, text: project.location },
+    project.description ? { icon: Layers, text: project.description } : null,
+    project.area_size ? { icon: Ruler, text: project.area_size } : null,
+    project.approval_status ? { icon: ShieldCheck, text: project.approval_status } : null,
+  ].filter(Boolean) as { icon: typeof MapPin; text: string }[];
 
   return (
-    <div className="flex-shrink-0 w-[260px] sm:w-[300px] md:w-[340px] snap-start">
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all overflow-hidden group h-full">
-        <div className="relative h-48">
+    <div className="flex-shrink-0 w-[300px] sm:w-[340px] md:w-[380px] snap-start">
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
+        <div className="relative h-52 sm:h-56">
           {project.image_url ? (
             <>
               {useFallback ? (
@@ -46,7 +53,7 @@ function ProjectCard({ project, index }: { project: ProjectWithCategory; index: 
                 <img
                   src={project.image_url}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover"
                   onLoad={() => setIsLoaded(true)}
                 />
               ) : (
@@ -55,8 +62,8 @@ function ProjectCard({ project, index }: { project: ProjectWithCategory; index: 
                     src={project.image_url}
                     alt={project.title}
                     fill
-                    sizes="(max-width: 640px) 90vw, (max-width: 768px) 300px, 340px"
-                    className={`object-cover transition-all duration-500 group-hover:scale-110 ${
+                    sizes="(max-width: 640px) 90vw, (max-width: 768px) 340px, 380px"
+                    className={`object-cover transition-opacity duration-500 ${
                       isLoaded ? "opacity-100" : "opacity-0"
                     }`}
                     placeholder="blur"
@@ -65,9 +72,7 @@ function ProjectCard({ project, index }: { project: ProjectWithCategory; index: 
                     priority={index < 6}
                     quality={75}
                     onLoad={() => setIsLoaded(true)}
-                    onError={(e) => {
-                      console.error(`[ProjectCard] Image load error for ${project.title}:`, e);
-                      // Fallback to regular img if Next.js Image fails
+                    onError={() => {
                       setUseFallback(true);
                       setIsLoaded(true);
                     }}
@@ -91,34 +96,42 @@ function ProjectCard({ project, index }: { project: ProjectWithCategory; index: 
               </div>
             </div>
           )}
-          <div className="absolute top-3 left-3">
-            <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur text-white text-xs font-semibold px-2.5 py-1 rounded-full">
-              <CheckCircle size={12} /> {project.approval_status}
-            </span>
-          </div>
+          {project.approval_status && (
+            <div className="absolute top-0 left-0">
+              <span className="inline-block bg-[#1195db] text-white text-xs font-semibold px-4 py-2 rounded-br-lg shadow-sm">
+                {getStatusLabel(project.approval_status)}
+              </span>
+            </div>
+          )}
         </div>
-        <div className="p-5">
-          <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-            <MapPin size={12} /> {project.location}
+
+        <div className="p-5 flex flex-col flex-1">
+          <h3 className="font-bold text-gray-900 text-lg leading-snug mb-2">{project.title}</h3>
+          <p className="text-[#1195db] font-bold text-base sm:text-lg mb-4">{project.price}</p>
+
+          <ul className="space-y-3 mb-5 flex-1">
+            {detailRows.map((row) => (
+              <li key={row.text} className="flex items-start gap-3 text-sm text-gray-700 leading-relaxed">
+                <row.icon size={16} className="text-gray-900 shrink-0 mt-0.5" strokeWidth={1.75} />
+                <span className="line-clamp-2">{row.text}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="border-t border-gray-200 pt-4 grid grid-cols-2 gap-3">
+            <Link
+              href="/#site-visit"
+              className="inline-flex items-center justify-center rounded-md border border-[#0E6FA3] text-[#0E6FA3] px-3 py-2.5 text-xs sm:text-sm font-semibold hover:bg-[#e6f2f9] transition-colors text-center"
+            >
+              Book a site visit
+            </Link>
+            <Link
+              href="/#contact"
+              className="inline-flex items-center justify-center rounded-md bg-[#0E6FA3] text-white px-3 py-2.5 text-xs sm:text-sm font-semibold hover:bg-[#0a5480] transition-colors text-center"
+            >
+              View Details
+            </Link>
           </div>
-          <h3 className="font-bold text-gray-900 text-base mb-2">{project.title}</h3>
-          <p className="text-gray-500 text-sm mb-4 line-clamp-2">{project.description}</p>
-          <div className="flex items-center justify-between text-sm mb-5">
-            <div>
-              <span className="text-xs text-gray-400">Price</span>
-              <div className="font-bold text-[#1195db]">{project.price}</div>
-            </div>
-            <div className="text-right">
-              <span className="text-xs text-gray-400">Area</span>
-              <div className="font-bold text-gray-700">{project.area_size}</div>
-            </div>
-          </div>
-          <a
-            href="#contact"
-            className="flex items-center justify-center gap-2 w-full rounded-lg bg-[#1195db] text-white py-2.5 text-sm font-medium hover:bg-[#0E6FA3] transition-colors group-hover:gap-3"
-          >
-            Enquire Now <ArrowRight size={16} />
-          </a>
         </div>
       </div>
     </div>
@@ -130,7 +143,7 @@ function ProjectScrollRow({ projects, color }: { projects: ProjectWithCategory[]
 
   const scroll = useCallback((dir: number) => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: dir * 340, behavior: "smooth" });
+      scrollRef.current.scrollBy({ left: dir * 396, behavior: "smooth" });
     }
   }, []);
 
@@ -302,7 +315,7 @@ function FeaturedProjectsContent() {
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex gap-4 sm:gap-6 overflow-hidden">
                 {[1, 2, 3].map((j) => (
-                  <div key={j} className="flex-shrink-0 w-[260px] sm:w-[300px] bg-gray-100 rounded-xl h-96 animate-pulse" />
+                  <div key={j} className="flex-shrink-0 w-[300px] sm:w-[340px] bg-gray-100 rounded-lg h-[520px] animate-pulse" />
                 ))}
               </div>
             ))}
