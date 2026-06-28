@@ -138,7 +138,7 @@ export default function HeroSection() {
 
   return (
     <section ref={sectionRef} id="home" className="relative text-white overflow-hidden">
-      {/* Background image with parallax — crop left so person is not oversized */}
+      {/* Background image with parallax */}
       <motion.div
         className="absolute inset-0 -top-[15%] -bottom-[15%]"
         initial={{ scale: 1.1 }}
@@ -151,29 +151,13 @@ export default function HeroSection() {
           alt="Hero background"
           fill
           priority
-          className="object-cover object-[left_center] lg:object-[28%_center]"
+          className="object-cover"
         />
       </motion.div>
-
-      {/* Person portrait — right side, ~50% viewport height (desktop) */}
-      <div className="absolute inset-y-0 right-0 z-0 hidden lg:flex w-[46%] max-w-2xl items-center justify-center pointer-events-none px-6 xl:px-10">
-        <div className="relative h-[min(50vh,380px)] w-full max-w-[280px] xl:max-w-[300px] overflow-hidden">
-          <Image
-            src={heroContent?.personImage || heroContent?.bgImage || "/hero-bg.png"}
-            alt="Lena Promoters representative"
-            fill
-            sizes="300px"
-            className="object-cover object-[right_bottom] scale-[1.12] origin-bottom"
-            priority
-          />
-        </div>
-      </div>
-
       {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-black/50 z-[1]" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/35 to-black/70 lg:to-black/55 z-[1]" />
+      <div className="absolute inset-0 bg-black/50" />
 
-      <div className="container-custom relative z-10 flex items-center min-h-[700px] sm:min-h-[780px] md:min-h-[600px] lg:min-h-[700px] py-10 md:py-10">
+      <div className="container-custom relative flex items-center min-h-[700px] sm:min-h-[780px] md:min-h-[600px] lg:min-h-[700px] py-10 md:py-10">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full max-w-full">
           <motion.div
             variants={containerVariants}
