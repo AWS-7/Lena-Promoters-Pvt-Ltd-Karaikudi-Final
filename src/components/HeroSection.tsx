@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { CONTACT, telHref } from "@/lib/contact";
+import { HERO_BG_FALLBACK, resolveHeroBackground } from "@/lib/images";
 import type { Project } from "@/lib/types";
 
 const containerVariants = {
@@ -67,6 +68,8 @@ export default function HeroSection() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedLocation, setSelectedLocation] = useState("All Locations");
   const [selectedBudget, setSelectedBudget] = useState("Any Budget");
+  const [heroBgSrc, setHeroBgSrc] = useState(HERO_BG_FALLBACK);
+  const [heroBgFailed, setHeroBgFailed] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const router = useRouter();
 
@@ -104,6 +107,11 @@ export default function HeroSection() {
       });
   }, []);
 
+  useEffect(() => {
+    setHeroBgSrc(resolveHeroBackground(heroContent?.bgImage));
+    setHeroBgFailed(false);
+  }, [heroContent?.bgImage]);
+
   const phone = CONTACT.phonePrimary;
 
   // Extract unique locations from projects
@@ -140,19 +148,28 @@ export default function HeroSection() {
     <section ref={sectionRef} id="home" className="relative text-white overflow-hidden">
       {/* Background image with parallax */}
       <motion.div
-        className="absolute inset-0 -top-[15%] -bottom-[15%]"
+        className="absolute inset-0 -top-[15%] -bottom-[15%] bg-gradient-to-br from-[#0E6FA3] via-[#1195db] to-[#0a5480]"
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
         style={{ y: backgroundY }}
       >
-        <Image
-          src={heroContent?.bgImage || "/hero-bg.png"}
-          alt="Hero background"
-          fill
-          priority
-          className="object-cover"
-        />
+        {!heroBgFailed && (
+          <Image
+            src={heroBgSrc}
+            alt="Hero background"
+            fill
+            priority
+            className="object-cover"
+            onError={() => {
+              if (heroBgSrc !== HERO_BG_FALLBACK) {
+                setHeroBgSrc(HERO_BG_FALLBACK);
+                return;
+              }
+              setHeroBgFailed(true);
+            }}
+          />
+        )}
       </motion.div>
       {/* Dark overlay for text readability */}
       <div className="absolute inset-0 bg-black/50" />

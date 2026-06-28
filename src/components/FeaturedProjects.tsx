@@ -33,7 +33,7 @@ function getStatusLabel(status: string) {
 
 function ProjectCard({ project, index }: { project: ProjectWithCategory; index: number }) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [useFallback, setUseFallback] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
 
   const detailRows = [
     { icon: MapPin, text: project.location },
@@ -46,43 +46,31 @@ function ProjectCard({ project, index }: { project: ProjectWithCategory; index: 
     <div className="flex-shrink-0 w-[300px] sm:w-[340px] md:w-[380px] snap-start">
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
         <div className="relative h-52 sm:h-56">
-          {project.image_url ? (
+          {project.image_url && !imageFailed ? (
             <>
-              {useFallback ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={project.image_url}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                  onLoad={() => setIsLoaded(true)}
-                />
-              ) : (
-                <>
-                  <Image
-                    src={project.image_url}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 640px) 90vw, (max-width: 768px) 340px, 380px"
-                    className={`object-cover transition-opacity duration-500 ${
-                      isLoaded ? "opacity-100" : "opacity-0"
-                    }`}
-                    placeholder="blur"
-                    blurDataURL={blurPlaceholder}
-                    loading={index < 6 ? "eager" : "lazy"}
-                    priority={index < 6}
-                    quality={75}
-                    onLoad={() => setIsLoaded(true)}
-                    onError={() => {
-                      setUseFallback(true);
-                      setIsLoaded(true);
-                    }}
-                  />
-                  {!isLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1195db] to-[#0a5480]">
-                      <Loader2 className="animate-spin text-white/60" size={24} />
-                    </div>
-                  )}
-                </>
+              <Image
+                src={project.image_url}
+                alt={project.title}
+                fill
+                sizes="(max-width: 640px) 90vw, (max-width: 768px) 340px, 380px"
+                className={`object-cover transition-opacity duration-500 ${
+                  isLoaded ? "opacity-100" : "opacity-0"
+                }`}
+                placeholder="blur"
+                blurDataURL={blurPlaceholder}
+                loading={index < 6 ? "eager" : "lazy"}
+                priority={index < 6}
+                quality={75}
+                onLoad={() => setIsLoaded(true)}
+                onError={() => {
+                  setImageFailed(true);
+                  setIsLoaded(true);
+                }}
+              />
+              {!isLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1195db] to-[#0a5480]">
+                  <Loader2 className="animate-spin text-white/60" size={24} />
+                </div>
               )}
             </>
           ) : (

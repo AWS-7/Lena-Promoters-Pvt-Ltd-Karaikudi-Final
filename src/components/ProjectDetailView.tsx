@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   MapPin,
@@ -40,6 +41,7 @@ const categoryMeta = {
 } as const;
 
 export default function ProjectDetailView({ project }: { project: Project }) {
+  const [imageFailed, setImageFailed] = useState(false);
   const category = categoryMeta[project.category || "government"];
   const CategoryIcon = category.icon;
   const siteVisitHref = `/?project=${encodeURIComponent(project.title)}#site-visit`;
@@ -94,7 +96,7 @@ export default function ProjectDetailView({ project }: { project: Project }) {
           <div className="grid lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-8">
               <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-gray-100 border border-gray-200 shadow-sm">
-                {project.image_url ? (
+                {project.image_url && !imageFailed ? (
                   <Image
                     src={project.image_url}
                     alt={project.title}
@@ -102,6 +104,7 @@ export default function ProjectDetailView({ project }: { project: Project }) {
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 66vw"
                     priority
+                    onError={() => setImageFailed(true)}
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1195db] to-[#0a5480] text-white">

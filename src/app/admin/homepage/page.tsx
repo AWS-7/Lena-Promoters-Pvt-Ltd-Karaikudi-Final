@@ -156,7 +156,7 @@ export default function HomepageAdmin() {
               </h2>
               <CloudinaryUpload
                 label="Hero Background Image"
-                value={get("hero", "bgImage", "/hero-bg.png")}
+                value={get("hero", "bgImage", "/hero-bg.jpg")}
                 onChange={(url) => updateField("hero", "bgImage", url)}
               />
               <div className="grid md:grid-cols-2 gap-4">
