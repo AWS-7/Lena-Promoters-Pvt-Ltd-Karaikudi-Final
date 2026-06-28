@@ -73,10 +73,14 @@ export default function AboutSection() {
             className="order-2 lg:order-1"
           >
             <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-4 sm:mb-6">
-              Lena Promoters Private Limited is a leading real estate company based in Karaikudi, Tamil Nadu. Founded with a vision to provide premium DTCP-approved land layouts, we proudly serve customers with transparency, legal clarity, and trusted service.
+              Lena Promoters Private Limited is a leading real estate company based in Karaikudi, Tamil Nadu. Founded by{" "}
+              <strong className="font-bold text-gray-900">C.T. Subaramanian, Founder and Managing Director</strong>, with a
+              vision to provide premium DTCP and RERA-approved land layouts, we proudly serve customers with transparency,
+              legal clarity, and trusted service.
             </p>
             <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
-              Lena Promoters Pvt. Ltd. was incorporated on the 16th day of January 2024 under the Companies Act. We are an ISO Certified Company with our Head Office in Karaikudi and branches in Karaikudi, Sivaganga, and Dubai.
+              Lena Promoters Pvt. Ltd. was incorporated on the 16th day of January 2024 under the Companies Act. We are an
+              ISO Certified Company with our Head Office in Karaikudi and branches in Karaikudi, Sivaganga, and Dubai.
             </p>
 
             {/* Feature checklist */}

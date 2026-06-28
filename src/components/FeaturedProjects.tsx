@@ -120,13 +120,13 @@ function ProjectCard({ project, index }: { project: ProjectWithCategory; index: 
 
           <div className="border-t border-gray-200 pt-4 grid grid-cols-2 gap-3">
             <Link
-              href="/#site-visit"
+              href={`/?project=${encodeURIComponent(project.title)}#site-visit`}
               className="inline-flex items-center justify-center rounded-md border border-[#0E6FA3] text-[#0E6FA3] px-3 py-2.5 text-xs sm:text-sm font-semibold hover:bg-[#e6f2f9] transition-colors text-center"
             >
               Book a site visit
             </Link>
             <Link
-              href="/#contact"
+              href={`/projects/${project.id}`}
               className="inline-flex items-center justify-center rounded-md bg-[#0E6FA3] text-white px-3 py-2.5 text-xs sm:text-sm font-semibold hover:bg-[#0a5480] transition-colors text-center"
             >
               View Details

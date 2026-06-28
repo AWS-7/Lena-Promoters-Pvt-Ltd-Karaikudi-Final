@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, MapPin, CheckCircle, Phone, User, FileText } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -15,21 +16,35 @@ const timeSlots = [
 ];
 
 export default function SiteVisitForm() {
+  return (
+    <Suspense fallback={<div className="py-16 md:py-24 bg-gray-50" />}>
+      <SiteVisitFormContent />
+    </Suspense>
+  );
+}
+
+function SiteVisitFormContent() {
+  const searchParams = useSearchParams();
   const [projectOptions, setProjectOptions] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchProjects = async () => {
       const { data } = await supabase
         .from("projects")
-        .select("name")
+        .select("title")
         .order("created_at", { ascending: false });
       const names = Array.from(
-        new Set((data ?? []).map((p: { name: string }) => p.name).filter(Boolean))
+        new Set((data ?? []).map((p: { title: string }) => p.title).filter(Boolean))
       );
       setProjectOptions([...names, "Any Project"]);
+
+      const preselect = searchParams.get("project");
+      if (preselect && names.includes(preselect)) {
+        setForm((f) => ({ ...f, project: preselect }));
+      }
     };
     fetchProjects();
-  }, []);
+  }, [searchParams]);
 
   const [form, setForm] = useState({
     name: "",
