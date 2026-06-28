@@ -6,6 +6,7 @@ import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
+import { CONTACT, telHref } from "@/lib/contact";
 import type { Project } from "@/lib/types";
 
 const containerVariants = {
@@ -103,7 +104,7 @@ export default function HeroSection() {
       });
   }, []);
 
-  const phone = "+91 81487 48140";
+  const phone = CONTACT.phonePrimary;
 
   // Extract unique locations from projects
   const locations = useMemo(() => {
@@ -184,7 +185,7 @@ export default function HeroSection() {
                 {heroContent?.ctaText || "Explore Projects"} <ChevronRight size={16} className="md:w-[18px] md:h-[18px]" />
               </a>
               <a
-                href={`tel:${phone}`}
+                href={telHref(phone)}
                 className="inline-flex items-center gap-2 rounded-lg bg-white/10 backdrop-blur border border-white/20 px-4 sm:px-5 md:px-6 py-2.5 md:py-3 font-semibold hover:bg-white/20 transition-colors hover:scale-105 active:scale-95 text-sm md:text-base"
               >
                 <Phone size={16} className="md:w-[18px] md:h-[18px]" /> Call Now

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Phone, MessageCircle, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { CONTACT, telHref, whatsappHref } from "@/lib/contact";
 import FloatingShapes from "@/components/FloatingShapes";
 
 export default function CTASection() {
@@ -19,8 +20,8 @@ export default function CTASection() {
       });
   }, []);
 
-  const phone = "+91 81487 48140";
-  const whatsapp = settings?.whatsapp || "+91 81487 48140";
+  const phone = CONTACT.phonePrimary;
+  const whatsapp = settings?.whatsapp || CONTACT.whatsapp;
 
   return (
     <section className="py-16 md:py-24 bg-gradient-to-br from-[#0E6FA3] to-[#0a5480] text-white relative overflow-hidden">
@@ -60,7 +61,7 @@ export default function CTASection() {
 
           <div className="flex flex-wrap justify-center gap-4">
             <motion.a
-              href={`tel:${phone}`}
+              href={telHref(phone)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-2 rounded-lg bg-white text-[#0E6FA3] px-6 py-3 font-semibold hover:bg-gray-100 transition-colors shadow-lg"
@@ -68,9 +69,9 @@ export default function CTASection() {
               <Phone size={18} /> Call Now
             </motion.a>
             <motion.a
-              href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
+              href={whatsappHref(whatsapp)}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-2 rounded-lg bg-green-500 text-white px-6 py-3 font-semibold hover:bg-green-600 transition-colors shadow-lg"

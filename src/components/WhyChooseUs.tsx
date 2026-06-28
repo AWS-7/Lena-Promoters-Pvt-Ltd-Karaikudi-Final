@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { MapPin, Shield, Coins, Clock, Landmark, Award, Check, Sparkles } from "lucide-react";
+import { SITE_STATS } from "@/lib/contact";
 
 const features = [
   { icon: MapPin, title: "Prime Locations", desc: "Plots in high-growth areas with excellent connectivity and infrastructure." },
@@ -9,7 +10,7 @@ const features = [
   { icon: Coins, title: "Transparent Pricing", desc: "No hidden costs. All prices inclusive with detailed breakup provided." },
   { icon: Clock, title: "Fast Registration", desc: "Quick and hassle-free registration process with dedicated support." },
   { icon: Landmark, title: "Bank Loan Support", desc: "Direct tie-ups with SBI, HDFC, ICICI and other leading banks for plot loans." },
-  { icon: Award, title: "Trusted Development", desc: "5+ years of trusted land development with 1000+ happy customers." },
+  { icon: Award, title: "Trusted Development", desc: `${SITE_STATS.yearsExperience}+ years of trusted land development with ${SITE_STATS.happyCustomers}+ happy customers.` },
 ];
 
 export default function WhyChooseUs() {
@@ -99,7 +100,7 @@ export default function WhyChooseUs() {
                 ))}
               </ul>
               <a
-                href="#contact"
+                href="/#contact"
                 className="inline-flex items-center gap-2 rounded-xl bg-white text-[#1195db] px-6 py-3 font-semibold hover:bg-gray-100 transition-colors shadow-lg w-full justify-center"
               >
                 Book Now

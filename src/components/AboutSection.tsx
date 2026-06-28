@@ -5,6 +5,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { User, Check, Award, Shield, MapPin } from "lucide-react";
 import Image from "next/image";
 
+import { SITE_STATS } from "@/lib/contact";
+
 const features = [
   "DTCP & RERA Approved Layouts",
   "100% Legal Clearance Guarantee",
@@ -13,10 +15,10 @@ const features = [
 ];
 
 const stats = [
-  { value: "5+", label: "Years Exp" },
-  { value: "30+", label: "Projects Done" },
-  { value: "1,000+", label: "Happy Customers" },
-  { value: "1,000+", label: "Plots Sold" },
+  { value: `${SITE_STATS.yearsExperience}+`, label: "Years Exp" },
+  { value: `${SITE_STATS.projectsCompleted}+`, label: "Projects Done" },
+  { value: `${SITE_STATS.happyCustomers.toLocaleString()}+`, label: "Happy Customers" },
+  { value: `${SITE_STATS.plotsSold.toLocaleString()}+`, label: "Plots Sold" },
 ];
 
 export default function AboutSection() {

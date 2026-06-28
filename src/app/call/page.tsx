@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Phone, MapPin, Mail, Clock, MessageCircle } from "lucide-react";
+import { CONTACT } from "@/lib/contact";
 import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -20,11 +21,11 @@ export default function CallPage() {
       });
   }, []);
 
-  const phone1 = "+91 814 874 8140";
-  const phone2 = "+91 814 814 8140";
-  const email = settings?.email || "lenapromoterspvtltd@gmail.com";
-  const address = settings?.address || "No:49/3 Keelamel,100 Feet Road,Soodamanipuram,Karaikudi - 630001";
-  const whatsapp = settings?.whatsapp || "+91 8148748140";
+  const phone1 = CONTACT.phonePrimary;
+  const phone2 = CONTACT.phoneSecondary;
+  const email = settings?.email || CONTACT.email;
+  const address = settings?.address || CONTACT.address;
+  const whatsapp = settings?.whatsapp || CONTACT.whatsapp;
 
   return (
     <>
@@ -130,7 +131,7 @@ export default function CallPage() {
                 </div>
                 <div className="flex-1">
                   <div className="text-sm text-gray-500 mb-1">Working Hours</div>
-                  <div className="text-lg font-bold text-gray-900">Mon - Sat: 9:00 AM - 7:00 PM</div>
+                  <div className="text-lg font-bold text-gray-900">{CONTACT.workingHours}</div>
                 </div>
               </div>
             </motion.div>

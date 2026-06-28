@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Phone, Mail, MapPin, Clock, ArrowUp, Code } from "lucide-react";
+import Link from "next/link";
+import { Phone, Mail, MapPin, Clock, ArrowUp } from "lucide-react";
+import { CONTACT } from "@/lib/contact";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 
 export default function Footer() {
   const [settings, setSettings] = useState<any>(null);
-  const [year, setYear] = useState<number>(2025);
+  const [year, setYear] = useState<number>(2026);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -23,11 +25,21 @@ export default function Footer() {
       });
   }, []);
 
-  const phone1 = "+91 814 874 8140";
-  const phone2 = "+91 814 814 8140";
-  const email = "lenapromoterspvtltd@gmail.com";
-  const address = settings?.address || "No:49/3 Keelamel, 100 Feet Road, Soodamanipuram, Karaikudi - 630001";
-  const workingHours = "Monday to Sunday - 9 AM - 8 PM";
+  const phone1 = CONTACT.phonePrimary;
+  const phone2 = CONTACT.phoneSecondary;
+  const email = CONTACT.email;
+  const address = settings?.address || CONTACT.address;
+  const workingHours = CONTACT.workingHours;
+
+  const quickLinks = [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/#about" },
+    { label: "Lena Group", href: "/lena-group" },
+    { label: "Projects", href: "/projects" },
+    { label: "Services", href: "/services" },
+    { label: "Offers", href: "/offers" },
+    { label: "Contact", href: "/#contact" },
+  ];
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -38,7 +50,7 @@ export default function Footer() {
         <div className="container-custom py-12 md:py-16">
           <div className="border-t border-gray-800 pt-6">
             <div className="text-center text-sm text-gray-500">
-              © 2025 Lena Promoters Private Limited. All rights reserved.
+              © 2026 Lena Promoters Private Limited. All rights reserved.
             </div>
           </div>
         </div>
@@ -68,14 +80,14 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-white mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm">
-              {["Home", "About", "Projects", "Services", "Gallery", "Contact"].map((link) => (
-                <li key={link}>
-                  <a href={`#${link.toLowerCase()}`} className="group inline-flex items-center gap-1 hover:text-white transition-colors relative">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="group inline-flex items-center gap-1 hover:text-white transition-colors relative">
                     <span className="relative">
-                      {link}
+                      {link.label}
                       <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-white group-hover:w-full transition-all duration-300" />
                     </span>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

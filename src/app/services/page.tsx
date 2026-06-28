@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { SITE_STATS } from "@/lib/contact";
 import { motion } from "framer-motion";
 import { Building2, FileText, Scale, Hammer, Search, Landmark, Home, CheckCircle } from "lucide-react";
 
@@ -113,10 +114,10 @@ export default function ServicesPage() {
           <div className="container-custom">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
-                { label: "Happy Customers", value: "1000+" },
-                { label: "Years Experience", value: "5+" },
-                { label: "Projects Completed", value: "30+" },
-                { label: "Ongoing Project", value: "27+" },
+                { label: "Happy Customers", value: `${SITE_STATS.happyCustomers}+` },
+                { label: "Years Experience", value: `${SITE_STATS.yearsExperience}+` },
+                { label: "Projects Completed", value: `${SITE_STATS.projectsCompleted}+` },
+                { label: "Ongoing Project", value: `${SITE_STATS.ongoingProjects}+` },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
@@ -198,10 +199,10 @@ export default function ServicesPage() {
                   Why Choose Us
                 </span>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  Trusted by 1000+ Customers Across Tamil Nadu
+                  Trusted by {SITE_STATS.happyCustomers}+ Customers Across Tamil Nadu
                 </h2>
                 <p className="text-gray-600 mb-8 leading-relaxed">
-                  With over 5+ years of experience in real estate, we've built a reputation for trust, transparency, and excellence. Our team of experts ensures every property transaction is smooth and legally secure.
+                  With over {SITE_STATS.yearsExperience}+ years of experience in real estate, we've built a reputation for trust, transparency, and excellence. Our team of experts ensures every property transaction is smooth and legally secure.
                 </p>
                 <div className="space-y-4">
                   {[

@@ -25,7 +25,7 @@ const milestones = [
   { year: "2026", title: "Dubai Branch", desc: "Expanded internationally with Dubai office at Business Bay.", icon: MapPin },
 ];
 
-export default function JourneySection() {
+export default function JourneySection({ showHeader = true }: { showHeader?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
 
   // Scroll-driven line drawing
@@ -43,7 +43,7 @@ export default function JourneySection() {
       <div className="absolute bottom-0 left-0 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] bg-[#f59e0b]/3 rounded-full -translate-x-1/3 translate-y-1/3" />
 
       <div className="container-custom relative">
-        {/* Header */}
+        {showHeader && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -62,6 +62,7 @@ export default function JourneySection() {
             From a small mobile shop to a diversified business conglomerate — our growth story since 2009.
           </p>
         </motion.div>
+        )}
 
         {/* Timeline */}
         <div className="relative max-w-4xl mx-auto">

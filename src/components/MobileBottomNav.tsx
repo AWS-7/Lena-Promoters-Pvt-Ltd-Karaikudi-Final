@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { CONTACT, telHref } from "@/lib/contact";
 
 const navItems = [
   { label: "Home", href: "/", icon: Home },
@@ -32,7 +33,7 @@ export default function MobileBottomNav() {
   // Hide on admin pages
   if (pathname?.startsWith("/admin")) return null;
 
-  const phone = "+91 81487 48140";
+  const phone = CONTACT.phonePrimary;
 
   const isActive = (href: string) =>
     pathname === href || (href !== "/" && pathname?.startsWith(href));
@@ -64,7 +65,7 @@ export default function MobileBottomNav() {
         })}
 
         {/* Call button */}
-        <a href={`tel:${phone.replace(/\s/g, "")}`}>
+        <a href={telHref(phone)}>
           <div className="flex flex-col items-center gap-1 px-2 py-2 rounded-xl transition-all duration-200 min-w-[52px] text-[#1195db] hover:bg-blue-50">
             <Phone size={20} strokeWidth={2} />
             <span className="text-[10px] font-medium leading-none">Call</span>

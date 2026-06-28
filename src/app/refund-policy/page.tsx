@@ -20,7 +20,7 @@ export default function RefundPolicyPage() {
             <ArrowLeft size={16} /> Back to Home
           </Link>
           <div className="flex items-center gap-4 mb-4">
-            <img src="/logo.png" alt="Lena Promoters Logo" className="h-12 w-auto" />
+            <img src="/favicon.svg" alt="Lena Promoters Logo" className="h-12 w-auto" />
             <div className="flex items-center gap-3">
               <RefreshCw size={28} className="text-white/90" />
               <h1 className="text-3xl md:text-4xl font-bold">Refund & Cancellation Policy</h1>

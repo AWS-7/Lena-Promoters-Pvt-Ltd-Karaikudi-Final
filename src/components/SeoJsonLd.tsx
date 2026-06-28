@@ -1,5 +1,7 @@
 "use client";
 
+import { CONTACT } from "@/lib/contact";
+
 export function LocalBusinessJsonLd() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -27,20 +29,22 @@ export function LocalBusinessJsonLd() {
     },
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Karaikudi",
+      streetAddress: "No:49/3 Keelamel, 100 Feet Road, Soodamanipuram",
       addressLocality: "Karaikudi",
+      postalCode: "630001",
       addressRegion: "Tamil Nadu",
       addressCountry: "IN",
     },
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+91-81487-48140",
+      telephone: "+91-814-874-8140",
       contactType: "sales",
       availableLanguage: ["Tamil", "English"],
     },
     sameAs: [
-      "https://www.facebook.com/lenapromoters",
-      "https://www.instagram.com/lenapromoters",
+      CONTACT.facebook,
+      CONTACT.instagram,
+      CONTACT.youtube,
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",

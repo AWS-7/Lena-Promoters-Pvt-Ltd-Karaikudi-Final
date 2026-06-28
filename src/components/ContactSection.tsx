@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import { CONTACT, whatsappHref } from "@/lib/contact";
 import { supabase } from "@/lib/supabase";
 
 export default function ContactSection() {
@@ -44,12 +45,12 @@ export default function ContactSection() {
     setTimeout(() => setSubmitted(false), 4000);
   };
 
-  const phone1 = "+91 814 874 8140";
-  const phone2 = "+91 814 814 8140";
-  const email = "lenapromoterspvtltd@gmail.com";
-  const address = "No:49/3 Keelamel, 100 Feet Road, Soodamanipuram, Karaikudi - 630001";
-  const whatsapp = settings?.whatsapp || "+91 8148748140";
-  const workingHours = "Monday to Sunday - 9 AM - 8 PM";
+  const phone1 = CONTACT.phonePrimary;
+  const phone2 = CONTACT.phoneSecondary;
+  const email = CONTACT.email;
+  const address = CONTACT.address;
+  const whatsapp = settings?.whatsapp || CONTACT.whatsapp;
+  const workingHours = CONTACT.workingHours;
 
   return (
     <section id="contact" className="py-16 md:py-24 bg-white overflow-hidden">
@@ -119,9 +120,9 @@ export default function ContactSection() {
 
               <div className="mt-8 pt-6 border-t">
                 <a
-                  href={`https://wa.me/${phone1.replace(/\D/g, "")}`}
+                  href={whatsappHref(whatsapp)}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-lg bg-green-500 text-white px-5 py-2.5 text-sm font-medium hover:bg-green-600 transition-colors"
                 >
                   <Send size={16} /> Chat on WhatsApp
@@ -132,7 +133,7 @@ export default function ContactSection() {
             <div className="mt-6 rounded-2xl overflow-hidden border border-gray-100 h-64 bg-gray-100 flex items-center justify-center">
               <iframe
                 title="Office Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3922.1!2d78.78!3d10.07!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDAzJzUyLjgiTiA3OMKwNDYnNDguMCJF!5e0!3m2!1sen!2sin!4v1"
+                src={CONTACT.googleMapsEmbed}
                 className="w-full h-full border-0"
                 allowFullScreen
                 loading="lazy"

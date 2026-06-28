@@ -3,12 +3,14 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
   { label: "Home", href: "/" },
   { label: "About", href: "/#about" },
+  { label: "Lena Group", href: "/lena-group" },
   { label: "Projects", href: "/projects" },
   { label: "Services", href: "/services" },
   { label: "Why Us", href: "/#why-us" },
@@ -16,25 +18,32 @@ const links = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const hasTopHeader = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-[100] bg-white transition-shadow duration-300 md:sticky md:top-0 md:inset-x-0 ${
-          scrolled ? "shadow-md" : "shadow-none"
-        }`}
+        className={`fixed left-0 right-0 z-[100] bg-white/95 backdrop-blur-md transition-shadow duration-300 top-0 ${
+          hasTopHeader ? "md:top-10" : ""
+        } ${scrolled ? "shadow-md" : "shadow-sm"}`}
       >
       <div className="container-custom py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <div className="relative w-15 h-15">
+          <div className="relative w-14 h-14">
             <Image src="/images/logo.png" alt="Lena Promoters Logo" fill className="object-contain" />
           </div>
           <div className="leading-tight">
@@ -127,8 +136,7 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </nav>
-    {/* Spacer for mobile fixed navbar */}
-    <div className="h-[72px] md:hidden" />
+    <div className={hasTopHeader ? "h-[72px] md:h-[112px]" : "h-[72px]"} aria-hidden="true" />
     </>
   );
 }

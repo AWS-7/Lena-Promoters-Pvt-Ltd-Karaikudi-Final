@@ -4,12 +4,14 @@ import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Calendar, Briefcase, Users, FileCheck, HardHat } from "lucide-react";
 
+import { SITE_STATS } from "@/lib/contact";
+
 const stats = [
-  { icon: Calendar, label: "Years Exp", value: 5 },
-  { icon: Briefcase, label: "Projects Completed", value: 30 },
-  { icon: Users, label: "Happy Customer", value: 1000 },
-  { icon: FileCheck, label: "Plots Sold", value: 1000 },
-  { icon: HardHat, label: "Ongoing Projects", value: 27 },
+  { icon: Calendar, label: "Years Exp", value: SITE_STATS.yearsExperience },
+  { icon: Briefcase, label: "Projects Completed", value: SITE_STATS.projectsCompleted },
+  { icon: Users, label: "Happy Customer", value: SITE_STATS.happyCustomers },
+  { icon: FileCheck, label: "Plots Sold", value: SITE_STATS.plotsSold },
+  { icon: HardHat, label: "Ongoing Projects", value: SITE_STATS.ongoingProjects },
 ];
 
 function AnimatedCounter({ value, inView }: { value: number; inView: boolean }) {
