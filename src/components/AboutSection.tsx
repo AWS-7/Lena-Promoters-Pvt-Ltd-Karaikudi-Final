@@ -130,12 +130,12 @@ export default function AboutSection() {
             className="order-1 lg:order-2 relative px-2 sm:px-0"
           >
             {/* Main image with decorative frame */}
-            <div className="relative mx-auto max-w-sm sm:max-w-md md:max-w-lg">
+            <div className="relative w-full max-w-[50%] mx-auto lg:max-w-[55%]">
               {/* Decorative border frame */}
-              <div className="absolute -inset-2 sm:-inset-4 border-2 border-[#1195db]/20 rounded-3xl transform rotate-2" />
-              <div className="absolute -inset-2 sm:-inset-4 border-2 border-[#f59e0b]/20 rounded-3xl transform -rotate-2" />
+              <div className="absolute -inset-2 sm:-inset-3 border-2 border-[#1195db]/20 rounded-3xl transform rotate-2" />
+              <div className="absolute -inset-2 sm:-inset-3 border-2 border-[#f59e0b]/20 rounded-3xl transform -rotate-2" />
 
-              <div className="relative aspect-[4/5] sm:aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-[#1195db] to-[#0a5480]">
+              <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-[#1195db] to-[#0a5480]">
                 {!imgError ? (
                   <Image
                     src="/images/about.jpg"
@@ -163,7 +163,7 @@ export default function AboutSection() {
                 transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
                 className="absolute -bottom-3 sm:-bottom-6 left-2 sm:-left-6 bg-white rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-5 border border-gray-100"
               >
-                <div className="text-2xl sm:text-3xl font-black text-[#1195db]">5+</div>
+                <div className="text-2xl sm:text-3xl font-black text-[#1195db]">{SITE_STATS.yearsExperience}+</div>
                 <div className="text-xs sm:text-sm text-gray-500 font-medium">Years Experience</div>
               </motion.div>
 
