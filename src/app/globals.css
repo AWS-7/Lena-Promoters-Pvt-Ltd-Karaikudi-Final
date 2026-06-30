@@ -68,7 +68,7 @@ body {
 }
 
 @supports (content-visibility: auto) {
-  main > * {
+  main:not(.admin-main) > * {
     content-visibility: auto;
     contain-intrinsic-size: auto 600px;
   }
