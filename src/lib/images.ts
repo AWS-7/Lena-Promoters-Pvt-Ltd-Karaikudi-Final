@@ -9,3 +9,10 @@ export function resolveHeroBackground(bgImage?: string | null): string {
   if (!trimmed || trimmed === HERO_BG_LEGACY) return HERO_BG_FALLBACK;
   return trimmed;
 }
+
+/** Bust CDN/browser cache when admin updates hero image */
+export function withImageCacheBuster(url: string, version?: string | null): string {
+  if (!url || !version || url.startsWith("data:")) return url;
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}v=${encodeURIComponent(version)}`;
+}

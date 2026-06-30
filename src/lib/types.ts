@@ -173,3 +173,21 @@ export interface Enquiry {
   status: "pending" | "verified";
   created_at?: string;
 }
+
+export interface Campaign {
+  id: string;
+  slug: string;
+  title: string;
+  headline: string;
+  subtitle: string;
+  offer_text: string;
+  banner_url: string;
+  benefits: string[];
+  project_ids: string[];
+  start_date: string | null;
+  end_date: string | null;
+  whatsapp_message: string;
+  active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}

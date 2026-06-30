@@ -81,8 +81,16 @@ export default function EnquiriesPage() {
     (e) =>
       e.name.toLowerCase().includes(filter.toLowerCase()) ||
       e.phone.includes(filter) ||
-      e.location.toLowerCase().includes(filter.toLowerCase())
+      e.location.toLowerCase().includes(filter.toLowerCase()) ||
+      e.source.toLowerCase().includes(filter.toLowerCase())
   );
+
+  function formatSource(source: string) {
+    if (source.startsWith("campaign:")) {
+      return source.replace("campaign:", "");
+    }
+    return source.replace(/_/g, " ");
+  }
 
   return (
     <div className="space-y-6">
@@ -90,7 +98,7 @@ export default function EnquiriesPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">New Enquiries</h1>
           <p className="text-gray-500 text-sm mt-1">
-            Enquiries submitted via the website popup form.
+            Enquiries from website popup and festival campaign landing pages.
           </p>
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-500 bg-gray-100 px-3 py-2 rounded-lg">
@@ -135,6 +143,7 @@ export default function EnquiriesPage() {
                 <th className="text-left font-semibold text-gray-700 px-4 py-3">Name</th>
                 <th className="text-left font-semibold text-gray-700 px-4 py-3">Phone</th>
                 <th className="text-left font-semibold text-gray-700 px-4 py-3">Location</th>
+                <th className="text-left font-semibold text-gray-700 px-4 py-3">Source</th>
                 <th className="text-left font-semibold text-gray-700 px-4 py-3">Status</th>
                 <th className="text-left font-semibold text-gray-700 px-4 py-3">Date</th>
                 <th className="text-right font-semibold text-gray-700 px-4 py-3">Action</th>
@@ -143,7 +152,7 @@ export default function EnquiriesPage() {
             <tbody>
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="text-center text-gray-400 py-12">
+                  <td colSpan={7} className="text-center text-gray-400 py-12">
                     <MessageSquare size={32} className="mx-auto mb-2 text-gray-300" />
                     No enquiries found.
                   </td>
@@ -170,6 +179,17 @@ export default function EnquiriesPage() {
                       <MapPin size={14} className="text-amber-500" />
                       {enquiry.location || "—"}
                     </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
+                        enquiry.source.startsWith("campaign:")
+                          ? "bg-purple-100 text-purple-700"
+                          : "bg-gray-100 text-gray-600"
+                      }`}
+                    >
+                      {formatSource(enquiry.source)}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
                     <select

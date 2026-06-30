@@ -18,6 +18,7 @@ const TABLES = [
   "site_visit_bookings",
   "enquiries",
   "homepage_content",
+  "campaigns",
   "project_layouts",
   "project_plots",
 ];

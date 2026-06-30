@@ -161,6 +161,25 @@ CREATE TABLE IF NOT EXISTS homepage_content (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 13b. FESTIVAL / CAMPAIGN LANDING PAGES
+CREATE TABLE IF NOT EXISTS campaigns (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  slug TEXT UNIQUE NOT NULL,
+  title TEXT NOT NULL,
+  headline TEXT NOT NULL,
+  subtitle TEXT DEFAULT '',
+  offer_text TEXT DEFAULT '',
+  banner_url TEXT DEFAULT '',
+  benefits JSONB NOT NULL DEFAULT '[]',
+  project_ids JSONB NOT NULL DEFAULT '[]',
+  start_date DATE,
+  end_date DATE,
+  whatsapp_message TEXT DEFAULT '',
+  active BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- 14. PROJECT LAYOUTS (Layout Map)
 CREATE TABLE IF NOT EXISTS project_layouts (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

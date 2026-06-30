@@ -55,6 +55,7 @@ const navGroups = [
     title: "Content",
     items: [
       { label: "Homepage", href: "/admin/homepage", icon: Home },
+      { label: "Campaigns", href: "/admin/campaigns", icon: Gift },
       { label: "Projects", href: "/admin/projects", icon: Briefcase },
       { label: "Services", href: "/admin/services", icon: Layers },
       { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },

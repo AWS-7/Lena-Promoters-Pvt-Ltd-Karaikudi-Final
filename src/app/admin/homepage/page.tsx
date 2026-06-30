@@ -51,17 +51,24 @@ export default function HomepageAdmin() {
     setErrorMessage("");
 
     try {
-      const { error } = await supabase
-        .from("homepage_content")
-        .upsert({ section_key: section, content }, { onConflict: "section_key" });
+      const res = await fetch("/api/admin/homepage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ section, content }),
+      });
 
-      if (error) {
-        console.error("Save error:", error);
-        setErrorMessage("Save failed: " + error.message);
+      const payload = await res.json();
+
+      if (!res.ok) {
+        console.error("Save error:", payload);
+        setErrorMessage("Save failed: " + (payload.error || "Unknown error"));
         setTimeout(() => setErrorMessage(""), 5000);
       } else {
-        setMessage("Saved successfully!");
-        setData((prev) => ({ ...prev, [section]: content }));
+        setMessage(section === "hero" && content.bgImage ? "Hero background saved!" : "Saved successfully!");
+        setData((prev) => ({
+          ...prev,
+          [section]: payload.content ?? { ...(prev[section] || {}), ...content },
+        }));
         setTimeout(() => setMessage(""), 3000);
       }
     } catch (err: any) {
@@ -70,6 +77,14 @@ export default function HomepageAdmin() {
       setTimeout(() => setErrorMessage(""), 5000);
     }
     setSaving(false);
+  };
+
+  const handleHeroBgChange = async (url: string) => {
+    const nextHero = { ...(data.hero || {}), bgImage: url };
+    setData((prev) => ({ ...prev, hero: nextHero }));
+    if (url) {
+      await saveSection("hero", nextHero);
+    }
   };
 
   const updateField = (section: string, field: string, value: any) => {
@@ -157,8 +172,11 @@ export default function HomepageAdmin() {
               <CloudinaryUpload
                 label="Hero Background Image"
                 value={get("hero", "bgImage", "/hero-bg.jpg")}
-                onChange={(url) => updateField("hero", "bgImage", url)}
+                onChange={handleHeroBgChange}
               />
+              <p className="text-xs text-gray-500">
+                Background image saves automatically after upload. Click &quot;Save Hero&quot; to save text changes.
+              </p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700">Badge Text</label>

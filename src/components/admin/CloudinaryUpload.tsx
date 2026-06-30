@@ -37,6 +37,10 @@ export default function CloudinaryUpload({ value, onChange, label = "Upload Imag
     setProvider(getStorageProvider());
   }, []);
 
+  useEffect(() => {
+    setPreview(value);
+  }, [value]);
+
   // Listen for provider changes from other tabs/components
   useEffect(() => {
     const handler = () => setProvider(getStorageProvider());
@@ -92,8 +96,11 @@ export default function CloudinaryUpload({ value, onChange, label = "Upload Imag
         return;
       }
 
-      // Use the URL based on selected provider
-      const url = currentProvider === "supabase" ? data.backup_url : data.image_url;
+      // Use the URL based on selected provider, with backup fallback
+      const url =
+        currentProvider === "supabase"
+          ? data.backup_url
+          : data.image_url || data.backup_url;
       if (url) {
         onChange(url);
         setPreview(url);

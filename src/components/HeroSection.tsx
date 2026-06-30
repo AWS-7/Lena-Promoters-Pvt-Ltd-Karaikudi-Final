@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { CONTACT, telHref } from "@/lib/contact";
-import { HERO_BG_FALLBACK, resolveHeroBackground } from "@/lib/images";
+import { HERO_BG_FALLBACK, resolveHeroBackground, withImageCacheBuster } from "@/lib/images";
 import type { Project } from "@/lib/types";
 
 const containerVariants = {
@@ -70,6 +70,7 @@ export default function HeroSection() {
   const [selectedBudget, setSelectedBudget] = useState("Any Budget");
   const [heroBgSrc, setHeroBgSrc] = useState(HERO_BG_FALLBACK);
   const [heroBgFailed, setHeroBgFailed] = useState(false);
+  const [heroUpdatedAt, setHeroUpdatedAt] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const router = useRouter();
 
@@ -84,15 +85,29 @@ export default function HeroSection() {
 
     supabase
       .from("homepage_content")
-      .select("content")
+      .select("content, updated_at")
       .eq("section_key", "hero")
       .maybeSingle()
       .then(({ data, error }) => {
         if (error) {
           console.error("Failed to load hero content:", error.message);
-          return;
         }
-        if (data?.content) setHeroContent(data.content);
+        if (data?.content) {
+          setHeroContent(data.content);
+          setHeroUpdatedAt(data.updated_at ?? null);
+        }
+      });
+
+    fetch("/api/homepage/hero", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((payload) => {
+        if (payload?.content) {
+          setHeroContent(payload.content);
+          setHeroUpdatedAt(payload.updated_at ?? null);
+        }
+      })
+      .catch(() => {
+        // Supabase client fetch above is the fallback
       });
 
     supabase
@@ -105,9 +120,10 @@ export default function HeroSection() {
   }, []);
 
   useEffect(() => {
-    setHeroBgSrc(resolveHeroBackground(heroContent?.bgImage));
+    const resolved = resolveHeroBackground(heroContent?.bgImage);
+    setHeroBgSrc(withImageCacheBuster(resolved, heroUpdatedAt));
     setHeroBgFailed(false);
-  }, [heroContent?.bgImage]);
+  }, [heroContent?.bgImage, heroUpdatedAt]);
 
   const phone = CONTACT.phonePrimary;
 
@@ -157,7 +173,7 @@ export default function HeroSection() {
             alt="Hero background"
             fill
             priority
-            unoptimized={heroBgSrc.startsWith("http")}
+            unoptimized={heroBgSrc.startsWith("http") || heroBgSrc.includes("?v=")}
             className="object-cover"
             onError={() => {
               if (heroBgSrc !== HERO_BG_FALLBACK) {

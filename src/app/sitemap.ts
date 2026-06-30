@@ -1,5 +1,6 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 import { getAllProjects } from "@/lib/projects";
+import { getActiveCampaigns } from "@/lib/campaigns";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.lenapromoterspvtltd.com";
@@ -25,5 +26,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly",
   }));
 
-  return [...staticPages, ...projectPages];
+  const campaigns = await getActiveCampaigns();
+  const campaignPages: MetadataRoute.Sitemap = campaigns.map((campaign) => ({
+    url: `${baseUrl}/offers/${campaign.slug}`,
+    lastModified: campaign.updated_at ? new Date(campaign.updated_at) : now,
+    priority: 0.9,
+    changeFrequency: "daily",
+  }));
+
+  return [...staticPages, ...campaignPages, ...projectPages];
 }
