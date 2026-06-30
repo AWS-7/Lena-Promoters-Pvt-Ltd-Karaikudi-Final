@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Phone, MapPin, Shield, Award, ChevronRight, Search, Banknote, Building2 } from "lucide-react";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
@@ -8,7 +8,6 @@ import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { CONTACT, telHref } from "@/lib/contact";
 import { HERO_BG_FALLBACK, resolveHeroBackground } from "@/lib/images";
-import { pickReachableImageUrl } from "@/lib/sanitize-images-client";
 import type { Project } from "@/lib/types";
 
 const containerVariants = {
@@ -74,13 +73,6 @@ export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const router = useRouter();
 
-  // Parallax scroll effect
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-
   useEffect(() => {
     supabase
       .from("settings")
@@ -94,9 +86,13 @@ export default function HeroSection() {
       .from("homepage_content")
       .select("content")
       .eq("section_key", "hero")
-      .single()
-      .then(({ data }) => {
-        if (data) setHeroContent(data.content);
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("Failed to load hero content:", error.message);
+          return;
+        }
+        if (data?.content) setHeroContent(data.content);
       });
 
     supabase
@@ -109,20 +105,8 @@ export default function HeroSection() {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-
-    (async () => {
-      const candidate = resolveHeroBackground(heroContent?.bgImage);
-      const resolved = await pickReachableImageUrl(candidate, HERO_BG_FALLBACK);
-      if (!cancelled) {
-        setHeroBgSrc(resolved);
-        setHeroBgFailed(false);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
+    setHeroBgSrc(resolveHeroBackground(heroContent?.bgImage));
+    setHeroBgFailed(false);
   }, [heroContent?.bgImage]);
 
   const phone = CONTACT.phonePrimary;
@@ -159,20 +143,21 @@ export default function HeroSection() {
 
   return (
     <section ref={sectionRef} id="home" className="relative text-white overflow-hidden">
-      {/* Background image with parallax */}
+      {/* Background image */}
       <motion.div
-        className="absolute inset-0 -top-[15%] -bottom-[15%] bg-gradient-to-br from-[#0E6FA3] via-[#1195db] to-[#0a5480]"
-        initial={{ scale: 1.1 }}
+        className="absolute inset-0 bg-gradient-to-br from-[#0E6FA3] via-[#1195db] to-[#0a5480]"
+        initial={{ scale: 1.05 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        style={{ y: backgroundY }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
       >
         {!heroBgFailed && (
           <Image
+            key={heroBgSrc}
             src={heroBgSrc}
             alt="Hero background"
             fill
             priority
+            unoptimized={heroBgSrc.startsWith("http")}
             className="object-cover"
             onError={() => {
               if (heroBgSrc !== HERO_BG_FALLBACK) {

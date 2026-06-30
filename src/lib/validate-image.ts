@@ -25,7 +25,7 @@ export async function isImageUrlReachable(url: string): Promise<boolean> {
       redirect: "follow",
     });
 
-    if (response.status === 405 || response.status === 403) {
+    if (!response.ok && response.status !== 206) {
       response = await fetch(trimmed, {
         method: "GET",
         headers: { Range: "bytes=0-0" },

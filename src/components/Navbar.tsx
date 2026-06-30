@@ -24,8 +24,16 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
+    let ticking = false;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 10);
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -37,7 +45,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed left-0 right-0 z-[100] bg-white/95 backdrop-blur-md transition-shadow duration-300 top-0 ${
+        className={`fixed left-0 right-0 z-[100] bg-white transition-shadow duration-300 top-0 ${
           hasTopHeader ? "md:top-10" : ""
         } ${scrolled ? "shadow-md" : "shadow-sm"}`}
       >

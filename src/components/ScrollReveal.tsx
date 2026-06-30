@@ -21,6 +21,7 @@ export default function ScrollReveal({
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -33,7 +34,7 @@ export default function ScrollReveal({
           observer.unobserve(el);
         }
       },
-      { threshold: 0.05, rootMargin: "-60px" }
+      { threshold: 0.05, rootMargin: "-40px" }
     );
 
     observer.observe(el);
@@ -41,21 +42,24 @@ export default function ScrollReveal({
   }, []);
 
   const dir = {
-    up: { transform: `translateY(${distance}px)` },
-    down: { transform: `translateY(-${distance}px)` },
-    left: { transform: `translateX(${distance}px)` },
-    right: { transform: `translateX(-${distance}px)` },
+    up: { transform: `translate3d(0, ${distance}px, 0)` },
+    down: { transform: `translate3d(0, -${distance}px, 0)` },
+    left: { transform: `translate3d(${distance}px, 0, 0)` },
+    right: { transform: `translate3d(-${distance}px, 0, 0)` },
   };
 
   return (
     <div
       ref={ref}
       className={className}
+      onTransitionEnd={() => {
+        if (isVisible) setHasAnimated(true);
+      }}
       style={{
         opacity: isVisible ? 1 : 0,
         transition: `opacity ${duration}s ease-out ${delay}s, transform ${duration}s ease-out ${delay}s`,
-        transform: isVisible ? "translate(0, 0)" : dir[direction].transform,
-        willChange: "opacity, transform",
+        transform: isVisible ? "translate3d(0, 0, 0)" : dir[direction].transform,
+        willChange: hasAnimated ? "auto" : isVisible ? "opacity, transform" : undefined,
       }}
     >
       {children}

@@ -23,12 +23,16 @@ const row2Images = [
 ];
 
 function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: boolean }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dragRef = useRef(false);
+  const pointerStartRef = useRef({ x: 0, y: 0 });
   const [isPaused, setIsPaused] = useState(false);
-  const [touchStart, setTouchStart] = useState(0);
+  const [isInView, setIsInView] = useState(false);
+  const [allowAutoScroll, setAllowAutoScroll] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  // Duplicate images for seamless loop
   const displayImages = [...images, ...images];
 
   const scroll = useCallback((dir: number) => {
@@ -37,21 +41,52 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
     }
   }, []);
 
-  // Auto scroll
+  const pauseAutoScroll = useCallback(() => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    setIsPaused(true);
+  }, []);
+
+  const resumeAutoScrollLater = useCallback(() => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => setIsPaused(false), 3500);
+  }, []);
+
+  useEffect(() => {
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    setAllowAutoScroll(!coarse);
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0, rootMargin: "100px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    };
+  }, []);
+
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el) return;
+    if (!el || !isInView || !allowAutoScroll) return;
 
     let rafId: number;
     let lastTime = performance.now();
-    const speed = reverse ? -2.0 : 2.0; // pixels per frame (reverse goes left) - increased speed
+    const speed = reverse ? -2.0 : 2.0;
 
     const loop = (now: number) => {
       if (!isPaused && el) {
         const delta = now - lastTime;
         el.scrollLeft += speed * (delta / 16);
 
-        // Infinite loop: reset when scrolled past half (original set)
         const halfScroll = el.scrollWidth / 2;
         if (reverse) {
           if (el.scrollLeft <= 0) el.scrollLeft = halfScroll;
@@ -65,47 +100,63 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
 
     rafId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafId);
-  }, [isPaused, reverse]);
+  }, [isPaused, reverse, isInView, allowAutoScroll]);
 
-  // Touch swipe support for mobile
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientX);
+  const handlePointerDown = (e: React.PointerEvent) => {
+    dragRef.current = false;
+    pointerStartRef.current = { x: e.clientX, y: e.clientY };
+    pauseAutoScroll();
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-    if (Math.abs(diff) > 50) {
-      scroll(diff > 0 ? 1 : -1);
-    }
+  const handlePointerMove = (e: React.PointerEvent) => {
+    const dx = Math.abs(e.clientX - pointerStartRef.current.x);
+    const dy = Math.abs(e.clientY - pointerStartRef.current.y);
+    if (dx > 8 || dy > 8) dragRef.current = true;
+  };
+
+  const handlePointerUp = () => {
+    resumeAutoScrollLater();
+  };
+
+  const handleImageClick = (src: string) => {
+    if (!dragRef.current) setSelectedImage(src);
   };
 
   return (
     <div
+      ref={containerRef}
       className="relative group"
       onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      onMouseLeave={() => {
+        if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+        setIsPaused(false);
+      }}
     >
-      {/* Scroll buttons - always visible on mobile, hover on desktop */}
       <button
+        type="button"
         onClick={() => scroll(-1)}
         className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center transition-opacity hover:bg-[#1195db] hover:text-white md:opacity-0 md:group-hover:opacity-100"
       >
         <ChevronLeft size={20} />
       </button>
       <button
+        type="button"
         onClick={() => scroll(1)}
         className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center transition-opacity hover:bg-[#1195db] hover:text-white md:opacity-0 md:group-hover:opacity-100"
       >
         <ChevronRight size={20} />
       </button>
 
-      {/* Image strip */}
       <div
         ref={scrollRef}
-        className={`flex gap-5 overflow-x-scroll scrollbar-hide snap-x snap-mandatory py-2 ${reverse ? "flex-row-reverse" : ""}`}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        className={`flex gap-5 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2 touch-pan-x overscroll-x-contain ${
+          reverse ? "flex-row-reverse" : ""
+        }`}
+        style={{ WebkitOverflowScrolling: "touch" }}
       >
         {displayImages.map((src, i) => (
           <motion.div
@@ -115,8 +166,8 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
             viewport={{ once: true }}
             transition={{ delay: (i % images.length) * 0.05 }}
             whileHover={{ scale: 1.03 }}
-            className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-start cursor-pointer"
-            onClick={() => setSelectedImage(src)}
+            className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] snap-start cursor-pointer select-none"
+            onClick={() => handleImageClick(src)}
           >
             <div className="relative rounded-2xl overflow-hidden shadow-lg border border-gray-100 group/card">
               <div className="relative aspect-[4/3]">
@@ -124,12 +175,11 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
                   src={src}
                   alt={`Offer ${(i % images.length) + 1}`}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover/card:scale-110"
+                  draggable={false}
+                  className="object-cover transition-transform duration-500 group-hover/card:scale-110 pointer-events-none"
                 />
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity" />
-                {/* Hot badge */}
-                <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity pointer-events-none" />
+                <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 pointer-events-none">
                   <Sparkles size={10} />
                   Hot Deal
                 </div>
@@ -139,7 +189,6 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
         ))}
       </div>
 
-      {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
@@ -158,6 +207,7 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
               className="relative max-w-4xl max-h-[90vh] w-full"
             >
               <button
+                type="button"
                 onClick={() => setSelectedImage(null)}
                 className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
               >
@@ -184,13 +234,11 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
 export default function LatestOffers() {
   return (
     <section className="py-16 md:py-24 bg-[#1195db] relative overflow-hidden">
-      {/* Background decoration */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white/5 rounded-full -translate-y-1/2" />
       <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-white/5 rounded-full" />
       <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/5 rounded-full" />
 
       <div className="container-custom relative">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -210,13 +258,11 @@ export default function LatestOffers() {
           </p>
         </motion.div>
 
-        {/* Row 1 */}
-        <div className="mb-6 overflow-x-hidden">
+        <div className="mb-6">
           <ScrollRow images={row1Images} />
         </div>
 
-        {/* Row 2 */}
-        <div className="mb-6 overflow-x-hidden">
+        <div className="mb-6">
           <ScrollRow images={row2Images} reverse />
         </div>
       </div>

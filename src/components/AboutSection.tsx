@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { User, Check, Award, Shield, MapPin } from "lucide-react";
 import Image from "next/image";
 
@@ -23,27 +23,12 @@ const stats = [
 
 export default function AboutSection() {
   const [imgError, setImgError] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // Parallax for decorative shapes
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const circle1Y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
-  const circle2Y = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
 
   return (
-    <section ref={sectionRef} id="about" className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
-      {/* Background decorative shapes with parallax */}
-      <motion.div
-        className="absolute top-0 right-0 w-96 h-96 bg-[#1195db]/5 rounded-full -translate-y-1/2 translate-x-1/2"
-        style={{ y: circle1Y }}
-      />
-      <motion.div
-        className="absolute bottom-0 left-0 w-64 h-64 bg-[#f59e0b]/5 rounded-full translate-y-1/2 -translate-x-1/2"
-        style={{ y: circle2Y }}
-      />
+    <section id="about" className="py-16 md:py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+      {/* Background decorative shapes */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#1195db]/5 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#f59e0b]/5 rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
       <div className="container-custom relative">
         {/* Header */}

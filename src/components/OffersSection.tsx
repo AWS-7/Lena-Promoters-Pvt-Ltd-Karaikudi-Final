@@ -61,8 +61,10 @@ function OfferCard({ offer }: { offer: typeof offers[0] }) {
 }
 
 export default function OffersSection() {
+  const sectionRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [isInView, setIsInView] = useState(false);
 
   const scroll = useCallback((dir: number) => {
     if (scrollRef.current) {
@@ -70,21 +72,32 @@ export default function OffersSection() {
     }
   }, []);
 
-  // Auto scroll on mobile only
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0, rootMargin: "100px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Auto scroll on mobile — only while section is visible
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el) return;
+    if (!el || !isInView) return;
 
     let rafId: number;
     let lastTime = performance.now();
-    const speed = 2.0; // pixels per frame (increased speed)
+    const speed = 2.0;
 
     const loop = (now: number) => {
       if (!isPaused && el) {
         const delta = now - lastTime;
         el.scrollLeft += speed * (delta / 16);
 
-        // Bounce back when reaching end
         if (el.scrollLeft >= el.scrollWidth - el.clientWidth) {
           el.scrollLeft = 0;
         }
@@ -95,10 +108,10 @@ export default function OffersSection() {
 
     rafId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafId);
-  }, [isPaused]);
+  }, [isPaused, isInView]);
 
   return (
-    <section className="py-16 md:py-24 bg-[#1195db] relative overflow-hidden">
+    <section ref={sectionRef} className="py-16 md:py-24 bg-[#1195db] relative overflow-hidden">
       {/* Decorative sparkles */}
       <div className="absolute top-6 left-6 text-[#f59e0b]/20">
         <Sparkles size={48} />

@@ -29,7 +29,11 @@ export async function pickReachableImageUrl(
   }
 
   const results = await batchCheckImageUrls([trimmed]);
-  return results[trimmed] ? trimmed : fallback;
+  if (trimmed in results) {
+    return results[trimmed] ? trimmed : fallback;
+  }
+  // If validation API is unavailable, keep the admin-provided URL
+  return trimmed;
 }
 
 export async function sanitizeProjectImageUrls<T extends { image_url?: string | null }>(
@@ -39,7 +43,9 @@ export async function sanitizeProjectImageUrls<T extends { image_url?: string | 
   const reachable = await batchCheckImageUrls(urls);
 
   return items.map((item) => {
-    if (!item.image_url || reachable[item.image_url]) return item;
-    return { ...item, image_url: "" };
+    if (!item.image_url) return item;
+    if (!(item.image_url in reachable)) return item;
+    if (!reachable[item.image_url]) return { ...item, image_url: "" };
+    return item;
   });
 }
