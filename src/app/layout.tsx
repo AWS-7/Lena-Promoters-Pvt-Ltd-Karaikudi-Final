@@ -5,7 +5,8 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import Preloader from "@/components/Preloader";
 import WelcomeSound from "@/components/WelcomeSound";
 import VisitorTracker from "@/components/VisitorTracker";
-import { LocalBusinessJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
+import { GeoAeoJsonLd, LocalBusinessJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
+import { geoAeoKeywords } from "@/lib/seo/geo-aeo";
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -61,6 +62,7 @@ export const metadata: Metadata = {
     "land developers Tamil Nadu",
     "affordable plots Karaikudi",
     "premium land layouts",
+    ...geoAeoKeywords,
   ].join(", "),
   authors: [{ name: "Lena Promoters Private Limited", url: "https://www.lenapromoterspvtltd.com" }],
   creator: "Lena Promoters Private Limited",
@@ -149,6 +151,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <LocalBusinessJsonLd />
         <WebsiteJsonLd />
+        <GeoAeoJsonLd />
         <link rel="preconnect" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         <link rel="dns-prefetch" href="https://rjeydmqspxklsrtohumn.supabase.co" />
 

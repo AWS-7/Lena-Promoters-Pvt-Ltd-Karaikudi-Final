@@ -1,6 +1,12 @@
 "use client";
 
 import { CONTACT } from "@/lib/contact";
+import {
+  SITE_URL,
+  aeoService,
+  geoAeoFaqs,
+  geoService,
+} from "@/lib/seo/geo-aeo";
 
 export function LocalBusinessJsonLd() {
   const jsonLd = {
@@ -90,8 +96,35 @@ export function LocalBusinessJsonLd() {
             description: "Title verification and registration support",
           },
         },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: geoService.name,
+            alternateName: geoService.alternateName,
+            description: geoService.description,
+            serviceType: geoService.serviceType,
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: aeoService.name,
+            alternateName: aeoService.alternateName,
+            description: aeoService.description,
+            serviceType: aeoService.serviceType,
+          },
+        },
       ],
     },
+    knowsAbout: [
+      "DTCP approved plots Karaikudi",
+      "Generative Engine Optimization",
+      "Answer Engine Optimization",
+      "Real estate Karaikudi Tamil Nadu",
+      "Land layouts Sivaganga district",
+    ],
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "4.8",
@@ -99,6 +132,85 @@ export function LocalBusinessJsonLd() {
       bestRating: "5",
       worstRating: "1",
     },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
+
+function buildGeoAeoServiceJsonLd(service: typeof geoService | typeof aeoService) {
+  return {
+    "@type": "Service",
+    name: service.name,
+    alternateName: service.alternateName,
+    description: service.description,
+    serviceType: service.serviceType,
+    provider: {
+      "@type": "RealEstateAgent",
+      name: "Lena Promoters Private Limited",
+      url: SITE_URL,
+    },
+    url: SITE_URL,
+    areaServed: {
+      "@type": "City",
+      name: "Karaikudi",
+      containedInPlace: {
+        "@type": "State",
+        name: "Tamil Nadu",
+      },
+    },
+    hasOffer: {
+      "@type": "Offer",
+      availability: "https://schema.org/InStock",
+      url: `${SITE_URL}/#contact`,
+    },
+  };
+}
+
+export function GeoAeoJsonLd() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildGeoAeoServiceJsonLd(geoService),
+      buildGeoAeoServiceJsonLd(aeoService),
+      {
+        "@type": "FAQPage",
+        mainEntity: geoAeoFaqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${SITE_URL}/#ai-seo`,
+        name: "GEO & AEO Optimization — Lena Promoters",
+        description:
+          "Generative Engine Optimization (GEO) and Answer Engine Optimization (AEO) structured data for Lena Promoters — DTCP approved plots in Karaikudi, Tamil Nadu.",
+        url: SITE_URL,
+        isPartOf: {
+          "@type": "WebSite",
+          name: "Lena Promoters Private Limited",
+          url: SITE_URL,
+        },
+        about: [
+          { "@type": "Thing", name: "Generative Engine Optimization" },
+          { "@type": "Thing", name: "Answer Engine Optimization" },
+          { "@type": "Thing", name: "DTCP approved plots Karaikudi" },
+        ],
+        speakable: {
+          "@type": "SpeakableSpecification",
+          cssSelector: ["h1", "h2", "[itemprop='description']"],
+        },
+      },
+    ],
   };
 
   return (
