@@ -67,6 +67,11 @@ export default function AboutSection() {
               Lena Promoters Pvt. Ltd. was incorporated on the 16th day of January 2024 under the Companies Act. We are an
               ISO Certified Company with our Head Office in Karaikudi and branches in Karaikudi, Sivaganga, and Dubai.
             </p>
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
+              We specialize in DTCP approved residential plots, commercial land, and villament layouts across Karaikudi and
+              Sivaganga district. Every project includes legal title verification, registration support, and bank loan
+              assistance for a smooth and secure land purchase experience in Tamil Nadu.
+            </p>
 
             {/* Feature checklist */}
             <div className="space-y-3 mb-8 sm:mb-10">

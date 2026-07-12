@@ -185,6 +185,22 @@ export default function Footer() {
             >
               YouTube
             </a>
+            <a
+              href={CONTACT.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              X (Twitter)
+            </a>
+            <a
+              href={CONTACT.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              LinkedIn
+            </a>
           </div>
         </div>
 

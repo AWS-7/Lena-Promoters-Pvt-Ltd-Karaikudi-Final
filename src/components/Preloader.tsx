@@ -23,7 +23,7 @@ export default function Preloader() {
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), isMobile ? 800 : 1200);
+    const timer = setTimeout(() => setLoading(false), isMobile ? 400 : 600);
     return () => clearTimeout(timer);
   }, [isMobile]);
 
@@ -182,14 +182,15 @@ export default function Preloader() {
               transition={{ delay: 0.3, duration: 0.4 }}
               className="text-center mt-6"
             >
-              <motion.h1
+              <motion.p
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.4, ease: "easeOut" }}
                 className="text-white font-bold text-2xl md:text-3xl tracking-[0.2em] uppercase"
+                aria-hidden="true"
               >
                 Lena Promoters
-              </motion.h1>
+              </motion.p>
               <motion.div
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}

@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import Preloader from "@/components/Preloader";
-import WelcomeSound from "@/components/WelcomeSound";
 import VisitorTracker from "@/components/VisitorTracker";
-import { GeoAeoJsonLd, LocalBusinessJsonLd, ReviewJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
+import { GeoAeoJsonLd, LocalBusinessJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
 import { DEFAULT_OG_IMAGE, SITE_URL, localKeywords } from "@/lib/seo";
 import { geoAeoKeywords } from "@/lib/seo/geo-aeo";
 
@@ -33,10 +33,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Lena Promoters Private Limited | DTCP Approved Plots in Karaikudi, Tamil Nadu",
-    template: "%s | Lena Promoters Private Limited"
+    default: "DTCP Approved Plots Karaikudi | Lena Promoters",
+    template: "%s | Lena Promoters",
   },
-  description: "Buy DTCP approved residential & commercial plots in Karaikudi, Tamil Nadu from Lena Promoters — a trusted real estate company with 18+ years experience, 1200+ happy customers, clear legal titles, and bank loan assistance.",
+  description: "Buy DTCP approved plots in Karaikudi from Lena Promoters. Clear titles, 18+ years experience, bank loan help and free site visit.",
   keywords: [
     ...localKeywords,
     ...geoAeoKeywords,
@@ -111,44 +111,32 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable} h-full antialiased`}>
       <head>
-        {/* Google Tag Manager — as high in <head> as possible */}
-        <script>{`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-PLGH5S42');`}</script>
-
-        {/* Favicons */}
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/icon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/icon.png" />
-        <link rel="manifest" href="/manifest.json" />
-
         {/* Google Search Console Verification */}
         <meta name="google-site-verification" content="5DX8KNlqJsxw14QkpWWKITb5wStKlL23-aCMtARDQ5o" />
 
         <LocalBusinessJsonLd />
         <WebsiteJsonLd />
         <GeoAeoJsonLd />
-        <ReviewJsonLd />
         <link rel="preconnect" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         <link rel="dns-prefetch" href="https://rjeydmqspxklsrtohumn.supabase.co" />
-
-        {/* Google Analytics (GA4) + Google Ads conversion tracking */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMW2XTPPBD" />
-        <script id="gtag-init">
+      </head>
+      <body className={`${poppins.variable} ${inter.variable} min-h-full flex flex-col pb-[88px] md:pb-0`}>
+        {/* Google Tag Manager (noscript) — immediately after opening <body> */}
+        <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLGH5S42" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }} />
+        <Script id="gtm-init" strategy="lazyOnload">{`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PLGH5S42');`}</Script>
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-ZMW2XTPPBD" strategy="lazyOnload" />
+        <Script id="gtag-init" strategy="lazyOnload">
           {`window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-ZMW2XTPPBD');
           gtag('config', 'AW-18145943083');`}
-        </script>
-      </head>
-      <body className={`${poppins.variable} ${inter.variable} min-h-full flex flex-col pb-[88px] md:pb-0`}>
-        {/* Google Tag Manager (noscript) — immediately after opening <body> */}
-        <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLGH5S42" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }} />
+        </Script>
         <VisitorTracker />
-        <WelcomeSound />
         <Preloader />
         {children}
         <MobileBottomNav />

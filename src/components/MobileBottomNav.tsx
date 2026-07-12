@@ -51,14 +51,14 @@ export default function MobileBottomNav() {
           return (
             <Link key={item.label} href={item.href} prefetch={false}>
               <div
-                className={`flex flex-col items-center gap-1 px-2 py-2 rounded-xl transition-all duration-200 min-w-[52px] ${
+                className={`flex flex-col items-center justify-center gap-1 px-2 py-2.5 rounded-xl transition-all duration-200 min-w-[56px] min-h-[48px] ${
                   active
                     ? "bg-[#1195db] text-white shadow-md shadow-[#1195db]/25 scale-105"
                     : "text-gray-400 hover:text-gray-600"
                 }`}
               >
-                <item.icon size={20} strokeWidth={active ? 2.5 : 2} />
-                <span className="text-[10px] font-medium leading-none">{item.label}</span>
+                <item.icon size={22} strokeWidth={active ? 2.5 : 2} />
+                <span className="text-xs font-medium leading-none">{item.label}</span>
               </div>
             </Link>
           );
@@ -66,9 +66,9 @@ export default function MobileBottomNav() {
 
         {/* Call button */}
         <a href={telHref(phone)}>
-          <div className="flex flex-col items-center gap-1 px-2 py-2 rounded-xl transition-all duration-200 min-w-[52px] text-[#1195db] hover:bg-blue-50">
-            <Phone size={20} strokeWidth={2} />
-            <span className="text-[10px] font-medium leading-none">Call</span>
+          <div className="flex flex-col items-center justify-center gap-1 px-2 py-2.5 rounded-xl transition-all duration-200 min-w-[56px] min-h-[48px] text-[#1195db] hover:bg-blue-50">
+            <Phone size={22} strokeWidth={2} />
+            <span className="text-xs font-medium leading-none">Call</span>
           </div>
         </a>
       </div>

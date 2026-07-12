@@ -201,8 +201,9 @@ export default function HeroSection() {
               {heroContent?.badge || "DTCP & RERA Approved Layouts"}
             </motion.div>
             <motion.h1 variants={itemVariants} className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-snug md:leading-tight mb-4 md:mb-6">
-              {heroContent?.title1 || "Premium DTCP Approved"} <span className="block text-[#e6f2f9]">{heroContent?.title2 || "Land & Plot Layouts"}</span>
-              {heroContent?.location || "in Karaikudi"}
+              {heroContent?.title1
+                ? `${heroContent.title1}${heroContent.title2 ? ` ${heroContent.title2}` : ""}${heroContent.location ? ` ${heroContent.location}` : ""}`
+                : "Lena Promoters — DTCP Approved Plots in Karaikudi"}
             </motion.h1>
             <motion.p variants={itemVariants} className="text-sm sm:text-base md:text-xl text-white/90 mb-6 md:mb-8 max-w-xl mx-auto md:mx-0">
               {heroContent?.subtitle || "Trusted land promoter in Tamil Nadu offering clear-title plots, legal assurance, and hassle-free registration at prime locations."}

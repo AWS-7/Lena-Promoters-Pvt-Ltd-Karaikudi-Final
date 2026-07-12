@@ -10,6 +10,8 @@ export const CONTACT = {
   instagram:
     "https://www.instagram.com/lena_promoters_pvt_ltd?igsh=MTR4MnJqbGZhcGZuYw==",
   youtube: "https://www.youtube.com/@Lena_Promoters",
+  twitter: "https://x.com/lenapromoters",
+  linkedin: "https://www.linkedin.com/company/lena-promoters-karaikudi",
   googleBusiness:
     "https://www.google.com/maps/search/Lena+Promoters+Karaikudi+Tamil+Nadu",
   googleMapsEmbed:

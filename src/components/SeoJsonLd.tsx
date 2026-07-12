@@ -4,15 +4,15 @@ import { CONTACT, SITE_STATS } from "@/lib/contact";
 import {
   SITE_URL,
   aeoService,
-  geoAeoFaqs,
   geoService,
 } from "@/lib/seo/geo-aeo";
-import { businessGeo, directoryCitations } from "@/lib/seo";
+import { businessGeo } from "@/lib/seo";
 
 export function LocalBusinessJsonLd() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
+    "@id": `${SITE_URL}/#organization`,
     name: "Lena Promoters Private Limited",
     alternateName: "Lena Promoters",
     url: SITE_URL,
@@ -21,7 +21,6 @@ export function LocalBusinessJsonLd() {
     description:
       "Premium DTCP approved land layouts and plot sales in Karaikudi, Tamil Nadu. Trusted land promoter with 18+ years experience.",
     foundingDate: "2006",
-    priceRange: "₹₹",
     email: CONTACT.email,
     telephone: "+91-814-874-8140",
     geo: {
@@ -77,8 +76,9 @@ export function LocalBusinessJsonLd() {
       CONTACT.facebook,
       CONTACT.instagram,
       CONTACT.youtube,
+      CONTACT.twitter,
+      CONTACT.linkedin,
       CONTACT.googleBusiness,
-      ...directoryCitations.map((c) => c.url),
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
@@ -160,6 +160,22 @@ export function LocalBusinessJsonLd() {
       bestRating: "5",
       worstRating: "1",
     },
+    review: [
+      {
+        "@type": "Review",
+        author: { "@type": "Person", name: "Lena Promoters Customer" },
+        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+        reviewBody:
+          "Excellent DTCP approved plots in Karaikudi with clear legal documentation and helpful staff.",
+      },
+      {
+        "@type": "Review",
+        author: { "@type": "Person", name: "Plot Buyer, Karaikudi" },
+        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+        reviewBody:
+          "Smooth registration process and bank loan assistance. Highly recommend Lena Promoters.",
+      },
+    ],
   };
 
   return (
@@ -206,22 +222,11 @@ export function GeoAeoJsonLd() {
       buildGeoAeoServiceJsonLd(geoService),
       buildGeoAeoServiceJsonLd(aeoService),
       {
-        "@type": "FAQPage",
-        mainEntity: geoAeoFaqs.map((faq) => ({
-          "@type": "Question",
-          name: faq.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: faq.answer,
-          },
-        })),
-      },
-      {
         "@type": "WebPage",
         "@id": `${SITE_URL}/#ai-seo`,
-        name: "GEO & AEO Optimization — Lena Promoters",
+        name: "GEO and AEO Optimization — Lena Promoters",
         description:
-          "Generative Engine Optimization (GEO) and Answer Engine Optimization (AEO) structured data for Lena Promoters — DTCP approved plots in Karaikudi, Tamil Nadu.",
+          "Generative Engine Optimization and Answer Engine Optimization structured data for Lena Promoters in Karaikudi, Tamil Nadu.",
         url: SITE_URL,
         isPartOf: {
           "@type": "WebSite",
@@ -233,10 +238,6 @@ export function GeoAeoJsonLd() {
           { "@type": "Thing", name: "Answer Engine Optimization" },
           { "@type": "Thing", name: "DTCP approved plots Karaikudi" },
         ],
-        speakable: {
-          "@type": "SpeakableSpecification",
-          cssSelector: ["h1", "h2", "[itemprop='description']"],
-        },
       },
     ],
   };
@@ -456,45 +457,6 @@ export function OfferJsonLd({
 
   if (image) jsonLd.image = image;
   if (validThrough) jsonLd.validThrough = validThrough;
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
-  );
-}
-
-export function ReviewJsonLd() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "RealEstateAgent",
-    name: "Lena Promoters Private Limited",
-    url: SITE_URL,
-    review: [
-      {
-        "@type": "Review",
-        author: { "@type": "Person", name: "Lena Promoters Customer" },
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-        reviewBody:
-          "Excellent DTCP approved plots in Karaikudi with clear legal documentation and helpful staff.",
-      },
-      {
-        "@type": "Review",
-        author: { "@type": "Person", name: "Plot Buyer — Karaikudi" },
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-        reviewBody:
-          "Smooth registration process and bank loan assistance. Highly recommend Lena Promoters for land purchase.",
-      },
-    ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: String(SITE_STATS.happyCustomers),
-      bestRating: "5",
-      worstRating: "1",
-    },
-  };
 
   return (
     <script

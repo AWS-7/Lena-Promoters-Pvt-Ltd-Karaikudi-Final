@@ -99,7 +99,7 @@ export function buildPageMetadata({
   const url = path === "/" ? SITE_URL : `${SITE_URL}${path}`;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     ...(keywords?.length ? { keywords: keywords.join(", ") } : {}),
     alternates: {
