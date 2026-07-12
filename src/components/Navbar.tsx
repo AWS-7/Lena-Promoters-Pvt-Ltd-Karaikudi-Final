@@ -13,6 +13,7 @@ const links = [
   { label: "Lena Group", href: "/lena-group" },
   { label: "Projects", href: "/projects" },
   { label: "Services", href: "/services" },
+  { label: "Offers", href: "/offers" },
   { label: "Why Us", href: "/why-us" },
   { label: "Contact", href: "/#contact" },
 ];

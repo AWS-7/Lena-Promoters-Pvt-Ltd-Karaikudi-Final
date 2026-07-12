@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { FileCheck, Gift, ScrollText, Coins, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { FileCheck, Gift, ScrollText, Coins, Sparkles, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { useRef, useEffect, useState, useCallback } from "react";
 
 const offers = [
@@ -138,6 +139,12 @@ export default function OffersSection() {
           <p className="text-white/80 mt-3 max-w-2xl mx-auto">
             Exclusive deals and benefits when you book a plot with Lena Promoters.
           </p>
+          <Link
+            href="/offers"
+            className="inline-flex items-center gap-2 mt-5 rounded-full bg-white text-[#0E6FA3] px-6 py-2.5 text-sm font-semibold hover:bg-white/90 transition-colors"
+          >
+            View All Festival Offers <ArrowRight size={16} />
+          </Link>
         </motion.div>
 
         {/* Mobile: Horizontal scrolling with auto-scroll */}

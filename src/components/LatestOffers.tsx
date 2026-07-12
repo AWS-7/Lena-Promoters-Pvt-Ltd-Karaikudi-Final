@@ -173,7 +173,7 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
               <div className="relative aspect-[4/3]">
                 <Image
                   src={src}
-                  alt={`Offer ${(i % images.length) + 1}`}
+                  alt={`Lena Promoters plot offer banner ${(i % images.length) + 1} — Karaikudi`}
                   fill
                   draggable={false}
                   className="object-cover transition-transform duration-500 group-hover/card:scale-110 pointer-events-none"
@@ -216,7 +216,7 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
               <div className="relative rounded-2xl overflow-hidden bg-gray-900">
                 <Image
                   src={selectedImage}
-                  alt="Full size offer image"
+                  alt="Lena Promoters festival offer banner — Karaikudi plots"
                   width={1200}
                   height={900}
                   className="w-full h-auto object-contain"

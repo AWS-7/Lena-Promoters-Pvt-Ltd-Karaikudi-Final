@@ -5,15 +5,16 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import StatsSection from "@/components/StatsSection";
 import ScrollReveal from "@/components/ScrollReveal";
+import { FaqJsonLd } from "@/components/SeoJsonLd";
+import { buildPageMetadata, homepageFaqs, localKeywords } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "DTCP Approved Plots in Karaikudi, Tamil Nadu | Buy Land with Clear Title",
   description:
     "Buy DTCP approved residential & commercial plots in Karaikudi, Tamil Nadu from Lena Promoters. 18+ years experience, 1200+ happy customers, clear legal titles, bank loan assistance & free site visit.",
-  alternates: {
-    canonical: "https://www.lenapromoterspvtltd.com",
-  },
-};
+  path: "/",
+  keywords: localKeywords,
+});
 
 const AboutSection = dynamic(() => import("@/components/AboutSection"));
 const TrustSection = dynamic(() => import("@/components/TrustSection"));
@@ -33,6 +34,7 @@ const EnquiryPopup = dynamic(() => import("@/components/EnquiryPopup"));
 export default function Home() {
   return (
     <>
+      <FaqJsonLd faqs={[...homepageFaqs]} />
       <TopHeader />
       <Navbar />
       <main className="overflow-x-hidden">

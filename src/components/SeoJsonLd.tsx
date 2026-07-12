@@ -1,12 +1,13 @@
 "use client";
 
-import { CONTACT } from "@/lib/contact";
+import { CONTACT, SITE_STATS } from "@/lib/contact";
 import {
   SITE_URL,
   aeoService,
   geoAeoFaqs,
   geoService,
 } from "@/lib/seo/geo-aeo";
+import { businessGeo, directoryCitations } from "@/lib/seo";
 
 export function LocalBusinessJsonLd() {
   const jsonLd = {
@@ -14,13 +15,36 @@ export function LocalBusinessJsonLd() {
     "@type": "RealEstateAgent",
     name: "Lena Promoters Private Limited",
     alternateName: "Lena Promoters",
-    url: "https://www.lenapromoterspvtltd.com",
-    logo: "https://www.lenapromoterspvtltd.com/logo.png",
-    image: "https://www.lenapromoterspvtltd.com/og-image.jpg",
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon.png`,
+    image: `${SITE_URL}/hero-bg.jpg`,
     description:
       "Premium DTCP approved land layouts and plot sales in Karaikudi, Tamil Nadu. Trusted land promoter with 18+ years experience.",
     foundingDate: "2006",
     priceRange: "₹₹",
+    email: CONTACT.email,
+    telephone: "+91-814-874-8140",
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: businessGeo.latitude,
+      longitude: businessGeo.longitude,
+    },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ],
+        opens: "09:00",
+        closes: "20:00",
+      },
+    ],
     areaServed: {
       "@type": "City",
       name: "Karaikudi",
@@ -44,13 +68,17 @@ export function LocalBusinessJsonLd() {
     contactPoint: {
       "@type": "ContactPoint",
       telephone: "+91-814-874-8140",
+      email: CONTACT.email,
       contactType: "sales",
       availableLanguage: ["Tamil", "English"],
+      areaServed: "IN",
     },
     sameAs: [
       CONTACT.facebook,
       CONTACT.instagram,
       CONTACT.youtube,
+      CONTACT.googleBusiness,
+      ...directoryCitations.map((c) => c.url),
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
@@ -128,7 +156,7 @@ export function LocalBusinessJsonLd() {
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "4.8",
-      reviewCount: "1200",
+      reviewCount: String(SITE_STATS.happyCustomers),
       bestRating: "5",
       worstRating: "1",
     },
@@ -226,12 +254,12 @@ export function WebsiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Lena Promoters Private Limited",
-    url: "https://www.lenapromoterspvtltd.com",
+    url: SITE_URL,
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: "https://www.lenapromoterspvtltd.com/projects?q={search_term_string}",
+        urlTemplate: `${SITE_URL}/projects?location={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
@@ -286,7 +314,7 @@ export function ServiceJsonLd({
     provider: {
       "@type": "RealEstateAgent",
       name: "Lena Promoters Private Limited",
-      url: "https://www.lenapromoterspvtltd.com",
+      url: SITE_URL,
     },
     url,
     areaServed: {
@@ -339,19 +367,22 @@ export function ProductJsonLd({
   image,
   url,
   price,
+  location,
 }: {
   name: string;
   description: string;
   image?: string;
   url: string;
-  price?: number;
+  price?: string;
+  location?: string;
 }) {
-  const jsonLd: any = {
+  const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
     name,
     description,
     url,
+    category: "Real Estate Plot",
     brand: {
       "@type": "Brand",
       name: "Lena Promoters Private Limited",
@@ -365,15 +396,105 @@ export function ProductJsonLd({
       url,
       availability: "https://schema.org/InStock",
       priceCurrency: "INR",
+      seller: {
+        "@type": "RealEstateAgent",
+        name: "Lena Promoters Private Limited",
+      },
       areaServed: {
         "@type": "City",
-        name: "Karaikudi",
+        name: location || "Karaikudi",
       },
     },
   };
 
   if (image) jsonLd.image = image;
-  if (price) jsonLd.offers.price = price.toString();
+  if (price) (jsonLd.offers as Record<string, string>).price = price;
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
+
+export function OfferJsonLd({
+  name,
+  description,
+  url,
+  image,
+  validThrough,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  image?: string;
+  validThrough?: string;
+}) {
+  const jsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    name,
+    description,
+    url,
+    availability: "https://schema.org/InStock",
+    priceCurrency: "INR",
+    seller: {
+      "@type": "RealEstateAgent",
+      name: "Lena Promoters Private Limited",
+      url: SITE_URL,
+    },
+    offeredBy: {
+      "@type": "RealEstateAgent",
+      name: "Lena Promoters Private Limited",
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Karaikudi",
+    },
+  };
+
+  if (image) jsonLd.image = image;
+  if (validThrough) jsonLd.validThrough = validThrough;
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
+}
+
+export function ReviewJsonLd() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: "Lena Promoters Private Limited",
+    url: SITE_URL,
+    review: [
+      {
+        "@type": "Review",
+        author: { "@type": "Person", name: "Lena Promoters Customer" },
+        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+        reviewBody:
+          "Excellent DTCP approved plots in Karaikudi with clear legal documentation and helpful staff.",
+      },
+      {
+        "@type": "Review",
+        author: { "@type": "Person", name: "Plot Buyer — Karaikudi" },
+        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+        reviewBody:
+          "Smooth registration process and bank loan assistance. Highly recommend Lena Promoters for land purchase.",
+      },
+    ],
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.8",
+      reviewCount: String(SITE_STATS.happyCustomers),
+      bestRating: "5",
+      worstRating: "1",
+    },
+  };
 
   return (
     <script

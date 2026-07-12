@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import FestivalLandingPage from "@/components/FestivalLandingPage";
+import { BreadcrumbJsonLd, OfferJsonLd } from "@/components/SeoJsonLd";
 import { getCampaignBySlug, getCampaignProjects } from "@/lib/campaigns";
+import { SITE_URL, buildPageMetadata } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -15,19 +17,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: "Offer Not Found" };
   }
 
-  const url = `https://www.lenapromoterspvtltd.com/offers/${campaign.slug}`;
+  const url = `${SITE_URL}/offers/${campaign.slug}`;
 
-  return {
+  return buildPageMetadata({
     title: `${campaign.title} | Lena Promoters Karaikudi`,
     description: campaign.subtitle || campaign.headline,
-    alternates: { canonical: url },
-    openGraph: {
-      title: campaign.headline,
-      description: campaign.subtitle || campaign.offer_text,
-      url,
-      images: campaign.banner_url ? [{ url: campaign.banner_url }] : undefined,
-    },
-  };
+    path: `/offers/${campaign.slug}`,
+    image: campaign.banner_url || undefined,
+  });
 }
 
 export default async function CampaignOfferPage({ params }: PageProps) {
@@ -37,6 +34,25 @@ export default async function CampaignOfferPage({ params }: PageProps) {
   if (!campaign) notFound();
 
   const projects = await getCampaignProjects(campaign.project_ids);
+  const offerUrl = `${SITE_URL}/offers/${campaign.slug}`;
 
-  return <FestivalLandingPage campaign={campaign} projects={projects} />;
+  return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: SITE_URL },
+          { name: "Offers", url: `${SITE_URL}/offers` },
+          { name: campaign.title, url: offerUrl },
+        ]}
+      />
+      <OfferJsonLd
+        name={campaign.headline}
+        description={campaign.subtitle || campaign.offer_text}
+        url={offerUrl}
+        image={campaign.banner_url}
+        validThrough={campaign.end_date || undefined}
+      />
+      <FestivalLandingPage campaign={campaign} projects={projects} />
+    </>
+  );
 }

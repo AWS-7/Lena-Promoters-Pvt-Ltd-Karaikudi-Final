@@ -5,7 +5,8 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import Preloader from "@/components/Preloader";
 import WelcomeSound from "@/components/WelcomeSound";
 import VisitorTracker from "@/components/VisitorTracker";
-import { GeoAeoJsonLd, LocalBusinessJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
+import { GeoAeoJsonLd, LocalBusinessJsonLd, ReviewJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
+import { DEFAULT_OG_IMAGE, SITE_URL, localKeywords } from "@/lib/seo";
 import { geoAeoKeywords } from "@/lib/seo/geo-aeo";
 
 const poppins = Poppins({
@@ -30,38 +31,14 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Lena Promoters Private Limited | DTCP Approved Plots in Karaikudi, Tamil Nadu",
     template: "%s | Lena Promoters Private Limited"
   },
   description: "Buy DTCP approved residential & commercial plots in Karaikudi, Tamil Nadu from Lena Promoters — a trusted real estate company with 18+ years experience, 1200+ happy customers, clear legal titles, and bank loan assistance.",
   keywords: [
-    "DTCP approved plots Karaikudi",
-    "land promoter Karaikudi",
-    "plot sales Tamil Nadu",
-    "real estate Karaikudi",
-    "Lena Promoters",
-    "residential plots Sivaganga",
-    "commercial land Karaikudi",
-    "DTCP layouts Tamil Nadu",
-    "Karaikudi real estate",
-    "buy plot Karaikudi",
-    "land for sale Karaikudi",
-    "property dealer Karaikudi",
-    "house site Karaikudi",
-    "villament plots",
-    " CMDA approved plots",
-    "RERA approved plots",
-    "land investment Karaikudi",
-    "Chettinad plots",
-    "Sivaganga district plots",
-    "plot with patta Karaikudi",
-    "clear title plots",
-    "bank loan for plot purchase",
-    "real estate company Karaikudi",
-    "land developers Tamil Nadu",
-    "affordable plots Karaikudi",
-    "premium land layouts",
+    ...localKeywords,
     ...geoAeoKeywords,
   ].join(", "),
   authors: [{ name: "Lena Promoters Private Limited", url: "https://www.lenapromoterspvtltd.com" }],
@@ -83,18 +60,22 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://www.lenapromoterspvtltd.com",
+    canonical: SITE_URL,
+    languages: {
+      "en-IN": SITE_URL,
+      "x-default": SITE_URL,
+    },
   },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://www.lenapromoterspvtltd.com',
+    url: SITE_URL,
     title: 'Lena Promoters Private Limited | DTCP Approved Plots in Karaikudi',
     description: 'Buy DTCP approved plots in Karaikudi, Tamil Nadu. Trusted land promoter with 18+ years experience, 1200+ happy customers, clear titles & bank loan support.',
     siteName: 'Lena Promoters Private Limited',
     images: [
       {
-        url: 'https://www.lenapromoterspvtltd.com/og-image.jpg',
+        url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
         alt: 'Lena Promoters Private Limited - DTCP Approved Plots in Karaikudi',
@@ -105,7 +86,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Lena Promoters Private Limited | DTCP Approved Plots in Karaikudi',
     description: 'Buy DTCP approved plots in Karaikudi, Tamil Nadu. 18+ years experience, 1200+ happy customers.',
-    images: ['https://www.lenapromoterspvtltd.com/og-image.jpg'],
+    images: [DEFAULT_OG_IMAGE],
     creator: '@lenapromoters',
     site: '@lenapromoters',
   },
@@ -114,13 +95,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/logo.png", type: "image/png", sizes: "512x512" },
+      { url: "/icon.png", type: "image/png" },
       { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
-      { url: "/android-chrome-192x192.png", type: "image/png", sizes: "192x192" },
     ],
-    shortcut: "/logo.png",
-    apple: "/android-chrome-192x192.png",
+    shortcut: "/favicon.svg",
+    apple: "/icon.png",
   },
 };
 
@@ -140,10 +119,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PLGH5S42');`}</script>
 
         {/* Favicons */}
-        <link rel="icon" href="/logo.png" type="image/png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
-        <link rel="apple-touch-icon" sizes="192x192" href="/android-chrome-192x192.png" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/icon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/icon.png" />
         <link rel="manifest" href="/manifest.json" />
 
         {/* Google Search Console Verification */}
@@ -152,6 +130,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <LocalBusinessJsonLd />
         <WebsiteJsonLd />
         <GeoAeoJsonLd />
+        <ReviewJsonLd />
         <link rel="preconnect" href="https://rjeydmqspxklsrtohumn.supabase.co" />
         <link rel="dns-prefetch" href="https://rjeydmqspxklsrtohumn.supabase.co" />
 

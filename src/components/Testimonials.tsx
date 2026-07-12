@@ -5,16 +5,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 const youtubeReviews = [
-  { id: "wNR3mzn5Ptc", url: "https://youtube.com/shorts/wNR3mzn5Ptc", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
-  { id: "5g5k3P2dkUg", url: "https://youtube.com/shorts/5g5k3P2dkUg", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
-  { id: "cgJBW5aPX2g", url: "https://youtube.com/shorts/cgJBW5aPX2g", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
-  { id: "7hONoHNxwjM", url: "https://youtube.com/shorts/7hONoHNxwjM", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
-  { id: "gJcDZABTKDI", url: "https://youtube.com/shorts/gJcDZABTKDI", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
-  { id: "sbMLQqsTP3g", url: "https://youtube.com/shorts/sbMLQqsTP3g", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
-  { id: "cfvsjIQmWEI", url: "https://youtube.com/shorts/cfvsjIQmWEI", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
-  { id: "g9ti7SihbeU", url: "https://youtube.com/shorts/g9ti7SihbeU", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
-  { id: "LLyZjVFED2I", url: "https://youtube.com/shorts/LLyZjVFED2I", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
-  { id: "V0SJCcTUoX8", url: "https://youtube.com/shorts/V0SJCcTUoX8", name: "Customer Review", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "wNR3mzn5Ptc", url: "https://youtube.com/shorts/wNR3mzn5Ptc", name: "Customer video review 1", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "5g5k3P2dkUg", url: "https://youtube.com/shorts/5g5k3P2dkUg", name: "Customer video review 2", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "cgJBW5aPX2g", url: "https://youtube.com/shorts/cgJBW5aPX2g", name: "Customer video review 3", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "7hONoHNxwjM", url: "https://youtube.com/shorts/7hONoHNxwjM", name: "Customer video review 4", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "gJcDZABTKDI", url: "https://youtube.com/shorts/gJcDZABTKDI", name: "Customer video review 5", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "sbMLQqsTP3g", url: "https://youtube.com/shorts/sbMLQqsTP3g", name: "Customer video review 6", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "cfvsjIQmWEI", url: "https://youtube.com/shorts/cfvsjIQmWEI", name: "Customer video review 7", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "g9ti7SihbeU", url: "https://youtube.com/shorts/g9ti7SihbeU", name: "Customer video review 8", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "LLyZjVFED2I", url: "https://youtube.com/shorts/LLyZjVFED2I", name: "Customer video review 9", subtitle: "Lena Promoters — Karaikudi" },
+  { id: "V0SJCcTUoX8", url: "https://youtube.com/shorts/V0SJCcTUoX8", name: "Customer video review 10", subtitle: "Lena Promoters — Karaikudi" },
 ];
 
 function thumbnailUrl(id: string) {

@@ -10,6 +10,8 @@ export const CONTACT = {
   instagram:
     "https://www.instagram.com/lena_promoters_pvt_ltd?igsh=MTR4MnJqbGZhcGZuYw==",
   youtube: "https://www.youtube.com/@Lena_Promoters",
+  googleBusiness:
+    "https://www.google.com/maps/search/Lena+Promoters+Karaikudi+Tamil+Nadu",
   googleMapsEmbed:
     "https://maps.google.com/maps?q=No:49/3+Keelamel,+100+Feet+Road,+Soodamanipuram,+Karaikudi+630001&hl=en&z=16&output=embed",
 } as const;

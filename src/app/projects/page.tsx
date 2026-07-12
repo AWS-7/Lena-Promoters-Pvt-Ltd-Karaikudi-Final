@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import FeaturedProjects from "@/components/FeaturedProjects";
 import Footer from "@/components/Footer";
+import { BreadcrumbJsonLd } from "@/components/SeoJsonLd";
+import { SITE_URL, buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "DTCP Approved Land Projects in Karaikudi | Lena Promoters",
   description:
     "Explore DTCP approved residential & commercial land layouts in Karaikudi, Sivaganga, and Chettinad. Premium plots with clear titles, patta, and bank loan support from Lena Promoters.",
+  path: "/projects",
   keywords: [
     "DTCP approved projects Karaikudi",
     "land layouts Tamil Nadu",
@@ -14,31 +17,22 @@ export const metadata: Metadata = {
     "commercial plots Sivaganga",
     "Chettinad land projects",
     "premium plots Karaikudi",
-    "Lena Nagar Phase 1",
-    "Lena Garden",
-    "Lena Enclave",
-    "Lena City",
     "plot with patta",
     "clear title land",
     "bank loan approved plots",
-    "villament plots Karaikudi",
     "land for sale Tamil Nadu",
-  ].join(", "),
-  alternates: {
-    canonical: "https://www.lenapromoterspvtltd.com/projects",
-  },
-  openGraph: {
-    title: "DTCP Approved Land Projects in Karaikudi | Lena Promoters",
-    description:
-      "Explore DTCP approved residential & commercial land layouts with clear titles and bank loan support.",
-    url: "https://www.lenapromoterspvtltd.com/projects",
-    images: ["https://www.lenapromoterspvtltd.com/og-image.jpg"],
-  },
-};
+  ],
+});
 
 export default function ProjectsPage() {
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: SITE_URL },
+          { name: "Projects", url: `${SITE_URL}/projects` },
+        ]}
+      />
       <Navbar />
       <main>
         {/* Page Header */}

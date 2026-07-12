@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin, Clock, ArrowUp } from "lucide-react";
 import { CONTACT } from "@/lib/contact";
+import { directoryCitations } from "@/lib/seo";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 
@@ -97,14 +98,20 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-white mb-4">Services</h4>
             <ul className="space-y-2 text-sm">
-              {["DTCP Approved Plots", "Land Investment", "Documentation", "Bank Loan Assistance", "Registration Support"].map((s) => (
-                <li key={s}>
-                  <span className="group inline-flex hover:text-white transition-colors cursor-pointer relative">
+              {[
+                { label: "DTCP Approved Plots", href: "/services" },
+                { label: "Land Investment", href: "/services" },
+                { label: "Documentation", href: "/services" },
+                { label: "Bank Loan Assistance", href: "/services" },
+                { label: "Registration Support", href: "/services" },
+              ].map((s) => (
+                <li key={s.label}>
+                  <Link href={s.href} className="group inline-flex hover:text-white transition-colors relative">
                     <span className="relative">
-                      {s}
+                      {s.label}
                       <span className="absolute left-0 -bottom-0.5 w-0 h-px bg-white group-hover:w-full transition-all duration-300" />
                     </span>
-                  </span>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -129,6 +136,55 @@ export default function Footer() {
                 <Clock size={14} className="mt-0.5" /> {workingHours}
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="mb-10">
+          <h4 className="font-bold text-white mb-4 text-center md:text-left">Find Us Online</h4>
+          <div className="flex flex-wrap justify-center md:justify-start gap-3 text-sm">
+            <a
+              href={CONTACT.googleBusiness}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              Google Business
+            </a>
+            {directoryCitations.slice(1).map((citation) => (
+              <a
+                key={citation.name}
+                href={citation.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                {citation.name}
+              </a>
+            ))}
+            <a
+              href={CONTACT.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              Facebook
+            </a>
+            <a
+              href={CONTACT.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              Instagram
+            </a>
+            <a
+              href={CONTACT.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              YouTube
+            </a>
           </div>
         </div>
 

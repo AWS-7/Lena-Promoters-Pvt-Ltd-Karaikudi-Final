@@ -13,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/lena-group`, lastModified: now, priority: 0.8, changeFrequency: "monthly" },
     { url: `${baseUrl}/why-us`, lastModified: now, priority: 0.8, changeFrequency: "monthly" },
     { url: `${baseUrl}/offers`, lastModified: now, priority: 0.8, changeFrequency: "daily" },
+    { url: `${baseUrl}/call`, lastModified: now, priority: 0.7, changeFrequency: "monthly" },
     { url: `${baseUrl}/privacy-policy`, lastModified: now, priority: 0.3, changeFrequency: "monthly" },
     { url: `${baseUrl}/terms-and-conditions`, lastModified: now, priority: 0.3, changeFrequency: "monthly" },
     { url: `${baseUrl}/refund-policy`, lastModified: now, priority: 0.3, changeFrequency: "monthly" },

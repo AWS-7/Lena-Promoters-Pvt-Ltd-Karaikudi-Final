@@ -3,13 +3,16 @@ import Navbar from "@/components/Navbar";
 import LatestOffers from "@/components/LatestOffers";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { BreadcrumbJsonLd } from "@/components/SeoJsonLd";
 import { getActiveCampaigns } from "@/lib/campaigns";
+import { SITE_URL, buildPageMetadata } from "@/lib/seo";
 import { Sparkles, ArrowRight } from "lucide-react";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Exclusive Plot Offers in Karaikudi | Deals & Discounts | Lena Promoters",
   description:
     "Limited-time offers on DTCP approved plots in Karaikudi. Get 50% payment document, BOGO deals, free gold coins, free patta registration & more from Lena Promoters.",
+  path: "/offers",
   keywords: [
     "plot offers Karaikudi",
     "land deals Tamil Nadu",
@@ -24,24 +27,20 @@ export const metadata: Metadata = {
     "affordable plots offer",
     "plot festival Karaikudi",
     "real estate offers Tamil Nadu",
-  ].join(", "),
-  alternates: {
-    canonical: "https://www.lenapromoterspvtltd.com/offers",
-  },
-  openGraph: {
-    title: "Exclusive Plot Offers in Karaikudi | Lena Promoters",
-    description:
-      "Limited-time offers on DTCP approved plots — BOGO, free gold coins, free patta & more.",
-    url: "https://www.lenapromoterspvtltd.com/offers",
-    images: ["https://www.lenapromoterspvtltd.com/og-image.jpg"],
-  },
-};
+  ],
+});
 
 export default async function OffersPage() {
   const campaigns = await getActiveCampaigns();
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: SITE_URL },
+          { name: "Offers", url: `${SITE_URL}/offers` },
+        ]}
+      />
       <Navbar />
       <main>
         {/* Page Header */}
