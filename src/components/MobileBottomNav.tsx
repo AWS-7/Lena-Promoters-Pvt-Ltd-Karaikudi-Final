@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Home, Briefcase, Phone, Wrench, Tag, Gift } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Home, Briefcase, Phone, Wrench, Tag, Gift } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -39,12 +38,7 @@ export default function MobileBottomNav() {
     pathname === href || (href !== "/" && pathname?.startsWith(href));
 
   return (
-    <motion.nav
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-t border-gray-200 shadow-[0_-8px_32px_rgba(0,0,0,0.12)] md:hidden pb-safe"
-    >
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-t border-gray-200 shadow-[0_-8px_32px_rgba(0,0,0,0.12)] md:hidden pb-safe">
       <div className="flex items-center justify-around px-2 py-2">
         {navItems.map((item) => {
           const active = isActive(item.href);
@@ -72,6 +66,6 @@ export default function MobileBottomNav() {
           </div>
         </a>
       </div>
-    </motion.nav>
+    </nav>
   );
 }

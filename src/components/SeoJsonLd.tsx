@@ -1,5 +1,3 @@
-"use client";
-
 import { CONTACT, SITE_STATS } from "@/lib/contact";
 import {
   SITE_URL,

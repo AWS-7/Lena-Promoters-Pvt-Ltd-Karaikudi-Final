@@ -30,7 +30,7 @@ const CTASection = dynamic(() => import("@/components/CTASection"));
 const SchemesSection = dynamic(() => import("@/components/SchemesSection"));
 const ContactSection = dynamic(() => import("@/components/ContactSection"));
 const Footer = dynamic(() => import("@/components/Footer"));
-const EnquiryPopup = dynamic(() => import("@/components/EnquiryPopup"));
+const EnquiryPopup = dynamic(() => import("@/components/EnquiryPopup"), { ssr: false });
 
 export default function Home() {
   return (

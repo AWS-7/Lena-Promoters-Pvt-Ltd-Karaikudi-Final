@@ -80,7 +80,7 @@ export default function Navbar() {
         </div>
 
         <button
-          className="lg:hidden p-2 text-gray-700"
+          className="lg:hidden p-3 text-gray-700 min-h-[44px] min-w-[44px] tap-target"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -115,7 +115,7 @@ export default function Navbar() {
                 <span className="font-bold text-[#0E6FA3]">Menu</span>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="p-2 text-gray-700 hover:text-[#0E6FA3]"
+                  className="p-3 text-gray-700 hover:text-[#0E6FA3] min-h-[44px] min-w-[44px] tap-target"
                   aria-label="Close menu"
                 >
                   <X size={22} />
@@ -127,7 +127,7 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="block px-3 py-3 rounded-lg text-sm font-medium text-gray-700 hover:text-[#0E6FA3] hover:bg-[#e6f2f9] transition-colors"
+                    className="block px-3 py-3 min-h-[44px] rounded-lg text-base font-medium text-gray-700 hover:text-[#0E6FA3] hover:bg-[#e6f2f9] transition-colors"
                   >
                     {link.label}
                   </Link>

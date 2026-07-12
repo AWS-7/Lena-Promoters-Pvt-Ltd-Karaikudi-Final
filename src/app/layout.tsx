@@ -1,13 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import dynamic from "next/dynamic";
 import Script from "next/script";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import Preloader from "@/components/Preloader";
-import VisitorTracker from "@/components/VisitorTracker";
 import { GeoAeoJsonLd, LocalBusinessJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
 import { DEFAULT_OG_IMAGE, SITE_URL, localKeywords } from "@/lib/seo";
 import { geoAeoKeywords } from "@/lib/seo/geo-aeo";
+
+const Preloader = dynamic(() => import("@/components/Preloader"), { ssr: false });
+const VisitorTracker = dynamic(() => import("@/components/VisitorTracker"), { ssr: false });
 
 const poppins = Poppins({
   variable: "--font-heading",

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { scheduleIdleTask } from "@/lib/defer";
 import Image from "next/image";
 import { X, User, Phone, MapPin, Send, CheckCircle, Clock, Info } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -15,11 +16,12 @@ export default function EnquiryPopup() {
   const [enquiryStatus, setEnquiryStatus] = useState<"pending" | "verified" | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const cancel = scheduleIdleTask(() => {
       const alreadyShown = sessionStorage.getItem("enquiryPopupShown");
       if (!alreadyShown) setShow(true);
-    }, 4000);
-    return () => clearTimeout(timer);
+    }, 8000);
+
+    return cancel;
   }, []);
 
   const close = () => {

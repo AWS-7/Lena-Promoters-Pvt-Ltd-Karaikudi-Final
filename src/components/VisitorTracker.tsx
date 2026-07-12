@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { scheduleIdleTask } from "@/lib/defer";
 
 function getOrCreateCookieId(): string {
   const COOKIE_NAME = "lp_visitor_id";
@@ -29,8 +30,7 @@ function detectDevice(): "mobile" | "tablet" | "desktop" {
 
 export default function VisitorTracker() {
   useEffect(() => {
-    // Fire-and-forget: never blocks rendering
-    const track = async () => {
+    const cancel = scheduleIdleTask(async () => {
       try {
         const cookieId = getOrCreateCookieId();
         const device = detectDevice();
@@ -40,17 +40,14 @@ export default function VisitorTracker() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ cookieId, device, page }),
-          // Keepalive ensures the request completes even if the user navigates away
           keepalive: true,
         });
       } catch {
         // Silently fail — tracking should never break UX
       }
-    };
+    }, 4000);
 
-    // Delay slightly to prioritize critical page rendering
-    const timer = setTimeout(track, 500);
-    return () => clearTimeout(timer);
+    return cancel;
   }, []);
 
   return null;
