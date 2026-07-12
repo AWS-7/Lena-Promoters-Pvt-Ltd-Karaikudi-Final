@@ -8,6 +8,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { FaqJsonLd } from "@/components/SeoJsonLd";
 import { buildPageMetadata, homepageFaqs, localKeywords } from "@/lib/seo";
 import { geoAeoFaqs } from "@/lib/seo/geo-aeo";
+import Footer from "@/components/Footer";
+import DeferredEnquiryPopup from "@/components/DeferredEnquiryPopup";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "DTCP Approved Plots in Karaikudi | Lena Promoters",
@@ -29,8 +31,6 @@ const BranchesSection = dynamic(() => import("@/components/BranchesSection"));
 const CTASection = dynamic(() => import("@/components/CTASection"));
 const SchemesSection = dynamic(() => import("@/components/SchemesSection"));
 const ContactSection = dynamic(() => import("@/components/ContactSection"));
-const Footer = dynamic(() => import("@/components/Footer"));
-const EnquiryPopup = dynamic(() => import("@/components/EnquiryPopup"), { ssr: false });
 
 export default function Home() {
   return (
@@ -81,7 +81,7 @@ export default function Home() {
         </ScrollReveal>
       </main>
       <Footer />
-      <EnquiryPopup />
+      <DeferredEnquiryPopup />
     </>
   );
 }

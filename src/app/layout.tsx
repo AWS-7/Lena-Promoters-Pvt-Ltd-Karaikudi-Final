@@ -1,15 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import dynamic from "next/dynamic";
 import Script from "next/script";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import DeferredPreloader from "@/components/DeferredPreloader";
+import DeferredVisitorTracker from "@/components/DeferredVisitorTracker";
 import { GeoAeoJsonLd, LocalBusinessJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
 import { DEFAULT_OG_IMAGE, SITE_URL, localKeywords } from "@/lib/seo";
 import { geoAeoKeywords } from "@/lib/seo/geo-aeo";
-
-const Preloader = dynamic(() => import("@/components/Preloader"), { ssr: false });
-const VisitorTracker = dynamic(() => import("@/components/VisitorTracker"), { ssr: false });
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -138,8 +136,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           gtag('config', 'G-ZMW2XTPPBD');
           gtag('config', 'AW-18145943083');`}
         </Script>
-        <VisitorTracker />
-        <Preloader />
+        <DeferredVisitorTracker />
+        <DeferredPreloader />
         {children}
         <MobileBottomNav />
       </body>
