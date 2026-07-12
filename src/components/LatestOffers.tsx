@@ -179,7 +179,7 @@ function ScrollRow({ images, reverse = false }: { images: string[]; reverse?: bo
                   className="object-cover transition-transform duration-500 group-hover/card:scale-110 pointer-events-none"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity pointer-events-none" />
-                <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 pointer-events-none">
+                <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 pointer-events-none">
                   <Sparkles size={10} />
                   Hot Deal
                 </div>

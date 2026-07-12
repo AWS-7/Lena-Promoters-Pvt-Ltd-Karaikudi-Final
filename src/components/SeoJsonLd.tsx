@@ -1,4 +1,4 @@
-import { CONTACT, SITE_STATS } from "@/lib/contact";
+import { CONTACT } from "@/lib/contact";
 import {
   SITE_URL,
   aeoService,
@@ -21,6 +21,7 @@ export function LocalBusinessJsonLd() {
     foundingDate: "2006",
     email: CONTACT.email,
     telephone: "+91-814-874-8140",
+    priceRange: "₹₹",
     geo: {
       "@type": "GeoCoordinates",
       latitude: businessGeo.latitude,
@@ -85,16 +86,16 @@ export function LocalBusinessJsonLd() {
         {
           "@type": "Offer",
           itemOffered: {
-            "@type": "Product",
+            "@type": "Service",
             name: "DTCP Approved Residential Plots",
-            description: "DTCP approved residential plots in Karaikudi with clear titles",
+            description: "DTCP approved residential plot sales in Karaikudi with clear titles",
           },
         },
         {
           "@type": "Offer",
           itemOffered: {
-            "@type": "Product",
-            name: "Commercial Land",
+            "@type": "Service",
+            name: "Commercial Land Sales",
             description: "Commercial land parcels for business development",
           },
         },
@@ -151,29 +152,6 @@ export function LocalBusinessJsonLd() {
       "Real estate Karaikudi Tamil Nadu",
       "Land layouts Sivaganga district",
     ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: String(SITE_STATS.happyCustomers),
-      bestRating: "5",
-      worstRating: "1",
-    },
-    review: [
-      {
-        "@type": "Review",
-        author: { "@type": "Person", name: "Lena Promoters Customer" },
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-        reviewBody:
-          "Excellent DTCP approved plots in Karaikudi with clear legal documentation and helpful staff.",
-      },
-      {
-        "@type": "Review",
-        author: { "@type": "Person", name: "Plot Buyer, Karaikudi" },
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-        reviewBody:
-          "Smooth registration process and bank loan assistance. Highly recommend Lena Promoters.",
-      },
-    ],
   };
 
   return (
@@ -205,7 +183,7 @@ function buildGeoAeoServiceJsonLd(service: typeof geoService | typeof aeoService
         name: "Tamil Nadu",
       },
     },
-    hasOffer: {
+    offers: {
       "@type": "Offer",
       availability: "https://schema.org/InStock",
       url: `${SITE_URL}/#contact`,
@@ -252,15 +230,13 @@ export function WebsiteJsonLd() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
     name: "Lena Promoters Private Limited",
+    alternateName: "Lena Promoters",
     url: SITE_URL,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/projects?location={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
+    inLanguage: "en-IN",
+    publisher: {
+      "@id": `${SITE_URL}/#organization`,
     },
   };
 

@@ -129,6 +129,7 @@ export default function HeroSection() {
             alt="DTCP approved land layouts in Karaikudi by Lena Promoters"
             fill
             priority
+            fetchPriority="high"
             quality={75}
             sizes="100vw"
             unoptimized={heroBgSrc.startsWith("http") || heroBgSrc.includes("?v=")}

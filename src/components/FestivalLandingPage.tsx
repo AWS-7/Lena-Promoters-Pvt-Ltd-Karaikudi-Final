@@ -160,7 +160,7 @@ export default function FestivalLandingPage({ campaign, projects }: FestivalLand
                   ].map((item) => (
                     <div key={item.label} className="text-center min-w-[52px]">
                       <div className="text-xl font-bold leading-none">{String(item.value).padStart(2, "0")}</div>
-                      <div className="text-[10px] uppercase tracking-wide text-white/70">{item.label}</div>
+                      <div className="text-xs uppercase tracking-wide text-white/70">{item.label}</div>
                     </div>
                   ))}
                 </div>

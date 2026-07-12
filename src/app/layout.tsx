@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import DeferredAnalytics from "@/components/DeferredAnalytics";
 import DeferredPreloader from "@/components/DeferredPreloader";
 import DeferredVisitorTracker from "@/components/DeferredVisitorTracker";
 import { GeoAeoJsonLd, LocalBusinessJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
@@ -33,7 +33,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "DTCP Approved Plots Karaikudi | Lena Promoters",
+    default: "DTCP Approved Plots & Land in Karaikudi | Lena Promoters",
     template: "%s | Lena Promoters",
   },
   description: "Buy DTCP approved plots in Karaikudi from Lena Promoters. Clear titles, 18+ years experience, bank loan help and free site visit.",
@@ -123,19 +123,7 @@ export default function RootLayout({
       <body className={`${poppins.variable} ${inter.variable} min-h-full flex flex-col pb-[88px] md:pb-0`}>
         {/* Google Tag Manager (noscript) — immediately after opening <body> */}
         <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLGH5S42" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }} />
-        <Script id="gtm-init" strategy="lazyOnload">{`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-PLGH5S42');`}</Script>
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-ZMW2XTPPBD" strategy="lazyOnload" />
-        <Script id="gtag-init" strategy="lazyOnload">
-          {`window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-ZMW2XTPPBD');
-          gtag('config', 'AW-18145943083');`}
-        </Script>
+        <DeferredAnalytics />
         <DeferredVisitorTracker />
         <DeferredPreloader />
         {children}

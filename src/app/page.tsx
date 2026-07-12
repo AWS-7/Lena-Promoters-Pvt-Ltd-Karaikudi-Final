@@ -7,12 +7,11 @@ import StatsSection from "@/components/StatsSection";
 import ScrollReveal from "@/components/ScrollReveal";
 import { FaqJsonLd } from "@/components/SeoJsonLd";
 import { buildPageMetadata, homepageFaqs, localKeywords } from "@/lib/seo";
-import { geoAeoFaqs } from "@/lib/seo/geo-aeo";
 import Footer from "@/components/Footer";
 import DeferredEnquiryPopup from "@/components/DeferredEnquiryPopup";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "DTCP Approved Plots in Karaikudi | Lena Promoters",
+  title: "DTCP Approved Plots & Land in Karaikudi | Lena Promoters",
   description:
     "Buy DTCP approved plots in Karaikudi from Lena Promoters. Clear titles, 18+ years experience, bank loan help and free site visit.",
   path: "/",
@@ -35,7 +34,7 @@ const ContactSection = dynamic(() => import("@/components/ContactSection"));
 export default function Home() {
   return (
     <>
-      <FaqJsonLd faqs={[...homepageFaqs, ...geoAeoFaqs]} />
+      <FaqJsonLd faqs={[...homepageFaqs]} />
       <TopHeader />
       <Navbar />
       <main className="overflow-x-hidden">
